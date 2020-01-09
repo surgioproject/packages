@@ -1,0 +1,14 @@
+{
+  "name": "@surgioproject/packages-monorepo",
+  "private": true,
+  "license": "MIT",
+  "devDependencies": {
+    "lerna": "^3.20.2"
+  },
+  "repository": "https://github.com/surgioproject/gateway",
+  "author": "Yihang Li <me@royli.dev>",
+  "bugs": {
+    "url": "https://github.com/surgioproject/gateway/issues"
+  },
+  "homepage": "https://surgio.royli.dev"
+}
