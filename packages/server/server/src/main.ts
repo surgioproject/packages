@@ -6,9 +6,9 @@ import {
 
 import { AppModule } from './app.module';
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter()
