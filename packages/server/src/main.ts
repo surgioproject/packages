@@ -14,7 +14,7 @@ async function bootstrap(): Promise<void> {
     new FastifyAdapter()
   );
 
-  await app.listen(PORT);
+  await app.listen(Number(PORT));
 
   console.log('> Your app is ready at http://127.0.0.1:' + PORT);
 }
