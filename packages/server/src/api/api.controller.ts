@@ -13,7 +13,8 @@ export class ApiController {
       status: 'ok',
       data: {
         ..._.pick(this.surgioService.surgioHelper.config, ['urlBase', 'publicUrl']),
-        backendSurgioVersion: require('../../package.json').version,
+        backendVersion: require('../../package.json').version,
+        coreVersion: require('surgio/package.json').version,
       },
     };
   }

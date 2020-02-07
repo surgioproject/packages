@@ -33,8 +33,7 @@
     "nunjucks": "^3.2.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
-    "rxjs": "^6.5.3",
-    "surgio": "^1.11.2"
+    "rxjs": "^6.5.3"
   },
   "devDependencies": {
     "@nestjs/cli": "^6.9.1",
@@ -75,5 +74,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "peerDependencies": {
+    "surgio": "^1.11.3"
   }
 }

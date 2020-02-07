@@ -3013,6 +3013,11 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
+classnames@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
+  integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
+
 clean-css@4.2.x:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.2.1.tgz#2d411ef76b8569b6d0c84068dabe85b0aa5e5c17"
@@ -5681,7 +5686,7 @@ hoist-non-react-statics@^3.1.0:
   dependencies:
     react-is "^16.7.0"
 
-hoist-non-react-statics@^3.2.1:
+hoist-non-react-statics@^3.2.1, hoist-non-react-statics@^3.3.0:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
   integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
@@ -7933,6 +7938,23 @@ mkdirp@0.5.1, mkdirp@^0.5.1, mkdirp@~0.5.1:
   dependencies:
     minimist "0.0.8"
 
+mobx-react-lite@^1.4.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-1.5.2.tgz#c4395b0568b9cb16f07669d8869cc4efa1b8656d"
+  integrity sha512-PyZmARqqWtpuQaAoHF5pKX7h6TKNLwq6vtovm4zZvG6sEbMRHHSqioGXSeQbpRmG8Kw8uln3q/W1yMO5IfL5Sg==
+
+mobx-react@^6.1.4:
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/mobx-react/-/mobx-react-6.1.4.tgz#818e7991c321c05bd9b8156d94be17dad165501e"
+  integrity sha512-wzrJF1RflhyLh8ne4FJfMbG8ZgRFmZ62b4nbyhJzwQpAmrkSnSsAWG9mIff4ffV/Q7OU+uOYf7rXvSmiuUe4cw==
+  dependencies:
+    mobx-react-lite "^1.4.2"
+
+mobx@^5.15.4:
+  version "5.15.4"
+  resolved "https://registry.yarnpkg.com/mobx/-/mobx-5.15.4.tgz#9da1a84e97ba624622f4e55a0bf3300fb931c2ab"
+  integrity sha512-xRFJxSU2Im3nrGCdjSuOTFmxVDGeqOHL+TyADCGbT0k4HHqGmx5u2yaHNryvoORpI4DfbzjJ5jPmuv+d7sioFw==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -8201,6 +8223,16 @@ normalize.css@^8.0.1:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/normalize.css/-/normalize.css-8.0.1.tgz#9b98a208738b9cc2634caacbc42d131c97487bf3"
   integrity sha512-qizSNPO93t1YUuUhP22btGOo3chcvDFqFaj2TRybP0DMxkHOCTYwp3n34fel4a31ORXy4m1Xq0Gyqpb5m33qIg==
+
+notistack@^0.9.7:
+  version "0.9.7"
+  resolved "https://registry.yarnpkg.com/notistack/-/notistack-0.9.7.tgz#4475db65ec365c1d38244c66285e81f525ea0abb"
+  integrity sha512-OztbtaIiCMR7QdcDGXTcYu96Uuvu26k41d7cnMGdf4NaKkAX06fsLPAlodGPj4HrMjMBUl8nvUQ3LmQOS6kHWQ==
+  dependencies:
+    classnames "^2.2.6"
+    hoist-non-react-statics "^3.3.0"
+    prop-types "^15.7.2"
+    react-is "^16.8.6"
 
 npm-run-path@^2.0.0:
   version "2.0.2"
@@ -10043,7 +10075,7 @@ react-error-overlay@^6.0.4:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.4.tgz#0d165d6d27488e660bc08e57bdabaad741366f7a"
   integrity sha512-ueZzLmHltszTshDMwyfELDq8zOA803wQ1ZuzCccXa1m57k1PxSHfflPD5W9YIiTXLs0JTLzoj6o1LuM5N6zzNA==
 
-react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.0, react-is@^16.8.1, react-is@^16.8.4:
+react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   version "16.12.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==

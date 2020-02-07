@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { observer } from 'mobx-react';
+import { SnackbarProvider } from 'notistack';
 import {
   BrowserRouter as Router,
   Switch,
@@ -25,7 +27,10 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 
 import './App.css';
+import { defaultFetcher } from './libs/utils';
 import ArtifactListPage from './pages/ArtifactList';
+import { useStores } from './stores';
+import { Config } from './stores/config';
 
 const drawerWidth = 240;
 
@@ -64,7 +69,10 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up('md')]: {
         width: `calc(100% - ${drawerWidth}px)`,
       },
-      padding: theme.spacing(3),
+      padding: theme.spacing(2, 1),
+      [theme.breakpoints.up('sm')]: {
+        padding: theme.spacing(3),
+      },
     },
     pageTitle: {
       flexGrow: 1,
@@ -79,15 +87,28 @@ interface ResponsiveDrawerProps {
   container?: Element;
 }
 
-export default function App(props: ResponsiveDrawerProps) {
+export default observer((props: ResponsiveDrawerProps) => {
   const { container } = props;
   const classes = useStyles();
   const theme = useTheme();
+  const stores = useStores();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const updateConfig = async () => {
+    const config = await defaultFetcher<Partial<Config>>('/api/config');
+    stores.config.updateConfig(config);
+  };
+
+  useEffect(() => {
+    updateConfig()
+      .catch(err => {
+        console.error(err);
+      });
+  }, [stores.config]);
 
   const drawer = (
     <div>
@@ -101,73 +122,81 @@ export default function App(props: ResponsiveDrawerProps) {
 
   return (
     <Router>
-      <div className={classes.root}>
-        <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              className={classes.menuButton}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap className={classes.pageTitle}>
-              Surgio Dashboard
-            </Typography>
-            <div>
-              <Link href="https://github.com/geekdada/surgio"
-                    rel="noopener noreferrer"
-                    target="_blank">
-                <GitHubIcon className={classes.appBarIcons} />
-              </Link>
-            </div>
-          </Toolbar>
-        </AppBar>
-        <nav className={classes.drawer} aria-label="folders">
-          <Hidden lgUp>
-            <Drawer
-              container={container}
-              variant="temporary"
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
-              }}
-            >
-              {drawer}
-            </Drawer>
-          </Hidden>
-          <Hidden smDown>
-            <Drawer
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              variant="permanent"
-              open
-            >
-              {drawer}
-            </Drawer>
-          </Hidden>
-        </nav>
+      <SnackbarProvider maxSnack={3}>
+        <div className={classes.root}>
+          { stores.config.isReady && (
+            <React.Fragment>
+              <CssBaseline />
 
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Switch>
-            <Route path="/list-artifact">
-              <ArtifactListPage />
-            </Route>
-          </Switch>
-        </main>
-      </div>
+              <AppBar position="fixed" className={classes.appBar}>
+                <Toolbar>
+                  <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    edge="start"
+                    onClick={handleDrawerToggle}
+                    className={classes.menuButton}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Typography variant="h6" noWrap className={classes.pageTitle}>
+                    Surgio Dashboard
+                  </Typography>
+                  <div>
+                    <Link href="https://github.com/geekdada/surgio"
+                          rel="noopener noreferrer"
+                          target="_blank">
+                      <GitHubIcon className={classes.appBarIcons} />
+                    </Link>
+                  </div>
+                </Toolbar>
+              </AppBar>
+
+              <nav className={classes.drawer} aria-label="folders">
+                <Hidden lgUp>
+                  <Drawer
+                    container={container}
+                    variant="temporary"
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    classes={{
+                      paper: classes.drawerPaper,
+                    }}
+                    ModalProps={{
+                      keepMounted: true, // Better open performance on mobile.
+                    }}
+                  >
+                    {drawer}
+                  </Drawer>
+                </Hidden>
+                <Hidden smDown>
+                  <Drawer
+                    classes={{
+                      paper: classes.drawerPaper,
+                    }}
+                    variant="permanent"
+                    open
+                  >
+                    {drawer}
+                  </Drawer>
+                </Hidden>
+              </nav>
+
+              <main className={classes.content}>
+                <div className={classes.toolbar} />
+                <Switch>
+                  <Route path="/list-artifact">
+                    <ArtifactListPage />
+                  </Route>
+                </Switch>
+              </main>
+            </React.Fragment>
+          ) }
+        </div>
+      </SnackbarProvider>
     </Router>
   );
-}
+});
 
 interface ListItemLinkProps {
   icon?: React.ReactElement;

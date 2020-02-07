@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Clipboard from 'react-clipboard.js';
@@ -7,13 +8,21 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import { ArtifactConfig } from 'surgio/build/types';
+import { VariantType, useSnackbar } from 'notistack';
 
-import { getDownloadUrl, getToken } from '../../libs/utils';
+import { getDownloadUrl } from '../../libs/utils';
+import { useStores } from '../../stores';
+import ActionButtons from '../ActionButtons';
 
 const useStyles = makeStyles(theme => ({
-  root: {
+  ArtifactCard: {
+    '& .MuiCardActions-root': {
+      flexWrap: 'wrap',
+    },
   },
   urlContainer: {
     'background-color': '#eee',
@@ -25,19 +34,22 @@ const useStyles = makeStyles(theme => ({
       'monospace',
     ].join(','),
   },
+  contentSection: {
+    margin: theme.spacing(1.5, 0),
+    '&:last-child': {
+      marginBottom: 0,
+    },
+  },
   providersContainer: {
     display: 'flex',
     flexWrap: 'wrap',
   },
-  providerTag: {
-    'background-color': '#353535',
-    'color': '#fff',
-    'padding': '0 10px',
-    'margin': '0 5px 8px 0',
-    'height': '26px',
-    'line-height': '26px',
-    'border-radius': '13px',
-    fontSize: 12,
+  categoriesContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  tag: {
+    margin: theme.spacing(0.5),
   },
   actionButton: {
     margin: theme.spacing(1),
@@ -49,45 +61,69 @@ export interface ArtifactCardProps {
   artifact: ArtifactConfig;
 }
 
-export default function ArtifactCard({ artifact }: ArtifactCardProps) {
+function ArtifactCard({ artifact }: ArtifactCardProps) {
   const classes = useStyles();
+  const { config: configStore } = useStores();
   const providers = [artifact.provider].concat(artifact.combineProviders || []);
+  const { enqueueSnackbar } = useSnackbar();
+  const downloadUrl = getDownloadUrl(artifact.name, false, configStore.config.accessToken);
+  const previewUrl = getDownloadUrl(artifact.name, true, configStore.config.accessToken);
+
   const providersElement = providers.map(item => {
     return (
-      <span className={classes.providerTag} key={item}>
-        { item }
-      </span>
+      <Chip className={classes.tag} key={item} label={item} />
     );
   });
-  const accessToken = getToken();
-  const downloadUrl = getDownloadUrl(artifact.name, false, accessToken);
-  const previewUrl = getDownloadUrl(artifact.name, true, accessToken);
+
+  const categoriesElement = artifact.categories
+    ? artifact.categories.map(cat =>(
+        <Chip className={classes.tag} key={cat} label={cat} />
+      ))
+    : null;
 
   const onCopySuccess = () => {
-    window.alert('复制成功');
+    enqueueSnackbar('复制成功', { variant: 'success' });
   };
 
   const onCopyError = () => {
-    window.alert('复制失败');
+    enqueueSnackbar('复制失败', { variant: 'error' });
   };
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.ArtifactCard}>
       <CardHeader title={artifact.name} />
 
       <CardContent>
         <Typography className={classes.urlContainer}
                     component="pre"
                     paragraph>
-          { downloadUrl }
+          { previewUrl }
         </Typography>
 
-        <Typography gutterBottom variant="h6">
-          Providers
-        </Typography>
-        <div className={classes.providersContainer}>
-          { providersElement }
+        <div className={classes.contentSection}>
+          <Typography gutterBottom variant="body1">
+            Providers
+          </Typography>
+          <div className={classes.providersContainer}>
+            { providersElement }
+          </div>
         </div>
+
+        {
+          artifact.categories && (
+            <>
+              <Divider />
+              <div className={classes.contentSection}>
+                <Typography gutterBottom variant="body1">
+                  分类
+                </Typography>
+                <div className={classes.categoriesContainer}>
+                  { categoriesElement }
+                </div>
+              </div>
+            </>
+          )
+        }
       </CardContent>
 
       <CardActions disableSpacing>
@@ -110,7 +146,7 @@ export default function ArtifactCard({ artifact }: ArtifactCardProps) {
         </Link>
 
         <Clipboard component="div"
-                   data-clipboard-text={downloadUrl}
+                   data-clipboard-text={previewUrl}
                    onSuccess={onCopySuccess}
                    onError={onCopyError}>
           <Button className={classes.actionButton}
@@ -120,7 +156,11 @@ export default function ArtifactCard({ artifact }: ArtifactCardProps) {
             复制地址
           </Button>
         </Clipboard>
+
+        <ActionButtons artifact={artifact} />
       </CardActions>
     </Card>
   );
 }
+
+export default observer(ArtifactCard);

@@ -35,7 +35,7 @@ export class AppController {
 
     if (typeof result === 'string') {
       res.header('content-type', 'text/plain; charset=utf-8');
-      res.header('cache-control', 'private, no-cache, no-store');
+      res.header('cache-control', 'private, no-cache, no-stores');
 
       if (dl === '1') {
         res.header('content-disposition', `attachment; filename="${artifactName}"`);
