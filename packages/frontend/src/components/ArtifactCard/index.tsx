@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Clipboard from 'react-clipboard.js';
 import Link from '@material-ui/core/Link';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -12,11 +11,11 @@ import Divider from '@material-ui/core/Divider';
 import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import { ArtifactConfig } from 'surgio/build/types';
-import { useSnackbar } from 'notistack';
 
 import { getDownloadUrl } from '../../libs/utils';
 import { useStores } from '../../stores';
 import ActionButtons from '../ActionButtons';
+import ArtifactCopyButtons from '../ArtifactCopyButtons';
 
 const useStyles = makeStyles(theme => ({
   ArtifactCard: {
@@ -65,7 +64,6 @@ function ArtifactCard({ artifact }: ArtifactCardProps) {
   const classes = useStyles();
   const { config: configStore } = useStores();
   const providers = [artifact.provider].concat(artifact.combineProviders || []);
-  const { enqueueSnackbar } = useSnackbar();
   const downloadUrl = getDownloadUrl(artifact.name, false, configStore.config.accessToken);
   const previewUrl = getDownloadUrl(artifact.name, true, configStore.config.accessToken);
 
@@ -80,14 +78,6 @@ function ArtifactCard({ artifact }: ArtifactCardProps) {
         <Chip className={classes.tag} key={cat} label={cat} />
       ))
     : null;
-
-  const onCopySuccess = () => {
-    enqueueSnackbar('复制成功', { variant: 'success' });
-  };
-
-  const onCopyError = () => {
-    enqueueSnackbar('复制失败', { variant: 'error' });
-  };
 
   return (
     <Card className={classes.ArtifactCard}>
@@ -145,17 +135,9 @@ function ArtifactCard({ artifact }: ArtifactCardProps) {
           </Button>
         </Link>
 
-        <Clipboard component="div"
-                   data-clipboard-text={previewUrl}
-                   onSuccess={onCopySuccess}
-                   onError={onCopyError}>
-          <Button className={classes.actionButton}
-                  variant="contained"
-                  size="medium"
-                  color="primary">
-            复制地址
-          </Button>
-        </Clipboard>
+        <div className={classes.actionButton}>
+          <ArtifactCopyButtons artifact={artifact} />
+        </div>
 
         <ActionButtons artifact={artifact} />
       </CardActions>
