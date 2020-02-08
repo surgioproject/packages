@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { SurgioService } from '../surgio/surgio.service';
 import { ApiController } from './api.controller';
+import { SurgioService } from '../surgio/surgio.service';
 
 @Module({
   controllers: [ApiController],

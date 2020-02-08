@@ -1,7 +1,5 @@
 import { observable, action, computed } from 'mobx';
 
-import { getToken } from '../../libs/utils';
-
 export interface Config {
   urlBase: string;
   publicUrl: string;
@@ -17,7 +15,7 @@ export class ConfigStore {
     publicUrl: '',
     backendVersion: '',
     coreVersion: '',
-    accessToken: getToken(),
+    accessToken: '',
   };
 
   @action

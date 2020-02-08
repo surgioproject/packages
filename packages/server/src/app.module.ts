@@ -1,15 +1,27 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+
 import { AppController } from './app.controller';
 import { ApiModule } from './api/api.module';
 import { SurgioModule } from './surgio/surgio.module';
 import { SurgioService } from './surgio/surgio.service';
+import { AuthModule } from './auth/auth.module';
+import configuration from './config/configuration';
+
+const CWD = process.env.SURGIO_PROJECT_DIR || process.cwd();
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      ignoreEnvFile: true,
+      isGlobal: true,
+      load: [configuration],
+    }),
     SurgioModule.register({
-      cwd: process.env.SURGIO_PROJECT_DIR || process.cwd(),
+      cwd: CWD,
     }),
     ApiModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [SurgioService],

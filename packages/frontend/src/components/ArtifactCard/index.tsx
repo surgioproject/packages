@@ -12,7 +12,7 @@ import Divider from '@material-ui/core/Divider';
 import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import { ArtifactConfig } from 'surgio/build/types';
-import { VariantType, useSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
 
 import { getDownloadUrl } from '../../libs/utils';
 import { useStores } from '../../stores';

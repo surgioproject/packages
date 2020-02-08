@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { SnackbarProvider } from 'notistack';
+import clsx from 'clsx';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
   Link as RouterLink,
   LinkProps as RouterLinkProps,
 } from 'react-router-dom';
@@ -29,6 +31,9 @@ import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/sty
 import './App.css';
 import { defaultFetcher } from './libs/utils';
 import ArtifactListPage from './pages/ArtifactList';
+import AuthPage from './pages/Auth';
+import HomePage from './pages/Home';
+import NotFoundPage from './pages/NotFound';
 import { useStores } from './stores';
 import { Config } from './stores/config';
 
@@ -61,6 +66,11 @@ const useStyles = makeStyles((theme: Theme) =>
       ...theme.mixins.toolbar,
       display: 'flex',
     },
+    versionInfo: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      padding: theme.spacing(2),
+    },
     drawerPaper: {
       width: drawerWidth,
     },
@@ -76,6 +86,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     pageTitle: {
       flexGrow: 1,
+      '& .MuiTypography-root': {
+        color: '#fff',
+      },
     },
     appBarIcons: {
       color: '#fff',
@@ -98,13 +111,32 @@ export default observer((props: ResponsiveDrawerProps) => {
     setMobileOpen(!mobileOpen);
   };
 
-  const updateConfig = async () => {
-    const config = await defaultFetcher<Partial<Config>>('/api/config');
-    stores.config.updateConfig(config);
+  const validateAuth = () => {
+    return defaultFetcher<{accessToken?: string}>('/api/auth/validate');
+  };
+
+  const updateConfig = () => {
+    return defaultFetcher<Partial<Config>>('/api/config');
   };
 
   useEffect(() => {
-    updateConfig()
+    validateAuth()
+      .then(user => {
+        if (user.accessToken) {
+          stores.config.updateConfig({
+            accessToken: user.accessToken,
+          });
+        }
+
+        return updateConfig();
+      })
+      .catch(err => {
+        // 授权失败，直接获取配置信息
+        return updateConfig();
+      })
+      .then(config => {
+        stores.config.updateConfig(config);
+      })
       .catch(err => {
         console.error(err);
       });
@@ -112,7 +144,22 @@ export default observer((props: ResponsiveDrawerProps) => {
 
   const drawer = (
     <div>
-      <div className={classes.toolbar} />
+      <div className={clsx(classes.toolbar, classes.versionInfo)}>
+        {
+          stores.config.isReady && (
+            <>
+              <Typography variant="body2">
+                <span>Core: </span>
+                <code>v{stores.config.config.coreVersion}</code>
+              </Typography>
+              <Typography variant="body2">
+                <span>Backend: </span>
+                <code>v{stores.config.config.backendVersion}</code>
+              </Typography>
+            </>
+          )
+        }
+      </div>
       <Divider />
       <List>
         <ListItemLink to="/list-artifact" primary="Artifacts" icon={<ListIcon />} />
@@ -125,7 +172,7 @@ export default observer((props: ResponsiveDrawerProps) => {
       <SnackbarProvider maxSnack={3}>
         <div className={classes.root}>
           { stores.config.isReady && (
-            <React.Fragment>
+            <>
               <CssBaseline />
 
               <AppBar position="fixed" className={classes.appBar}>
@@ -140,7 +187,9 @@ export default observer((props: ResponsiveDrawerProps) => {
                     <MenuIcon />
                   </IconButton>
                   <Typography variant="h6" noWrap className={classes.pageTitle}>
-                    Surgio Dashboard
+                    <Link component={RouterLink} to="/">
+                      Surgio Dashboard
+                    </Link>
                   </Typography>
                   <div>
                     <Link href="https://github.com/geekdada/surgio"
@@ -188,9 +237,18 @@ export default observer((props: ResponsiveDrawerProps) => {
                   <Route path="/list-artifact">
                     <ArtifactListPage />
                   </Route>
+                  <Route path="/auth">
+                    <AuthPage />
+                  </Route>
+                  <Route exact path="/">
+                    <HomePage />
+                  </Route>
+                  <Route path="*">
+                    <NotFoundPage />
+                  </Route>
                 </Switch>
               </main>
-            </React.Fragment>
+            </>
           ) }
         </div>
       </SnackbarProvider>
