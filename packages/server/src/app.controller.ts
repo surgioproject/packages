@@ -1,6 +1,6 @@
 import { Controller, Get, Res, Header, Param, Query, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import got from 'got';
+import { BearerAuthGuard } from './auth/bearer.guard';
 
 import { SurgioService } from './surgio/surgio.service';
 
@@ -20,7 +20,7 @@ export class AppController {
       'Disallow: /';
   }
 
-  @UseGuards(AuthGuard('bearer'))
+  @UseGuards(BearerAuthGuard)
   @Get('get-artifact/:name')
   public async getArtifact(@Res() res, @Param() params, @Query() query): Promise<void> {
     const dl = query.dl;

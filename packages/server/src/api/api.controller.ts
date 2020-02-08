@@ -1,7 +1,7 @@
 import { Controller, Get, HttpException, HttpStatus, Param, Post, Res, UseGuards, Req } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import _ from 'lodash';
 
+import { CookieAuthGuard } from '../auth/cookie.guard';
 import { SurgioService } from '../surgio/surgio.service';
 
 @Controller('api')
@@ -26,7 +26,7 @@ export class ApiController {
     }
   }
 
-  @UseGuards(AuthGuard('cookie'))
+  @UseGuards(CookieAuthGuard)
   @Get('/auth/validate')
   public async validateAuth(@Req() req): Promise<any> {
     return {
@@ -37,24 +37,18 @@ export class ApiController {
 
   @Get('config')
   public async config(@Req() req): Promise<any> {
-    let accessToken: string;
-
-    if (req.user) {
-      accessToken = req.user.accessToken;
-    }
-
     return {
       status: 'ok',
       data: {
         ..._.pick(this.surgioService.surgioHelper.config, ['urlBase', 'publicUrl']),
         backendVersion: require('../../package.json').version,
         coreVersion: require('surgio/package.json').version,
-        accessToken,
+        needAuth: this.surgioService.surgioHelper.config?.gateway?.auth ?? false,
       },
     };
   }
 
-  @UseGuards(AuthGuard('cookie'))
+  @UseGuards(CookieAuthGuard)
   @Get('artifacts')
   public async listArtifacts(): Promise<any> {
     const artifactList = this.surgioService.surgioHelper.artifactList;
@@ -65,7 +59,7 @@ export class ApiController {
     };
   }
 
-  @UseGuards(AuthGuard('cookie'))
+  @UseGuards(CookieAuthGuard)
   @Get('artifacts/:name')
   public async getArtifact(@Res() res, @Param() params): Promise<void> {
     const artifactList = this.surgioService.surgioHelper.artifactList.filter(item => item.name === params.name);
