@@ -1,15 +1,15 @@
 {
-  "name": "@surgioproject/packages-monorepo",
+  "name": "@surgio/packages-monorepo",
   "private": true,
   "license": "MIT",
   "devDependencies": {
     "conventional-changelog-cli": "^2.0.31",
     "lerna": "^3.20.2"
   },
-  "repository": "https://github.com/surgioproject/gateway",
+  "repository": "https://github.com/surgioproject/packages",
   "author": "Yihang Li <me@royli.dev>",
   "bugs": {
-    "url": "https://github.com/surgioproject/gateway/issues"
+    "url": "https://github.com/surgioproject/packages/issues"
   },
   "homepage": "https://surgio.royli.dev"
 }

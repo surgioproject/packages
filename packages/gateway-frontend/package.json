@@ -1,6 +1,7 @@
 {
   "name": "@surgio/gateway-frontend",
   "version": "0.2.1",
+  "private": false,
   "proxy": "http://127.0.0.1:4000",
   "devDependencies": {
     "@material-ui/core": "^4.8.3",
@@ -56,5 +57,9 @@
   },
   "files": [
     "build"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "da96fe077b24097d0a721392bd32ec4a88ac2ee0"
 }

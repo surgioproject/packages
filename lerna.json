@@ -1,4 +1,15 @@
 {
+  "command": {
+    "version": {
+      "conventionalCommits": true,
+      "message": "chore(release): %s"
+    }
+  },
+  "ignoreChanges": [
+    "**/__fixtures__/**",
+    "**/__tests__/**",
+    "**/*.md"
+  ],
   "packages": [
     "packages/*"
   ],

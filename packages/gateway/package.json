@@ -1,5 +1,6 @@
 {
   "name": "@surgio/gateway",
+  "private": false,
   "license": "MIT",
   "version": "0.2.1",
   "main": "./dist/index.js",
@@ -32,7 +33,7 @@
     "@nestjs/passport": "^6.1.1",
     "@nestjs/platform-fastify": "^6.10.14",
     "@nestjs/serve-static": "^1.0.2",
-    "@surgio/gateway-frontend": "^0.2.1",
+    "@surgio/gateway-frontend": "file:../gateway-frontend",
     "cookie-signature": "^1.1.0",
     "fastify-cookie": "^3.5.0",
     "fastify-static": "^2.6.0",
@@ -93,5 +94,9 @@
   },
   "peerDependencies": {
     "surgio": "^1.12.0"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "da96fe077b24097d0a721392bd32ec4a88ac2ee0"
 }
