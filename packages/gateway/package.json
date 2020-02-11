@@ -1,7 +1,7 @@
 {
   "name": "@surgio/gateway",
   "license": "MIT",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "repository": "https://github.com/surgioproject/packages/tree/master/packages/server",
@@ -32,7 +32,7 @@
     "@nestjs/passport": "^6.1.1",
     "@nestjs/platform-fastify": "^6.10.14",
     "@nestjs/serve-static": "^1.0.2",
-    "@surgio/gateway-frontend": "^0.2.0",
+    "@surgio/gateway-frontend": "^0.2.1",
     "cookie-signature": "^1.1.0",
     "fastify-cookie": "^3.5.0",
     "fastify-static": "^2.6.0",
