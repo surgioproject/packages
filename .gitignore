@@ -106,3 +106,4 @@ packages/gateway/public
 .tern-port
 
 .idea
+.DS_Store
