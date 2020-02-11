@@ -447,7 +447,7 @@
   integrity sha512-mwhXGkRV5dlvQc4EgPDxDxO6WuMBVymGFd1CA+2Y+z5dG9MNspoQ+AWjl/Ld1MnpCL8AKbosZlDVohqcIwuWsw==
 
 "@surgio/gateway-frontend@file:../gateway-frontend":
-  version "0.2.1"
+  version "0.2.4"
 
 "@szmarczak/http-timer@^4.0.0":
   version "4.0.0"
