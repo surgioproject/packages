@@ -1,13 +1,12 @@
-<div align="center">
+<p align="center">
     <a href="https://surgio.royli.dev/" target="_blank">
         <img width="180" src="https://raw.githubusercontent.com/geekdada/surgio/master/docs/.vuepress/public/surgio-icon.png" alt="logo">
     </a>
-</div>
+</p>
 
 <h2 align="center">Gateway</h2>
 
 [![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
 [![Test coverage][codecov-image]][codecov-url]
 [![David deps][david-image]][david-url]
 [![Known Vulnerabilities][snyk-image]][snyk-url]
@@ -15,12 +14,10 @@
 
 [npm-image]: https://img.shields.io/npm/v/@surgio/gateway.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/@surgio/gateway
-[travis-image]: https://travis-ci.com/@surgio/gateway.svg?branch=master
-[travis-url]: https://travis-ci.com/@surgio/gateway
 [codecov-image]: https://codecov.io/gh/surgioproject/gateway/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/surgioproject/gateway
-[david-image]: https://img.shields.io/david/@surgio/gateway.svg?style=flat-square
-[david-url]: https://david-dm.org/@surgio/gateway
+[david-image]: https://david-dm.org/surgioproject/packages/status.svg?path=packages/gateway
+[david-url]: https://david-dm.org/surgioproject/packages?path=packages/gateway
 [snyk-image]: https://snyk.io/test/npm/@surgio/gateway/badge.svg?style=flat-square
 [snyk-url]: https://snyk.io/test/npm/@surgio/gateway
 [download-image]: https://img.shields.io/npm/dm/@surgio/gateway.svg?style=flat-square
