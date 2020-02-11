@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 import { AppController } from './app.controller';
 import { ApiModule } from './api/api.module';
@@ -12,6 +14,9 @@ const CWD = process.env.SURGIO_PROJECT_DIR || process.cwd();
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
     ConfigModule.forRoot({
       ignoreEnvFile: true,
       isGlobal: true,

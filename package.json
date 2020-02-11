@@ -3,6 +3,7 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
+    "conventional-changelog-cli": "^2.0.31",
     "lerna": "^3.20.2"
   },
   "repository": "https://github.com/surgioproject/gateway",

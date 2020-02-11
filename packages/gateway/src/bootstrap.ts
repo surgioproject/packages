@@ -7,7 +7,7 @@ import FastifyCookie from 'fastify-cookie';
 
 import { AppModule } from './app.module';
 
-async function bootstrap(): Promise<void> {
+export async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({})
@@ -25,5 +25,3 @@ async function bootstrap(): Promise<void> {
 
   console.log('> Your app is ready at http://127.0.0.1:' + port);
 }
-
-bootstrap();

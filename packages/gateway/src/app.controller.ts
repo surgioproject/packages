@@ -8,18 +8,6 @@ import { SurgioService } from './surgio/surgio.service';
 export class AppController {
   constructor(private readonly surgioService: SurgioService) {}
 
-  @Get()
-  @Header('content-type', 'text/html; charset=utf8')
-  public getIndex(): string {
-    return '<h1>Surgio Gateway</h1>';
-  }
-
-  @Get('/robots.txt')
-  public getRobots(): string {
-    return 'User-agent: *\n' +
-      'Disallow: /';
-  }
-
   @UseGuards(BearerAuthGuard)
   @Get('get-artifact/:name')
   public async getArtifact(@Res() res, @Param() params, @Query() query): Promise<void> {

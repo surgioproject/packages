@@ -1,11 +1,13 @@
 {
-  "name": "@surgioproject/gateway-server",
+  "name": "@surgio/gateway",
   "license": "MIT",
-  "version": "0.0.1",
-  "repository": "https://github.com/surgioproject/gateway",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "repository": "https://github.com/surgioproject/packages/tree/master/packages/server",
   "author": "Yihang Li <me@royli.dev>",
   "bugs": {
-    "url": "https://github.com/surgioproject/gateway/issues"
+    "url": "https://github.com/surgioproject/packages/issues"
   },
   "homepage": "https://surgio.royli.dev",
   "scripts": {
@@ -21,7 +23,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register jest --runInBand",
-    "test:e2e": "jest --config test/jest-e2e.json"
+    "test:e2e": "jest --config test/jest-e2e.json",
+    "prepare:fe": "sh scripts/prepare-fe.sh"
   },
   "dependencies": {
     "@nestjs/common": "^6.8.0",
@@ -29,8 +32,10 @@
     "@nestjs/core": "^6.8.0",
     "@nestjs/passport": "^6.1.1",
     "@nestjs/platform-fastify": "^6.10.14",
+    "@nestjs/serve-static": "^1.0.2",
     "cookie-signature": "^1.1.0",
     "fastify-cookie": "^3.5.0",
+    "fastify-static": "^2.6.0",
     "got": "^10.2.1",
     "http-errors": "^1.7.3",
     "lodash": "^4.17.15",
@@ -66,6 +71,10 @@
     "type-fest": "^0.8.1",
     "typescript": "^3.7.4"
   },
+  "files": [
+    "dist",
+    "public"
+  ],
   "jest": {
     "moduleFileExtensions": [
       "js",

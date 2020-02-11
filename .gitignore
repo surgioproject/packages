@@ -81,6 +81,8 @@ typings/
 # Nuxt.js build / generate output
 .nuxt
 dist
+packages/gateway-frontend/build
+packages/gateway/public
 
 # Gatsby files
 .cache/
