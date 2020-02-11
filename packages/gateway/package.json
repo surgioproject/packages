@@ -14,7 +14,6 @@
     "prebuild": "rimraf dist",
     "build": "run-s build:*",
     "build:server": "nest build",
-    "build:fe": "sh scripts/prepare-fe.sh",
     "start": "nest start",
     "start:prod": "node dist/main",
     "dev": "nest start --watch",
@@ -33,6 +32,7 @@
     "@nestjs/passport": "^6.1.1",
     "@nestjs/platform-fastify": "^6.10.14",
     "@nestjs/serve-static": "^1.0.2",
+    "@surgio/gateway-frontend": "^0.2.0",
     "cookie-signature": "^1.1.0",
     "fastify-cookie": "^3.5.0",
     "fastify-static": "^2.6.0",
@@ -72,8 +72,7 @@
     "typescript": "^3.7.4"
   },
   "files": [
-    "dist",
-    "public"
+    "dist"
   ],
   "jest": {
     "moduleFileExtensions": [

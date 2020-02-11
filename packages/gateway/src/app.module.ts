@@ -15,7 +15,7 @@ const CWD = process.env.SURGIO_PROJECT_DIR || process.cwd();
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', 'node_modules/@surgio/gateway-frontend/build'),
     }),
     ConfigModule.forRoot({
       ignoreEnvFile: true,

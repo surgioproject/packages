@@ -1,9 +1,8 @@
 {
   "name": "@surgio/gateway-frontend",
   "version": "0.2.0",
-  "private": true,
   "proxy": "http://127.0.0.1:4000",
-  "dependencies": {
+  "devDependencies": {
     "@material-ui/core": "^4.8.3",
     "@material-ui/icons": "^4.5.1",
     "@testing-library/jest-dom": "^4.2.4",
@@ -54,5 +53,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "files": [
+    "build"
+  ]
 }
