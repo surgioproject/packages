@@ -1,10 +1,10 @@
-<p align="center">
+<div align="center">
     <a href="https://surgio.royli.dev/" target="_blank">
         <img width="180" src="https://raw.githubusercontent.com/geekdada/surgio/master/docs/.vuepress/public/surgio-icon.png" alt="logo">
     </a>
-    
-    <p>Gateway</p>
-</p>
+</div>
+
+<h2 align="center">Gateway</h2>
 
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
