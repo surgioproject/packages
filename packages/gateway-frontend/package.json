@@ -1,6 +1,6 @@
 {
   "name": "@surgio/gateway-frontend",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "license": "MIT",
   "private": false,
   "proxy": "http://127.0.0.1:4000",
