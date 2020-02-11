@@ -1,6 +1,6 @@
 {
   "name": "@surgio/gateway-frontend",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": false,
   "proxy": "http://127.0.0.1:4000",
   "devDependencies": {
