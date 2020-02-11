@@ -9,7 +9,7 @@ lerna-debug.log*
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
-# Runtime data
+# Runtime stores
 pids
 *.pid
 *.seed
@@ -81,6 +81,8 @@ typings/
 # Nuxt.js build / generate output
 .nuxt
 dist
+packages/gateway-frontend/build
+packages/gateway/public
 
 # Gatsby files
 .cache/
@@ -104,3 +106,4 @@ dist
 .tern-port
 
 .idea
+.DS_Store
