@@ -11,11 +11,12 @@ import { AuthModule } from './auth/auth.module';
 import configuration from './config/configuration';
 
 const CWD = process.env.SURGIO_PROJECT_DIR || process.cwd();
+const FE_FOLDER = require.resolve('@surgio/gateway-frontend');
 
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'node_modules/@surgio/gateway-frontend/build'),
+      rootPath: join(FE_FOLDER, 'build'),
     }),
     ConfigModule.forRoot({
       ignoreEnvFile: true,

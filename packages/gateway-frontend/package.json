@@ -1,8 +1,11 @@
 {
   "name": "@surgio/gateway-frontend",
   "version": "0.2.3",
+  "license": "MIT",
   "private": false,
   "proxy": "http://127.0.0.1:4000",
+  "repository": "https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend",
+  "author": "Yihang Li <me@royli.dev>",
   "devDependencies": {
     "@material-ui/core": "^4.8.3",
     "@material-ui/icons": "^4.5.1",

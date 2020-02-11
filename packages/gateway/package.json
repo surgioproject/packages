@@ -5,7 +5,7 @@
   "version": "0.2.3",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "repository": "https://github.com/surgioproject/packages/tree/master/packages/server",
+  "repository": "https://github.com/surgioproject/packages/tree/master/packages/gateway",
   "author": "Yihang Li <me@royli.dev>",
   "bugs": {
     "url": "https://github.com/surgioproject/packages/issues"
