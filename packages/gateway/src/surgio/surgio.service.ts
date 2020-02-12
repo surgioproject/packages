@@ -1,6 +1,6 @@
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { generate } from 'surgio/build/generate';
-import * as filters from 'surgio/build/utils';
+import * as filters from 'surgio/build/utils/filter';
 import { SurgioHelper } from './surgio-helper';
 
 @Injectable()

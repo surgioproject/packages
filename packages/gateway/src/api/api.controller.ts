@@ -1,4 +1,6 @@
 import { Controller, Get, HttpException, HttpStatus, Param, Post, Res, UseGuards, Req } from '@nestjs/common';
+import { FastifyReply } from 'fastify';
+import { ServerResponse } from 'http';
 import _ from 'lodash';
 
 import { CookieAuthGuard } from '../auth/cookie.guard';
@@ -9,7 +11,7 @@ export class ApiController {
   constructor(private readonly surgioService: SurgioService) {}
 
   @Post('/auth')
-  public async login(@Req() req, @Res() res): Promise<void> {
+  public async login(@Req() req, @Res() res: FastifyReply<ServerResponse>): Promise<void> {
     const accessToken = req.body.accessToken;
 
     if (accessToken === this.surgioService.surgioHelper.config?.gateway.accessToken) {
@@ -35,7 +37,7 @@ export class ApiController {
     };
   }
 
-  @Get('config')
+  @Get('/config')
   public async config(@Req() req): Promise<any> {
     return {
       status: 'ok',
@@ -49,7 +51,7 @@ export class ApiController {
   }
 
   @UseGuards(CookieAuthGuard)
-  @Get('artifacts')
+  @Get('/artifacts')
   public async listArtifacts(): Promise<any> {
     const artifactList = this.surgioService.surgioHelper.artifactList;
 
@@ -60,8 +62,8 @@ export class ApiController {
   }
 
   @UseGuards(CookieAuthGuard)
-  @Get('artifacts/:name')
-  public async getArtifact(@Res() res, @Param() params): Promise<void> {
+  @Get('/artifacts/:name')
+  public async getArtifact(@Res() res: FastifyReply<ServerResponse>, @Param() params): Promise<void> {
     const artifactList = this.surgioService.surgioHelper.artifactList.filter(item => item.name === params.name);
 
     if (artifactList.length) {

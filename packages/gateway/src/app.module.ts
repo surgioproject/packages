@@ -17,6 +17,9 @@ const FE_MODULE = require.resolve('@surgio/gateway-frontend');
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(FE_MODULE, '../build'),
+      serveStaticOptions: {
+        etag: true,
+      },
     }),
     ConfigModule.forRoot({
       ignoreEnvFile: true,

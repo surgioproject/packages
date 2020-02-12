@@ -1,7 +1,9 @@
-import { Controller, Get, Res, Header, Param, Query, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, Header, Param, Query, HttpException, HttpStatus, UseGuards, Req } from '@nestjs/common';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import got from 'got';
-import { BearerAuthGuard } from './auth/bearer.guard';
+import { ServerResponse } from 'http';
 
+import { BearerAuthGuard } from './auth/bearer.guard';
 import { SurgioService } from './surgio/surgio.service';
 
 @Controller()
@@ -10,14 +12,14 @@ export class AppController {
 
   @UseGuards(BearerAuthGuard)
   @Get('get-artifact/:name')
-  public async getArtifact(@Res() res, @Param() params, @Query() query): Promise<void> {
-    const dl = query.dl;
-    const format = query.format;
-    const filter = query.filter;
-    const artifactName = params.name;
+  public async getArtifact(@Res() res: FastifyReply<ServerResponse>, @Param() params, @Query() query, @Req() req: FastifyRequest): Promise<void> {
+    const dl: string = query.dl;
+    const format: string = query.format;
+    const filter: string = query.filter;
+    const artifactName: string = params.name;
     const result = format !== void 0 ?
-      await this.surgioService.transformArtifact(artifactName as string, format as string, filter as string) :
-      await this.surgioService.getArtifact(artifactName as string);
+      await this.surgioService.transformArtifact(artifactName, format, filter) :
+      await this.surgioService.getArtifact(artifactName);
 
     if (result instanceof HttpException) {
       throw result;
@@ -31,6 +33,8 @@ export class AppController {
         res.header('content-disposition', `attachment; filename="${artifactName}"`);
       }
 
+      req.log.warn('[download-artifact] [%s] %s %s', req.ip, artifactName, req.headers['user-agent'] || '-');
+
       res.send(result);
     } else {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
@@ -38,7 +42,7 @@ export class AppController {
   }
 
   @Get('qx-script')
-  public async getQxScript(@Res() res, @Query() query): Promise<void> {
+  public async getQxScript(@Res() res: FastifyReply<ServerResponse>, @Query() query): Promise<void> {
     const { url, id: idFromUrl } = query;
     const idFromConfig = this.surgioService?.surgioHelper.config?.quantumultXConfig?.deviceIds;
     const deviceIds = idFromUrl ? idFromUrl.split(',') : (idFromConfig || []);

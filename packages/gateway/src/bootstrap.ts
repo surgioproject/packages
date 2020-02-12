@@ -6,15 +6,35 @@ import {
 import FastifyCookie from 'fastify-cookie';
 
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './filter/http-exception.filter';
 
 export async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter({})
+    new FastifyAdapter({
+      logger: {
+        level: 'warn',
+        serializers: {
+          req(req: any): any {
+            return {
+              method: req.method,
+              url: req.url,
+              'user-agent': req.headers['user-agent'] || '-',
+              hostname: req.hostname,
+              remoteAddress: req.ip,
+              remotePort: req.connection.remotePort
+            }
+          }
+        },
+        prettyPrint: true,
+      },
+    })
   );
   const configService = app.get('ConfigService');
   const port = configService.get('port');
   const secret = configService.get('secret');
+
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   app.register(FastifyCookie, {
     secret, // for cookies signature
