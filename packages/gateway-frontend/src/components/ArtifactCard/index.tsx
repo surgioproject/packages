@@ -35,6 +35,9 @@ const useStyles = makeStyles(theme => ({
   },
   contentSection: {
     margin: theme.spacing(1.5, 0),
+    '&:first-child': {
+      marginTop: 0,
+    },
     '&:last-child': {
       marginBottom: 0,
     },
@@ -84,11 +87,11 @@ function ArtifactCard({ artifact }: ArtifactCardProps) {
       <CardHeader title={artifact.name} />
 
       <CardContent>
-        <Typography className={classes.urlContainer}
-                    component="pre"
-                    paragraph>
-          { previewUrl }
-        </Typography>
+        {/*<Typography className={classes.urlContainer}*/}
+        {/*            component="pre"*/}
+        {/*            paragraph>*/}
+        {/*  { previewUrl }*/}
+        {/*</Typography>*/}
 
         <div className={classes.contentSection}>
           <Typography gutterBottom variant="body1">

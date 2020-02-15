@@ -115,16 +115,16 @@ const Page: React.FC = () => {
       }
     });
 
-    return <>{ result }</>;
+    return <div>{ result }</div>;
   };
 
   return (
     <div className={classes.ArtifactListPage}>
       <Paper className={classes.headerContainer}>
-        <Typography gutterBottom variant="h4">Artifacts</Typography>
         {
-          categories.length && (
+          categories.length > 0 ? (
             <>
+              <Typography gutterBottom variant="h4">Artifacts</Typography>
               <Divider />
               <div className={classes.categories}>
                 <Typography gutterBottom variant="body1">分类</Typography>
@@ -149,6 +149,8 @@ const Page: React.FC = () => {
                 </FormGroup>
               </div>
             </>
+          ) : (
+            <Typography variant="h4">Artifacts</Typography>
           )
         }
       </Paper>
