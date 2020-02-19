@@ -1,4 +1,5 @@
 import { Controller, Get, HttpException, HttpStatus, Param, Post, Res, UseGuards, Req } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { FastifyReply } from 'fastify';
 import { ServerResponse } from 'http';
 import _ from 'lodash';
@@ -8,7 +9,10 @@ import { SurgioService } from '../surgio/surgio.service';
 
 @Controller('api')
 export class ApiController {
-  constructor(private readonly surgioService: SurgioService) {}
+  constructor(
+    private readonly surgioService: SurgioService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Post('/auth')
   public async login(@Req() req, @Res() res: FastifyReply<ServerResponse>): Promise<void> {
@@ -16,7 +20,8 @@ export class ApiController {
 
     if (accessToken === this.surgioService.surgioHelper.config?.gateway.accessToken) {
       res.setCookie('_t', accessToken, {
-        maxAge: 60 * 60 * 24 * 7,
+        maxAge: this.surgioService.surgioHelper.config?.gateway?.cookieMaxAge
+          ?? this.configService.get('defaultCookieMaxAge'),
         httpOnly: true,
         signed: true,
       });

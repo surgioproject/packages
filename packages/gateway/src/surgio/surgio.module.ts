@@ -8,7 +8,7 @@ import { SurgioService } from './surgio.service';
 @Global()
 @Module({})
 export class SurgioModule {
-  public static register(options: { readonly cwd?: string } = { cwd: process.cwd() }): DynamicModule {
+  public static register(options: { readonly cwd: string }): DynamicModule {
     return {
       module: SurgioModule,
       providers: [
@@ -17,11 +17,7 @@ export class SurgioModule {
           provide: 'SURGIO_HELPER',
           useFactory: async (): Promise<SurgioHelper> => {
             const configFile = path.join(options.cwd, 'surgio.conf.js');
-            const config = loadConfig(options.cwd, configFile, {
-              ...(['development', 'test'].indexOf(process.env.NODE_ENV) > -1 ? {
-                urlBase: '/get-artifact/',
-              } : null),
-            });
+            const config = loadConfig(options.cwd, configFile);
             const helper = new SurgioHelper(options.cwd, config);
 
             return await helper.init();

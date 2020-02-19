@@ -8,7 +8,10 @@ import { AuthService } from './auth.service';
 
 @Injectable()
 export class CookieStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly authService: AuthService, private readonly configService: ConfigService) {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService
+  ) {
     super({
       cookieName: '_t',
       passReqToCallback: true,

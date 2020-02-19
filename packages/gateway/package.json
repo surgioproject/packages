@@ -72,7 +72,7 @@
     "testEnvironment": "node"
   },
   "peerDependencies": {
-    "surgio": "^1.12.0"
+    "surgio": "^1.12.2"
   },
   "publishConfig": {
     "access": "public"
