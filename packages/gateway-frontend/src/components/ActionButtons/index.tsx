@@ -6,6 +6,7 @@ import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import { CATEGORIES } from 'surgio/build/utils/constant';
 import { JsonObject } from 'type-fest';
+
 import { getDownloadUrl } from '../../libs/utils';
 import { useStores } from '../../stores';
 
@@ -15,9 +16,7 @@ export interface ActionButtonsProps {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    ActionButtons: {
-
-    },
+    ActionButtons: {},
     actionButton: {}
   }),
 );
@@ -82,7 +81,8 @@ function ActionButtons({ artifact }: ActionButtonsProps) {
       };
       return (
         <div className={classes.actionButton}>
-          <Button component={Link}
+          <Button data-testid="quanx-server-remote"
+                  component={Link}
                   color="secondary"
                   size="medium"
                   rel="nofollow"
@@ -104,7 +104,8 @@ function ActionButtons({ artifact }: ActionButtonsProps) {
       };
       return (
         <div className={classes.actionButton}>
-          <Button component={Link}
+          <Button data-testid="quanx-filter-remote"
+                  component={Link}
                   color="secondary"
                   size="medium"
                   rel="nofollow"
@@ -126,7 +127,8 @@ function ActionButtons({ artifact }: ActionButtonsProps) {
       };
       return (
         <div className={classes.actionButton}>
-          <Button component={Link}
+          <Button data-testid="quanx-rewrite-remote"
+                  component={Link}
                   color="secondary"
                   size="medium"
                   rel="nofollow"
@@ -142,7 +144,8 @@ function ActionButtons({ artifact }: ActionButtonsProps) {
   };
 
   return (
-    <div className={classes.ActionButtons}>
+    <div data-testid="action-buttons"
+         className={classes.ActionButtons}>
       <SurgeButtons />
       <ClashButtons />
       <QuantumultXButtons />

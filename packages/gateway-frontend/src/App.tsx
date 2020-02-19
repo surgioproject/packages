@@ -6,7 +6,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
   Link as RouterLink,
   LinkProps as RouterLinkProps,
 } from 'react-router-dom';
@@ -170,11 +169,11 @@ export default observer((props: ResponsiveDrawerProps) => {
   return (
     <Router>
       <SnackbarProvider maxSnack={3}>
-        <div className={classes.root}>
+        <CssBaseline />
+
+        <div className={clsx(classes.root, 'app-root')}>
           { stores.config.isReady && (
             <>
-              <CssBaseline />
-
               <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                   <IconButton

@@ -42,7 +42,6 @@ function ArtifactCopyButtons({ artifact }: ArtifactCopyButtonsProps) {
   const anchorRef = React.useRef<HTMLDivElement>(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const { enqueueSnackbar } = useSnackbar();
-  const previewUrl = getDownloadUrl(artifact.name, true, configStore.config.accessToken);
   const urls: string[] = [
     getDownloadUrl(artifact.name, true, configStore.config.accessToken),
     getDownloadUrl(`${artifact.name}?format=surge-policy`, true, configStore.config.accessToken),
@@ -85,6 +84,7 @@ function ArtifactCopyButtons({ artifact }: ArtifactCopyButtonsProps) {
                    ref={anchorRef}
                    aria-label="split button">
         <Clipboard component={CopyButton}
+                   data-testid="copy-button"
                    data-clipboard-text={urls[selectedIndex]}
                    onSuccess={onCopySuccess}
                    onError={onCopyError}>
@@ -98,7 +98,7 @@ function ArtifactCopyButtons({ artifact }: ArtifactCopyButtonsProps) {
               size="small"
               aria-controls={open ? 'split-button-menu' : undefined}
               aria-expanded={open ? 'true' : undefined}
-              aria-label="select merge strategy"
+              aria-label="select url type"
               aria-haspopup="menu"
               onClick={handleToggle}
             >

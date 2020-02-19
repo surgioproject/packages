@@ -72,13 +72,19 @@ function ArtifactCard({ artifact }: ArtifactCardProps) {
 
   const providersElement = providers.map(item => {
     return (
-      <Chip className={classes.tag} key={item} label={item} />
+      <Chip data-testid="display-provider-item"
+            className={classes.tag}
+            key={item}
+            label={item} />
     );
   });
 
   const categoriesElement = artifact.categories
     ? artifact.categories.map(cat =>(
-        <Chip className={classes.tag} key={cat} label={cat} />
+        <Chip data-testid="display-category-item"
+              className={classes.tag}
+              key={cat}
+              label={cat} />
       ))
     : null;
 
@@ -93,7 +99,8 @@ function ArtifactCard({ artifact }: ArtifactCardProps) {
         {/*  { previewUrl }*/}
         {/*</Typography>*/}
 
-        <div className={classes.contentSection}>
+        <div data-testid="display-provider-list"
+             className={classes.contentSection}>
           <Typography gutterBottom variant="body1">
             Providers
           </Typography>
@@ -120,7 +127,10 @@ function ArtifactCard({ artifact }: ArtifactCardProps) {
       </CardContent>
 
       <CardActions disableSpacing>
-        <Link target="_blank" href={downloadUrl}>
+        <Link data-testid="download-button"
+              target="_blank"
+              rel="nofollow"
+              href={downloadUrl}>
           <Button className={classes.actionButton}
                   variant="contained"
                   size="medium"
@@ -129,7 +139,10 @@ function ArtifactCard({ artifact }: ArtifactCardProps) {
           </Button>
         </Link>
 
-        <Link target="_blank" href={previewUrl}>
+        <Link data-testid="preview-button"
+              target="_blank"
+              rel="nofollow"
+              href={previewUrl}>
           <Button className={classes.actionButton}
                   variant="contained"
                   size="medium"
