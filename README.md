@@ -4,6 +4,11 @@
     </a>
 </p>
 
+![Github Actions][github-actions-image]
+[![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest)
+
+[github-actions-image]: https://github.com/surgioproject/packages/workflows/Node%20CI/badge.svg
+
 ## 文档
 
 查看完整使用文档，前往 [surgio.royli.dev](https://surgio.royli.dev)。

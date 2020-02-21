@@ -2,6 +2,11 @@
   "name": "@surgio/packages-monorepo",
   "private": true,
   "license": "MIT",
+  "scripts": {
+    "test": "yarn workspaces run test",
+    "test:ci": "yarn workspaces run test:ci",
+    "lint": "yarn workspaces run lint"
+  },
   "devDependencies": {
     "@material-ui/core": "^4.8.3",
     "@material-ui/icons": "^4.5.1",
