@@ -1,28 +1,14 @@
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
-import { Test } from '@nestjs/testing';
-import FastifyCookie from 'fastify-cookie';
-import fastifyAdapter from '../src/app.adapter';
-import { AppModule } from '../src/app.module';
+
+import { bootstrap } from '../src/bootstrap';
 
 describe('AppController (e2e)', () => {
   let app: NestFastifyApplication;
 
   beforeAll(async () => {
-    const moduleFixture = await Test.createTestingModule({
-      imports: [
-        AppModule,
-      ],
-    }).compile();
-
-    app = moduleFixture.createNestApplication<NestFastifyApplication>(fastifyAdapter);
+    app = await bootstrap();
 
     const configService = app.get('ConfigService');
-    const secret = configService.get('secret');
-
-    app.register(FastifyCookie, {
-      secret, // for cookies signature
-      parseOptions: {}, // options for parsing cookies
-    });
 
     await app.init();
   });
@@ -36,6 +22,7 @@ describe('AppController (e2e)', () => {
       url: '/',
     });
 
+    console.log(res.payload);
     expect(res.statusCode).toBe(200);
   });
 
