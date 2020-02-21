@@ -1,0 +1,224 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SurgioService getArtifact should work 1`] = `
+"🇺🇸US 1 = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, obfs=tls, obfs-host=gateway-carry.icloud.com
+🇺🇸US 2 = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module
+🇺🇲 US = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
+Snell = snell, us.example.com, 443, psk=password, obfs=tls
+HTTPS = https, us.example.com, 443, username, password
+ss1 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true
+ss2 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=false, obfs=tls, obfs-host=www.bing.com
+vmess = vmess, server, 443, username=uuid
+http 1 = https, server, 443, username, password, skip-cert-verify=false
+http 2 = http, server, 443, username, password
+snell = snell, server, 44046, psk=yourpsk, obfs=http
+ss4 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=false, obfs=tls, obfs-host=example.com
+----
+🇺🇸US 1, 🇺🇸US 2, 🇺🇸US 3, 🇺🇲 US, Snell, HTTPS, ss1, ss2, ss3, vmess, http 1, http 2, snell, ss4, ss-wss
+"
+`;
+
+exports[`SurgioService transformArtifact filter should work 1`] = `"🇺🇲 US = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"`;
+
+exports[`SurgioService transformArtifact filter should work 2`] = `"shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com, udp-relay=true, fast-open=true, tag=🇺🇲 US"`;
+
+exports[`SurgioService transformArtifact filter should work 3`] = `
+"---
+proxies:
+- type: ss
+  cipher: chacha20-ietf-poly1305
+  name: 🇺🇲 US
+  password: password
+  port: \\"443\\"
+  server: us.example.com
+  udp: true
+  plugin: obfs
+  plugin-opts:
+    mode: tls
+    host: gateway-carry.icloud.com
+
+..."
+`;
+
+exports[`SurgioService transformArtifact format should work 1`] = `
+"🇺🇸US 1 = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, obfs=tls, obfs-host=gateway-carry.icloud.com
+🇺🇸US 2 = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module
+🇺🇲 US = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
+Snell = snell, us.example.com, 443, psk=password, obfs=tls
+HTTPS = https, us.example.com, 443, username, password
+ss1 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true
+ss2 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=false, obfs=tls, obfs-host=www.bing.com
+vmess = vmess, server, 443, username=uuid
+http 1 = https, server, 443, username, password, skip-cert-verify=false
+http 2 = http, server, 443, username, password
+snell = snell, server, 44046, psk=yourpsk, obfs=http
+ss4 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=false, obfs=tls, obfs-host=example.com"
+`;
+
+exports[`SurgioService transformArtifact format should work 2`] = `
+"shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com, tag=🇺🇸US 1
+shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, tag=🇺🇸US 2
+shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=wss, obfs-host=gateway-carry.icloud.com, obfs-uri=/, tag=🇺🇸US 3
+shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com, udp-relay=true, fast-open=true, tag=🇺🇲 US
+http=us.example.com:443, username=username, password=password, over-tls=true, tls-verification=true, tag=HTTPS
+shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, udp-relay=true, tag=ss1
+shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=www.bing.com, tag=ss2
+shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=ws, obfs-host=server, obfs-uri=/, tag=ss3
+vmess=server:443, method=chacha20-ietf-poly1305, password=uuid, udp-relay=true, tag=vmess
+http=server:443, username=username, password=password, over-tls=true, tls-verification=true, tag=http 1
+http=server:443, username=username, password=password, tag=http 2
+shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=example.com, tag=ss4
+shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=wss, obfs-host=cloudflare.com, obfs-uri=/ws, tag=ss-wss"
+`;
+
+exports[`SurgioService transformArtifact format should work 3`] = `
+"---
+proxies:
+- type: ss
+  cipher: chacha20-ietf-poly1305
+  name: 🇺🇸US 1
+  password: password
+  port: \\"443\\"
+  server: us.example.com
+  udp: false
+  plugin: obfs
+  plugin-opts:
+    mode: tls
+    host: gateway-carry.icloud.com
+- type: ss
+  cipher: chacha20-ietf-poly1305
+  name: 🇺🇸US 2
+  password: password
+  port: \\"443\\"
+  server: us.example.com
+  udp: false
+- type: ss
+  cipher: chacha20-ietf-poly1305
+  name: 🇺🇸US 3
+  password: password
+  port: \\"443\\"
+  server: us.example.com
+  udp: false
+  plugin: v2ray-plugin
+  plugin-opts:
+    mode: websocket
+    tls: true
+    host: gateway-carry.icloud.com
+    path: /
+    mux: false
+- type: ss
+  cipher: chacha20-ietf-poly1305
+  name: 🇺🇲 US
+  password: password
+  port: \\"443\\"
+  server: us.example.com
+  udp: true
+  plugin: obfs
+  plugin-opts:
+    mode: tls
+    host: gateway-carry.icloud.com
+- type: snell
+  name: Snell
+  server: us.example.com
+  port: \\"443\\"
+  psk: password
+  obfs-opts:
+    mode: tls
+- type: http
+  name: HTTPS
+  server: us.example.com
+  port: \\"443\\"
+  username: username
+  password: password
+  tls: true
+  skipCertVerify: false
+- type: ss
+  cipher: chacha20-ietf-poly1305
+  name: ss1
+  password: password
+  port: 443
+  server: server
+  udp: true
+- type: ss
+  cipher: chacha20-ietf-poly1305
+  name: ss2
+  password: password
+  port: 443
+  server: server
+  udp: false
+  plugin: obfs
+  plugin-opts:
+    mode: tls
+    host: www.bing.com
+- type: ss
+  cipher: chacha20-ietf-poly1305
+  name: ss3
+  password: password
+  port: 443
+  server: server
+  udp: false
+  plugin: v2ray-plugin
+  plugin-opts:
+    mode: websocket
+    tls: false
+    host: server
+    path: /
+    mux: false
+- type: vmess
+  cipher: auto
+  name: vmess
+  server: server
+  port: 443
+  uuid: uuid
+  alterId: \\"32\\"
+  tls: false
+- type: http
+  name: http 1
+  server: server
+  port: 443
+  username: username
+  password: password
+  tls: true
+  skipCertVerify: false
+- type: http
+  name: http 2
+  server: server
+  port: 443
+  username: username
+  password: password
+- type: snell
+  name: snell
+  server: server
+  port: 44046
+  psk: yourpsk
+  obfs-opts:
+    mode: http
+- type: ss
+  cipher: chacha20-ietf-poly1305
+  name: ss4
+  password: password
+  port: 443
+  server: server
+  udp: false
+  plugin: obfs
+  plugin-opts:
+    mode: tls
+    host: example.com
+- type: ss
+  cipher: chacha20-ietf-poly1305
+  name: ss-wss
+  password: password
+  port: 443
+  server: server
+  udp: false
+  plugin: v2ray-plugin
+  plugin-opts:
+    mode: websocket
+    tls: true
+    skip-cert-verify: false
+    host: cloudflare.com
+    path: /ws
+    mux: false
+
+..."
+`;

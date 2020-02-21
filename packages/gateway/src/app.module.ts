@@ -10,7 +10,6 @@ import { SurgioService } from './surgio/surgio.service';
 import { AuthModule } from './auth/auth.module';
 import configuration from './config/configuration';
 
-const CWD = process.env.SURGIO_PROJECT_DIR || process.cwd();
 const FE_MODULE = require.resolve('@surgio/gateway-frontend');
 
 @Module({
@@ -27,7 +26,7 @@ const FE_MODULE = require.resolve('@surgio/gateway-frontend');
       load: [configuration],
     }),
     SurgioModule.register({
-      cwd: CWD,
+      cwd: process.env.SURGIO_PROJECT_DIR || process.cwd(),
     }),
     ApiModule,
     AuthModule,

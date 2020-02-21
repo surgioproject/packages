@@ -1,7 +1,3 @@
-import { bootstrap } from './bootstrap';
+import { startServer } from './index';
 
-bootstrap()
-  .catch(err => {
-    console.error(err);
-    process.exit(1);
-  });
+startServer();

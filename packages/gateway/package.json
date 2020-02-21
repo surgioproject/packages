@@ -69,7 +69,10 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFiles": [
+      "../test/setup-tests.ts"
+    ]
   },
   "peerDependencies": {
     "surgio": "^1.12.2"
