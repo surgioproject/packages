@@ -5,6 +5,7 @@
   "scripts": {
     "test": "yarn workspaces run test",
     "test:ci": "yarn workspaces run test:ci",
+    "build": "yarn workspaces run build",
     "lint": "yarn workspaces run lint"
   },
   "devDependencies": {

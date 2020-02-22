@@ -22,7 +22,6 @@ describe('AppController (e2e)', () => {
       url: '/',
     });
 
-    console.log(res.payload);
     expect(res.statusCode).toBe(200);
   });
 
