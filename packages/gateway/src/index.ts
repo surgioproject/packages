@@ -1,9 +1,29 @@
-import http from 'http';
+import { NowRequest, NowResponse } from '@now/node/dist';
+import { ServerFactoryFunction, ServerFactoryHandlerFunction } from 'fastify';
+import { createServer } from 'http';
 import { bootstrap } from './bootstrap';
 
-export const createHttpServer = (): Promise<http.Server> => {
-  return bootstrap()
-    .then(app => app.getHttpServer());
+export const createHttpServer = (): any => {
+  let nowHandler: ServerFactoryHandlerFunction;
+  const serverFactory: ServerFactoryFunction = handler => {
+    nowHandler = (req, res) => {
+      handler(req, res);
+    };
+    return createServer(nowHandler);
+  };
+  const server = bootstrap({
+    serverFactory,
+  })
+    .then(app => {
+      return app.init()
+        .then(() => app.getHttpAdapter().getInstance().ready())
+    });
+
+  return async (req: NowRequest, res: NowResponse) => {
+    await server;
+
+    return nowHandler(req, res);
+  };
 };
 
 export const startServer = (): Promise<void> => {
@@ -23,3 +43,5 @@ export const startServer = (): Promise<void> => {
       process.exit(1);
     });
 };
+
+export const bootstrapServer = bootstrap;
