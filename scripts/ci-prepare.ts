@@ -13,10 +13,13 @@ const projects = {
 (async () => {
   const buildTarget = join(projects['@surgio/gateway'], './node_modules/@surgio/gateway-frontend/build');
 
-  await execa('yarn', ['run', 'build'], {
+  const buildProc = execa('yarn', ['run', 'build'], {
     cwd: project,
-  })
-    .stdout.pipe(process.stdout);
+  });
+
+  buildProc.stdout.pipe(process.stdout);
+
+  await buildProc;
 
   if (fs.existsSync(buildTarget)) {
     await promisify(rimraf)(buildTarget);
@@ -26,8 +29,7 @@ const projects = {
     '-r',
     join(projects['@surgio/gateway-frontend'], './build'),
     join(projects['@surgio/gateway'], './node_modules/@surgio/gateway-frontend')
-  ])
-    .stdout.pipe(process.stdout);
+  ]);
 })()
   .catch(err => {
     console.error(err);
