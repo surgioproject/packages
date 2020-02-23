@@ -1,21 +1,31 @@
 import * as execa from 'execa';
-import * as path from 'path';
+import { join } from 'path';
+import * as fs from 'fs';
+import * as rimraf from 'rimraf';
+import { promisify } from 'util';
 
-const project = path.join(__dirname, '..');
+const project = join(__dirname, '..');
 const projects = {
-  '@surgio/gateway-frontend': path.join(project, 'packages/gateway-frontend'),
-  '@surgio/gateway': path.join(project, 'packages/gateway'),
+  '@surgio/gateway-frontend': join(project, 'packages/gateway-frontend'),
+  '@surgio/gateway': join(project, 'packages/gateway'),
 };
 
 (async () => {
-  await execa('yarn', ['workspace', '@surgio/gateway-frontend', 'run', 'build'], {
-    cwd: project,
-  })
-    .stdout.pipe(process.stdout);
+  const buildTarget = join(projects['@surgio/gateway'], './node_modules/@surgio/gateway-frontend/build');
 
-  await execa('mv', [
-    path.join(projects['@surgio/gateway-frontend'], './build/'),
-    path.join(projects['@surgio/gateway'], './node_modules/@surgio/gateway-frontend/')
+  // await execa('yarn', ['run', 'build'], {
+  //   cwd: project,
+  // })
+  //   .stdout.pipe(process.stdout);
+
+  if (fs.existsSync(buildTarget)) {
+    await promisify(rimraf)(buildTarget);
+  }
+
+  await execa('cp', [
+    '-r',
+    join(projects['@surgio/gateway-frontend'], './build'),
+    join(projects['@surgio/gateway'], './node_modules/@surgio/gateway-frontend')
   ])
     .stdout.pipe(process.stdout);
 })()
