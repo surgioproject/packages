@@ -107,3 +107,9 @@ packages/gateway/public
 
 .idea
 .DS_Store
+
+# bundle
+packages/**/src/*.js
+
+# Misc
+scripts/**/*.js

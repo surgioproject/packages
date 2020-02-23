@@ -6,7 +6,8 @@
     "test": "yarn workspaces run test",
     "test:ci": "yarn workspaces run test:ci",
     "build": "yarn workspaces run build",
-    "lint": "yarn workspaces run lint"
+    "lint": "yarn workspaces run lint",
+    "prepare-ci": "ts-node -P scripts/tsconfig.json scripts/ci-prepare.ts"
   },
   "devDependencies": {
     "@material-ui/core": "^4.8.3",
@@ -32,6 +33,7 @@
     "autoprefixer": "^9.7.3",
     "clsx": "^1.0.4",
     "conventional-changelog-cli": "^2.0.31",
+    "execa": "^4.0.0",
     "fetch-mock": "^9.0.0-beta.2",
     "jest": "^24.9.0",
     "ky": "^0.17.0",
@@ -72,10 +74,6 @@
     "url": "https://github.com/surgioproject/packages/issues"
   },
   "homepage": "https://surgio.royli.dev",
-  "dependencies": {
-    "@surgio/gateway": "file:packages/gateway",
-    "@surgio/gateway-frontend": "file:packages/gateway-frontend"
-  },
   "workspaces": [
     "packages/*"
   ]

@@ -13,9 +13,8 @@
   "homepage": "https://surgio.royli.dev",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "run-s build:*",
-    "build:server": "nest build",
-    "prepare": "npm run build",
+    "build": "nest build",
+    "prepare": "run-s build",
     "start": "nest start",
     "start:prod": "node dist/main",
     "dev": "nest start --watch",

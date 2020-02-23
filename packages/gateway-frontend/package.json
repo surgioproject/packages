@@ -16,10 +16,7 @@
     "test:cov": "react-scripts test --coverage --watchAll=false",
     "test:ci": "run-s test",
     "lint": "eslint .",
-    "prepare": "npm run build"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "prepare": "run-s build"
   },
   "browserslist": {
     "production": [
