@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.3.0...@surgio/gateway@0.4.0) (2020-02-23)
+
+
+### Features
+
+* cookie 有效期改为 1 个月并且可配置 ([28eeeb8](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/28eeeb81d1299ca2a431d0240ad4bc2fb971ce23))
+
+
+
+
+
 # [0.3.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.2.5...@surgio/gateway@0.3.0) (2020-02-12)
 
 
