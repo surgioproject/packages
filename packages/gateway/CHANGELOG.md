@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.4.0...@surgio/gateway@0.5.0) (2020-02-23)
+
+
+### Features
+
+* 提供新的 serverless 启动方式 ([7283469](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/7283469b1741f49db6dab30f3bf643f2d066b741))
+
+
+
+
+
 # [0.4.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.3.0...@surgio/gateway@0.4.0) (2020-02-23)
 
 
