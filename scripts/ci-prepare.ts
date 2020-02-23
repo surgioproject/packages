@@ -13,10 +13,10 @@ const projects = {
 (async () => {
   const buildTarget = join(projects['@surgio/gateway'], './node_modules/@surgio/gateway-frontend/build');
 
-  // await execa('yarn', ['run', 'build'], {
-  //   cwd: project,
-  // })
-  //   .stdout.pipe(process.stdout);
+  await execa('yarn', ['run', 'build'], {
+    cwd: project,
+  })
+    .stdout.pipe(process.stdout);
 
   if (fs.existsSync(buildTarget)) {
     await promisify(rimraf)(buildTarget);
