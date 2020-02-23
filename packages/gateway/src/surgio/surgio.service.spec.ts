@@ -13,7 +13,7 @@ describe('SurgioService', () => {
       providers: [],
       imports: [
         SurgioModule.register({
-          cwd: path.join(__dirname, '../../test/fixtures/gateway'),
+          cwd: path.join(__dirname, '../../__tests__/__fixtures__/gateway'),
         }),
       ],
     }).compile();
