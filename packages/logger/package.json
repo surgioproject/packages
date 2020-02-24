@@ -14,7 +14,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:ci": "run-s test"
+    "test:ci": "run-s test",
+    "lint": "tslint -p tsconfig.json -c tslint.json"
   },
   "files": [
     "dist"
