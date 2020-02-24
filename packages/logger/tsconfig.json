@@ -15,5 +15,7 @@
     "resolveJsonModule": true,
     "allowJs": true
   },
-  "exclude": ["node_modules", "dist", "coverage", "__tests__", "**/*.spec.ts", "**/*.test.ts"]
+  "exclude": ["node_modules", "dist", "coverage",
+    "src/__tests__/__fixtures__"
+  ]
 }
