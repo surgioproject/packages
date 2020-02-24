@@ -2259,7 +2259,7 @@
   integrity sha512-+iTbntw2IZPb/anVDbypzfQa+ay64MW0Zo8aJ8gZPWMMK6/OubMVb6lUPMagqjOPnmtauXnFCACVl3O7ogjeqQ==
 
 "@surgio/gateway-frontend@file:packages/gateway-frontend":
-  version "0.2.5"
+  version "0.3.0"
 
 "@svgr/babel-plugin-add-jsx-attribute@^4.2.0":
   version "4.2.0"

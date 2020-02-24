@@ -1,0 +1,53 @@
+{
+  "name": "@surgio/logger",
+  "version": "0.1.0",
+  "description": "Logger helper for Surgio projects",
+  "author": "Yihang Li <me@royli.dev>",
+  "homepage": "https://surgio.royli.dev",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc -p tsconfig.json",
+    "prepare": "run-s build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:ci": "run-s test",
+    "lint": "tslint -p tsconfig.json -c tslint.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".spec.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/surgioproject/packages.git"
+  },
+  "bugs": {
+    "url": "https://github.com/surgioproject/packages/issues"
+  },
+  "dependencies": {
+    "winston": "^3.2.1"
+  }
+}
