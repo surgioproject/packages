@@ -1,25 +1,31 @@
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { generate } from 'surgio/build/generate';
+import { Artifact } from 'surgio/build/generator/artifact';
+import { ArtifactConfig } from 'surgio/build/types';
 import * as filters from 'surgio/build/utils/filter';
+
 import { SurgioHelper } from './surgio-helper';
 
 @Injectable()
 export class SurgioService {
   constructor(@Inject('SURGIO_HELPER') public surgioHelper: SurgioHelper) {}
 
-  public async getArtifact(artifactName: string): Promise<string> {
+  public async getArtifact(artifactName: string): Promise<Artifact> {
     const target = this.surgioHelper.artifactList.filter(item => item.name === artifactName);
 
     if (!target.length) {
       return undefined;
     }
 
-    return await generate(
+    const artifactInstance = new Artifact(
       this.surgioHelper.config,
       target[0],
-      this.surgioHelper.remoteSnippetList,
-      this.surgioHelper.templateEngine
+      {
+        remoteSnippetList: this.surgioHelper.remoteSnippetList,
+      }
     );
+
+    return await artifactInstance.init(this.surgioHelper.templateEngine);
   }
 
   public async transformArtifact(artifactName: string, format: string, filter?: string): Promise<string|HttpException> {

@@ -1,6 +1,6 @@
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import path from 'path';
+import { join } from 'path';
 
 import { SurgioModule } from './surgio.module';
 import { SurgioService } from './surgio.service';
@@ -13,7 +13,7 @@ describe('SurgioService', () => {
       providers: [],
       imports: [
         SurgioModule.register({
-          cwd: path.join(__dirname, '../../__tests__/__fixtures__/gateway'),
+          cwd: join(__dirname, '../../__tests__/__fixtures__/gateway'),
         }),
       ],
     }).compile();
@@ -28,7 +28,7 @@ describe('SurgioService', () => {
   test('getArtifact should work', async () => {
     const artifact = await surgioService.getArtifact('test.conf');
 
-    expect(artifact).toMatchSnapshot();
+    expect(artifact.render()).toMatchSnapshot();
   });
 
   test('transformArtifact format should work', async () => {
