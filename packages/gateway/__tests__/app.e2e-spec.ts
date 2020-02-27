@@ -34,6 +34,7 @@ describe('AppController (e2e)', () => {
     });
 
     expect(res.statusCode).toBe(200);
+    expect(res.headers['subscription-userinfo']).toBeUndefined();
     expect(res.payload).toMatchSnapshot();
   });
 
@@ -47,6 +48,18 @@ describe('AppController (e2e)', () => {
     });
 
     expect(res.headers['content-disposition']).toBe('attachment; filename="test.conf"');
+  });
+
+  test('/get-artifact (GET) userinfo header', async () => {
+    const res = await app.inject({
+      url: '/get-artifact/test3.conf',
+      query: {
+        access_token: 'abcd',
+      },
+    });
+
+    expect(res.headers['subscription-userinfo'])
+      .toBe('upload=891332010; download=29921186546; total=322122547200; expire=1586330887');
   });
 
   test('/get-artifact (GET) 404', async () => {

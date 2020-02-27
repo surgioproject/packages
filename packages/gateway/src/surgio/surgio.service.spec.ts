@@ -57,4 +57,14 @@ describe('SurgioService', () => {
       await surgioService.transformArtifact('test.conf', 'clash-provider', 'globalFilter')
     ).toMatchSnapshot();
   });
+
+  test('listProviders', () => {
+    const providers = surgioService.listProviders();
+
+    expect(providers).toHaveLength(4);
+
+    providers.forEach(item => {
+      expect(item.name).toBeDefined();
+    });
+  });
 });

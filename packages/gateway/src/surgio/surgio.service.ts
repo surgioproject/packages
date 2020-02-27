@@ -1,6 +1,7 @@
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { generate } from 'surgio/build/generate';
 import { Artifact } from 'surgio/build/generator/artifact';
+import { getProvider } from 'surgio/build/provider';
 import { ArtifactConfig } from 'surgio/build/types';
 import * as filters from 'surgio/build/utils/filter';
 
@@ -28,7 +29,7 @@ export class SurgioService {
     return await artifactInstance.init(this.surgioHelper.templateEngine);
   }
 
-  public async transformArtifact(artifactName: string, format: string, filter?: string): Promise<string|HttpException> {
+  public async transformArtifact(artifactName: string, format: string, filter?: string): Promise<Artifact|string|HttpException> {
     const target = this.surgioHelper.artifactList.filter(item => item.name === artifactName);
     let filterName;
 
@@ -90,5 +91,9 @@ export class SurgioService {
       default:
         return new HttpException( 'unsupported format', HttpStatus.BAD_REQUEST);
     }
+  }
+
+  public listProviders(): ReadonlyArray<ReturnType<typeof getProvider>> {
+    return Array.from(this.surgioHelper.providerMap.values());
   }
 }
