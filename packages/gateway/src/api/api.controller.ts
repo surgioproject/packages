@@ -80,4 +80,15 @@ export class ApiController {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     }
   }
+
+  @UseGuards(CookieAuthGuard)
+  @Get('/providers')
+  public async listProviders(): Promise<any> {
+    const providerList = this.surgioService.listProviders();
+
+    return {
+      status: 'ok',
+      data: providerList,
+    };
+  }
 }

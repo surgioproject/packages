@@ -2,7 +2,7 @@ import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { generate } from 'surgio/build/generate';
 import { Artifact } from 'surgio/build/generator/artifact';
 import { getProvider } from 'surgio/build/provider';
-import { ArtifactConfig } from 'surgio/build/types';
+import { ArtifactConfig, CommandConfig } from 'surgio/build/types';
 import * as filters from 'surgio/build/utils/filter';
 
 import { SurgioHelper } from './surgio-helper';
@@ -10,6 +10,10 @@ import { SurgioHelper } from './surgio-helper';
 @Injectable()
 export class SurgioService {
   constructor(@Inject('SURGIO_HELPER') public surgioHelper: SurgioHelper) {}
+
+  public get config(): CommandConfig {
+    return this.surgioHelper.config;
+  }
 
   public async getArtifact(artifactName: string): Promise<Artifact> {
     const target = this.surgioHelper.artifactList.filter(item => item.name === artifactName);
