@@ -8,6 +8,7 @@ import {
   Route,
   Link as RouterLink,
   LinkProps as RouterLinkProps,
+  Redirect,
 } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -23,13 +24,15 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import ListIcon from '@material-ui/icons/List';
+import DnsIcon from '@material-ui/icons/Dns';
+import SubjectIcon from '@material-ui/icons/Subject';
 import MenuIcon from '@material-ui/icons/Menu';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
+import loadable from '@loadable/component';
 
 import './App.css';
 import { defaultFetcher } from './libs/utils';
-import ArtifactListPage from './pages/ArtifactList';
 import AuthPage from './pages/Auth';
 import HomePage from './pages/Home';
 import NotFoundPage from './pages/NotFound';
@@ -37,6 +40,8 @@ import { useStores } from './stores';
 import { Config } from './stores/config';
 
 const drawerWidth = 240;
+const ArtifactListPage = loadable(() => import('./pages/ArtifactList'), {});
+const ProviderListPage = loadable(() => import('./pages/ProviderList'), {});
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -161,7 +166,8 @@ export default observer((props: ResponsiveDrawerProps) => {
       </div>
       <Divider />
       <List>
-        <ListItemLink to="/list-artifact" primary="Artifacts" icon={<ListIcon />} />
+        <ListItemLink to="/artifacts" primary="Artifacts" icon={<SubjectIcon />} />
+        <ListItemLink to="/providers" primary="Providers" icon={<DnsIcon />} />
       </List>
     </div>
   );
@@ -234,7 +240,13 @@ export default observer((props: ResponsiveDrawerProps) => {
                 <div className={classes.toolbar} />
                 <Switch>
                   <Route path="/list-artifact">
+                    <Redirect to="/artifacts" />
+                  </Route>
+                  <Route path="/artifacts">
                     <ArtifactListPage />
+                  </Route>
+                  <Route path="/providers">
+                    <ProviderListPage />
                   </Route>
                   <Route path="/auth">
                     <AuthPage />

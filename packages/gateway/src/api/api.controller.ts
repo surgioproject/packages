@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { FastifyReply } from 'fastify';
 import { ServerResponse } from 'http';
 import _ from 'lodash';
+import { formatSubscriptionUserInfo } from 'surgio/build/utils/subscription';
 
 import { CookieAuthGuard } from '../auth/cookie.guard';
 import { SurgioService } from '../surgio/surgio.service';
@@ -89,6 +90,27 @@ export class ApiController {
     return {
       status: 'ok',
       data: providerList,
+    };
+  }
+
+  @UseGuards(CookieAuthGuard)
+  @Get('/providers/:name/subscription')
+  public async getProviderSubscription(@Param() params): Promise<any> {
+    const provider = this.surgioService.surgioHelper.providerMap.get(params.name);
+
+    if (!provider) {
+      throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
+    }
+
+    if (!provider.supportGetSubscriptionUserInfo) {
+      throw new HttpException('BAD REQUEST', HttpStatus.BAD_REQUEST);
+    }
+
+    const res = await provider.getSubscriptionUserInfo();
+
+    return {
+      status: 'ok',
+      data: res ? formatSubscriptionUserInfo(res) : null,
     };
   }
 }
