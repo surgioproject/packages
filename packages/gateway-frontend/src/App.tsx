@@ -23,7 +23,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
-import ListIcon from '@material-ui/icons/List';
 import DnsIcon from '@material-ui/icons/Dns';
 import SubjectIcon from '@material-ui/icons/Subject';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -33,15 +32,15 @@ import loadable from '@loadable/component';
 
 import './App.css';
 import { defaultFetcher } from './libs/utils';
-import AuthPage from './pages/Auth';
-import HomePage from './pages/Home';
-import NotFoundPage from './pages/NotFound';
 import { useStores } from './stores';
 import { Config } from './stores/config';
+import NotFoundPage from './pages/NotFound';
 
 const drawerWidth = 240;
 const ArtifactListPage = loadable(() => import('./pages/ArtifactList'), {});
 const ProviderListPage = loadable(() => import('./pages/ProviderList'), {});
+const HomePage = loadable(() => import('./pages/Home'), {});
+const AuthPage = loadable(() => import('./pages/Auth'), {});
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

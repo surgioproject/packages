@@ -39,6 +39,7 @@
   },
   "gitHead": "da96fe077b24097d0a721392bd32ec4a88ac2ee0",
   "dependencies": {
-    "@loadable/component": "^5.12.0"
+    "@loadable/component": "^5.12.0",
+    "lodash-es": "^4.17.15"
   }
 }
