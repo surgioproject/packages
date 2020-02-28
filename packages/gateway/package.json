@@ -76,7 +76,7 @@
     ]
   },
   "peerDependencies": {
-    "surgio": "^1.12.2"
+    "surgio": "^1.13.0"
   },
   "publishConfig": {
     "access": "public"

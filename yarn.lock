@@ -4148,7 +4148,7 @@ bytes@3.0.0:
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.0.0.tgz#d32815404d689699f85a4ea4fa8755dd13a96048"
   integrity sha1-0ygVQE1olpn4Wk6k+odV3ROpYEg=
 
-bytes@3.1.0, bytes@^3.0.0:
+bytes@3.1.0, bytes@^3.0.0, bytes@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.1.0.tgz#f6cf7933a360e0588fa9fde85651cdc7f805d1f6"
   integrity sha512-zauLjrfCG+xvoyaqLoV8bLVXXNGC4JqlxFCutSDWA6fJrTo2ZuvLYTqZ7aHBLZSMOopbzwv8f+wZcVzfVTI2Dg==
@@ -5628,6 +5628,11 @@ data-urls@^1.0.0, data-urls@^1.1.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
+date-fns@^2.10.0:
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.10.0.tgz#abd10604d8bafb0bcbd2ba2e9b0563b922ae4b6b"
+  integrity sha512-EhfEKevYGWhWlZbNeplfhIU/+N+x0iCIx7VzKlXma2EdQyznVlZhCptXUY+BegNpPW2kjdx15Rvq503YcXXrcA==
+
 dateformat@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-2.2.0.tgz#4065e2013cf9fb916ddfd82efb506ad4c6769062"
@@ -7046,6 +7051,11 @@ filesize@6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/filesize/-/filesize-6.0.1.tgz#f850b509909c7c86f7e450ea19006c31c2ed3d2f"
   integrity sha512-u4AYWPgbI5GBhs6id1KdImZWn5yfyFrrQ8OWZdN7ZMfA8Bf4HcO0BGo9bmUIEV8yrp8I1xVfJ/dn90GtFNNJcg==
+
+filesize@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/filesize/-/filesize-6.1.0.tgz#e81bdaa780e2451d714d71c0d7a4f3238d37ad00"
+  integrity sha512-LpCHtPQ3sFx67z+uh2HnSyWSLLu5Jxo21795uRDuar/EOuYWXib5EmPaGIBuSnRqH2IODiKA2k5re/K9OnN/Yg==
 
 fill-range@^4.0.0:
   version "4.0.0"
@@ -14980,21 +14990,25 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-surgio@^1.12.2:
-  version "1.12.2"
-  resolved "https://registry.yarnpkg.com/surgio/-/surgio-1.12.2.tgz#3300c33394d4ef4b8bca845868b047ee9b2dfe98"
-  integrity sha512-3Q7SnC9upWVZSFiUcFeX9ed8otav7x+l6b4N6co2y1Y6vxmGl901nRxDkpwqIIauZ8/Zo95eFbQ28Dh4JOJVCg==
+surgio@^1.13.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/surgio/-/surgio-1.13.0.tgz#f558c1d4e242bc29d280298a348b09bdca5e6601"
+  integrity sha512-/o5Q2YLvM7H9xGqC0Y0ER9trJkwqWX00UbMXSuFg2dOmaTpzuoemHs9bGF8yZvqEj/eMTYbraumem2BX3+xqzw==
   dependencies:
     "@hapi/joi" "^16.1.8"
+    "@surgio/logger" "^1.0.0"
     ali-oss "^6.4.0"
     bluebird "^3.7.2"
+    bytes "^3.1.0"
     chalk "^3.0.0"
     common-bin "^2.8.3"
     cross-env "^7.0.0"
+    date-fns "^2.10.0"
     debug "^4.1.1"
     emoji-regex "^8.0.0"
     env2 "^2.2.2"
     execa "^4.0.0"
+    filesize "^6.1.0"
     fs-extra "^8.1.0"
     get-port "^5.1.0"
     global-agent "^2.1.7"
