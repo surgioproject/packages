@@ -1,3 +1,5 @@
+import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -30,11 +32,15 @@ const Page: React.FC = () => {
   );
 
   if (error) {
-    return <div>Failed to load</div>;
+    return <Box display="flex" justifyContent="center">Failed to load</Box>;
   }
 
   if (!providerList) {
-    return <div>Loading...</div>;
+    return (
+      <Box display="flex" justifyContent="center">
+        <CircularProgress />;
+      </Box>
+    );
   }
 
   const getProviderListElement = () => {
