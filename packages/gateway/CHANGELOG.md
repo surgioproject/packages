@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.5.0...@surgio/gateway@0.6.0) (2020-02-28)
+
+
+### Features
+
+* @surgio/logger ([16a41a9](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/16a41a9f671482b92238db70d755c4686c3e5ab9))
+* /get-artifact 接口增加流量信息返回 ([188a550](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/188a550c5ca49f765b54c3c32eba03ee1496428b))
+* 面板支持流量查询 ([f8dccc0](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/f8dccc038147381063b0bf03ba4b0619096a8d94))
+* surgio 依赖版本检查 ([451dbff](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/451dbff591774352d330c6e851da93d951ccc388))
+
+
+
+
+
 # [0.5.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.4.0...@surgio/gateway@0.5.0) (2020-02-23)
 
 
