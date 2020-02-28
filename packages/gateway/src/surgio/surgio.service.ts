@@ -1,28 +1,40 @@
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { generate } from 'surgio/build/generate';
+import { Artifact } from 'surgio/build/generator/artifact';
+import { getProvider } from 'surgio/build/provider';
+import { CommandConfig } from 'surgio/build/types';
 import * as filters from 'surgio/build/utils/filter';
+
 import { SurgioHelper } from './surgio-helper';
 
 @Injectable()
 export class SurgioService {
   constructor(@Inject('SURGIO_HELPER') public surgioHelper: SurgioHelper) {}
 
-  public async getArtifact(artifactName: string): Promise<string> {
+  public get config(): CommandConfig {
+    return this.surgioHelper.config;
+  }
+
+  public async getArtifact(artifactName: string): Promise<Artifact> {
     const target = this.surgioHelper.artifactList.filter(item => item.name === artifactName);
 
     if (!target.length) {
       return undefined;
     }
 
-    return await generate(
+    const artifactInstance = new Artifact(
       this.surgioHelper.config,
       target[0],
-      this.surgioHelper.remoteSnippetList,
-      this.surgioHelper.templateEngine
+      {
+        remoteSnippetList: this.surgioHelper.remoteSnippetList,
+        templateEngine: this.surgioHelper.templateEngine,
+      }
     );
+
+    return await artifactInstance.init();
   }
 
-  public async transformArtifact(artifactName: string, format: string, filter?: string): Promise<string|HttpException> {
+  public async transformArtifact(artifactName: string, format: string, filter?: string): Promise<Artifact|string|HttpException> {
     const target = this.surgioHelper.artifactList.filter(item => item.name === artifactName);
     let filterName;
 
@@ -84,5 +96,9 @@ export class SurgioService {
       default:
         return new HttpException( 'unsupported format', HttpStatus.BAD_REQUEST);
     }
+  }
+
+  public listProviders(): ReadonlyArray<ReturnType<typeof getProvider>> {
+    return Array.from(this.surgioHelper.providerMap.values());
   }
 }

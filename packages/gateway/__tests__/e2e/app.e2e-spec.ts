@@ -1,14 +1,17 @@
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 
-import { bootstrap } from '../src/bootstrap';
+import { bootstrap } from '../../src/bootstrap';
+import { SurgioService } from '../../src/surgio/surgio.service';
 
 describe('AppController (e2e)', () => {
   let app: NestFastifyApplication;
+  let token;
 
   beforeAll(async () => {
     app = await bootstrap();
 
-    const configService = app.get('ConfigService');
+    const surgioService = app.get<SurgioService>('SurgioService');
+    token = surgioService.config.gateway?.accessToken;
 
     await app.init();
   });
@@ -29,11 +32,12 @@ describe('AppController (e2e)', () => {
     const res = await app.inject({
       url: '/get-artifact/test.conf',
       query: {
-        access_token: 'abcd',
+        access_token: token,
       },
     });
 
     expect(res.statusCode).toBe(200);
+    expect(res.headers['subscription-userinfo']).toBeUndefined();
     expect(res.payload).toMatchSnapshot();
   });
 
@@ -41,7 +45,7 @@ describe('AppController (e2e)', () => {
     const res = await app.inject({
       url: '/get-artifact/test.conf',
       query: {
-        access_token: 'abcd',
+        access_token: token,
         dl: '1',
       },
     });
@@ -49,11 +53,23 @@ describe('AppController (e2e)', () => {
     expect(res.headers['content-disposition']).toBe('attachment; filename="test.conf"');
   });
 
+  test('/get-artifact (GET) userinfo header', async () => {
+    const res = await app.inject({
+      url: '/get-artifact/test3.conf',
+      query: {
+        access_token: token,
+      },
+    });
+
+    expect(res.headers['subscription-userinfo'])
+      .toBe('upload=891332010; download=29921186546; total=322122547200; expire=1586330887');
+  });
+
   test('/get-artifact (GET) 404', async () => {
     const res = await app.inject({
       url: '/get-artifact/notfound.conf',
       query: {
-        access_token: 'abcd',
+        access_token: token,
       },
     });
 
@@ -61,10 +77,18 @@ describe('AppController (e2e)', () => {
   });
 
   test('/get-artifact (GET) unauthorized request', async () => {
-    const res = await app.inject({
-      url: '/get-artifact/test.conf',
-    });
-
-    expect(res.statusCode).toBe(401);
+    expect((
+      await app.inject({
+        url: '/get-artifact/test.conf',
+      })
+    ).statusCode).toBe(401);
+    expect((
+      await app.inject({
+        url: '/get-artifact/test.conf',
+        query: {
+          access_token: 'wrong',
+        },
+      })
+    ).statusCode).toBe(401);
   });
 });

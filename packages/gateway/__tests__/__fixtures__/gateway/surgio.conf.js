@@ -13,6 +13,11 @@ module.exports = {
       template: 'test',
       provider: 'rename',
     },
+    {
+      name: 'test3.conf',
+      template: 'test',
+      provider: 'subscription-userinfo',
+    }
   ],
   urlBase: 'https://example.com/',
   binPath: {

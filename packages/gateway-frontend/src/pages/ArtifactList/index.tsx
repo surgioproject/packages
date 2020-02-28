@@ -2,6 +2,7 @@ import React from 'react';
 import useSWR from 'swr';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -70,11 +71,15 @@ const Page: React.FC = () => {
   }, [artifactList]);
 
   if (error) {
-    return <div>Failed to load</div>;
+    return <Box display="flex" justifyContent="center">Failed to load</Box>;
   }
 
   if (!artifactList) {
-    return <div>Loading...</div>;
+    return (
+      <Box display="flex" justifyContent="center">
+        Loading...
+      </Box>
+    );
   }
 
   const handleCategoryChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
