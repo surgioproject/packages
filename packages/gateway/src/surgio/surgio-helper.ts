@@ -1,6 +1,8 @@
 import { basename, join } from 'path';
 import fs, { promises as fsp } from 'fs';
 import { Environment } from 'nunjucks';
+import semver from 'semver';
+import { Logger } from '@nestjs/common';
 import { getEngine } from 'surgio/build/generator/template';
 import { getProvider } from 'surgio/build/provider';
 import { ArtifactConfig, CommandConfig, RemoteSnippet } from 'surgio/build/types';
@@ -28,6 +30,8 @@ export class SurgioHelper {
   }
 
   public async init(): Promise<this> {
+    await this.checkCoreVersion();
+
     const remoteSnippetsConfig = this.config.remoteSnippets || [];
     this.remoteSnippetList = await loadRemoteSnippetList(remoteSnippetsConfig);
 
@@ -64,6 +68,22 @@ export class SurgioHelper {
       if (result) {
         this.providerMap.set(result.name, result);
       }
+    }
+  }
+
+  private async checkCoreVersion(): Promise<void> {
+    const corePkgFile = require('surgio/package.json');
+    const gatewayPkgFile = require('../../package.json');
+    const peerVersion = gatewayPkgFile.peerDependencies.surgio;
+
+    if (!semver.satisfies(corePkgFile.version, peerVersion)) {
+      Logger.warn('', undefined, false);
+      Logger.warn('Surgio 版本过低，请升级后重新运行！', undefined, false);
+      Logger.warn('', undefined, false);
+      Logger.warn('  命令：', undefined, false);
+      Logger.warn('  npm install surgio --save', undefined, false);
+      Logger.warn('', undefined, false);
+      throw new Error('Surgio 版本过低');
     }
   }
 }
