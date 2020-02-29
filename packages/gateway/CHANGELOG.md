@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.1](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.6.0...@surgio/gateway@0.6.1) (2020-02-29)
+
+
+### Bug Fixes
+
+* 错误无法被正确处理 ([28904e9](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/28904e9f9bcb412c0d99050a4fc032ea4850c7a8))
+
+
+
+
+
 # [0.6.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.5.0...@surgio/gateway@0.6.0) (2020-02-28)
 
 
