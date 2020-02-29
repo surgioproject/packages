@@ -6,7 +6,7 @@ import { ServerFactoryFunction } from 'fastify';
 import FastifyCookie from 'fastify-cookie';
 
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './filter/http-exception.filter';
+import { AppExceptionsFilter } from './filter/app-exception.filter';
 import { createAdapter } from './app.adapter';
 
 export interface BootstrapOptions {
@@ -22,7 +22,7 @@ export async function bootstrap(options: BootstrapOptions = {}): Promise<NestFas
   const configService = app.get('ConfigService');
   const secret = configService.get('secret');
 
-  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new AppExceptionsFilter());
 
   app.register(FastifyCookie, {
     secret, // for cookies signature

@@ -113,4 +113,9 @@ export class ApiController {
       data: res ? formatSubscriptionUserInfo(res) : null,
     };
   }
+
+  @Get('*')
+  public async apiNotFound(): Promise<void> {
+    throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
+  }
 }

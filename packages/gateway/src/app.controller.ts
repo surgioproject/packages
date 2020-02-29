@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Param, Query, HttpException, HttpStatus, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Res, Param, Query, HttpException, HttpStatus, UseGuards, Req, Logger } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ServerResponse } from 'http';
 import { Artifact } from 'surgio/build/generator/artifact';
@@ -8,6 +8,8 @@ import { SurgioService } from './surgio/surgio.service';
 
 @Controller()
 export class AppController {
+  private readonly logger = new Logger(AppController.name);
+
   constructor(private readonly surgioService: SurgioService) {}
 
   @UseGuards(BearerAuthGuard)
@@ -38,7 +40,7 @@ export class AppController {
         res.header('content-disposition', `attachment; filename="${artifactName}"`);
       }
 
-      req.log.warn('[download-artifact] [%s] %s %s', req.ip, artifactName, req.headers['user-agent'] || '-');
+      this.logger.warn(`[download-artifact] ${artifactName} ${req.headers['user-agent'] || '-'}`);
 
       if (typeof artifact === 'string') {
         res.send(artifact);
@@ -48,7 +50,7 @@ export class AppController {
           const providers = artifact.providerMap.values();
           const provider = providers.next().value;
 
-          if (provider.getSubscriptionUserInfo) {
+          if (provider.supportGetSubscriptionUserInfo) {
             const subscriptionUserInfo = await provider.getSubscriptionUserInfo();
 
             if (subscriptionUserInfo) {
