@@ -89,7 +89,7 @@ export class ApiController {
 
     return {
       status: 'ok',
-      data: providerList,
+      data: providerList.map(provider => _.pick(provider, ['name', 'type', 'url', 'supportGetSubscriptionUserInfo'])),
     };
   }
 
