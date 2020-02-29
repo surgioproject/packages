@@ -1,3 +1,4 @@
+import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -30,7 +31,7 @@ function SubscriptionPanel() {
   );
 
   if (error) {
-    return <div>Failed to load</div>;
+    return <Box display="flex" justifyContent="center">Failed to load</Box>;
   }
 
   if (!providerList) {
@@ -48,7 +49,7 @@ function SubscriptionPanel() {
 
   return (
     <Paper className={classes.SubscriptionPanel}>
-      <Typography gutterBottom variant="h5">订阅</Typography>
+      <Typography gutterBottom variant="h4">订阅</Typography>
 
       <Grid container spacing={3}>
         {
@@ -73,13 +74,26 @@ function SubscriptionPanelItem({ provider }: SubscriptionPanelItemProps) {
   );
 
   if (error) {
-    return <div>Failed to load</div>;
+    return (
+      <Grid item xs={12} sm={6} lg={4} key={provider.name}>
+        <div className={classes.SubscriptionPanelItem}>
+          <Typography gutterBottom variant="h6">
+            { provider.name }
+          </Typography>
+          <Typography gutterBottom variant="body2">
+            Failed to load
+          </Typography>
+        </div>
+      </Grid>
+    );
   }
 
   if (typeof data === 'undefined') {
     return (
       <Grid item xs={12} sm={6} lg={4} key={provider.name}>
-        <Skeleton />
+        <Typography gutterBottom variant="h6">
+          { provider.name }
+        </Typography>
         <Skeleton />
         <Skeleton />
       </Grid>

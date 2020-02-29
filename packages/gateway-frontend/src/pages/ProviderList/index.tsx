@@ -1,6 +1,7 @@
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
@@ -18,9 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2),
     },
     listContainer: {},
-    listItem: {
-      marginBottom: theme.spacing(4),
-    },
+    listItem: {},
   }),
 );
 
@@ -31,28 +30,36 @@ const Page: React.FC = () => {
     defaultFetcher,
   );
 
-  if (error) {
-    return <Box display="flex" justifyContent="center">Failed to load</Box>;
-  }
-
-  if (!providerList) {
-    return (
-      <Box display="flex" justifyContent="center">
-        <CircularProgress />;
-      </Box>
-    );
-  }
-
   const getProviderListElement = () => {
-    if (!providerList) return null;
+    if (error) {
+      return <Box display="flex" justifyContent="center">Failed to load</Box>;
+    }
 
-    return providerList.map(provider => {
+    if (!providerList) {
       return (
-        <div className={classes.listItem} key={provider.name}>
-          <ProviderCard provider={provider} />
-        </div>
+        <Box display="flex" justifyContent="center">
+          <CircularProgress />;
+        </Box>
       );
-    });
+    }
+
+    return (
+      <div className={classes.listContainer}>
+        <Grid container spacing={3}>
+          {
+            providerList.map(provider => {
+              return (
+                <Grid item xs={12} lg={6}
+                      className={classes.listItem}
+                      key={provider.name}>
+                  <ProviderCard provider={provider} />
+                </Grid>
+              );
+            })
+          }
+        </Grid>
+      </div>
+    );
   };
 
   return (
@@ -60,9 +67,8 @@ const Page: React.FC = () => {
       <Paper className={classes.headerContainer}>
         <Typography variant="h4">Providers</Typography>
       </Paper>
-      <div className={classes.listContainer}>
-        { getProviderListElement() }
-      </div>
+
+      { getProviderListElement() }
     </div>
   );
 };

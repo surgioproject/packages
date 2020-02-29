@@ -1,3 +1,4 @@
+import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import useSWR from 'swr';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
@@ -25,9 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     category: {},
     listContainer: {},
-    listItem: {
-      marginBottom: theme.spacing(4),
-    },
+    listItem: {},
   }),
 );
 
@@ -95,9 +94,11 @@ const Page: React.FC = () => {
     if (!hasSelection) {
       return artifactList.map(item => {
         return (
-          <div className={classes.listItem} key={item.name}>
+          <Grid item xs={12} lg={6}
+                className={classes.listItem}
+                key={item.name}>
             <ArtifactCard artifact={item} />
-          </div>
+          </Grid>
         );
       });
     }
@@ -111,9 +112,11 @@ const Page: React.FC = () => {
             })
             .map(artifact => {
               return (
-                <div className={classes.listItem} key={artifact.name}>
+                <Grid item xs={12} lg={6}
+                      className={classes.listItem}
+                      key={artifact.name}>
                   <ArtifactCard artifact={artifact} />
-                </div>
+                </Grid>
               );
             })
         );
@@ -160,7 +163,9 @@ const Page: React.FC = () => {
         }
       </Paper>
       <div className={classes.listContainer}>
-        { getArtifactListElement() }
+        <Grid container spacing={3}>
+          { getArtifactListElement() }
+        </Grid>
       </div>
     </div>
   );
