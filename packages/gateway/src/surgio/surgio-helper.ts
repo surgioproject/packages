@@ -81,7 +81,7 @@ export class SurgioHelper {
       Logger.warn('Surgio 版本过低，请升级后重新运行！', undefined, false);
       Logger.warn('', undefined, false);
       Logger.warn('  命令：', undefined, false);
-      Logger.warn('  npm install surgio --save', undefined, false);
+      Logger.warn('  npm install surgio@latest', undefined, false);
       Logger.warn('', undefined, false);
       throw new Error('Surgio 版本过低');
     }
