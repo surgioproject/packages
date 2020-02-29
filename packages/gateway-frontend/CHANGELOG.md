@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.3](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@0.4.2...@surgio/gateway-frontend@0.4.3) (2020-02-29)
+
+
+### Bug Fixes
+
+* artifact 展示布局在选择分类后错乱 ([9f8fc58](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/9f8fc58e6c9c63502a58fdd95df69a5feeba8f2e))
+
+
+
+
+
 ## [0.4.2](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@0.4.1...@surgio/gateway-frontend@0.4.2) (2020-02-29)
 
 
