@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.2](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@0.4.1...@surgio/gateway-frontend@0.4.2) (2020-02-29)
+
+
+### Bug Fixes
+
+* remove html description ([cc9ee8c](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/cc9ee8c35a914ae82b552a6ffb0076ae7a17a150))
+
+
+
+
+
 ## [0.4.1](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@0.4.0...@surgio/gateway-frontend@0.4.1) (2020-02-29)
 
 
