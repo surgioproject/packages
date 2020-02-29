@@ -123,7 +123,7 @@ const Page: React.FC = () => {
       }
     });
 
-    return <div>{ result }</div>;
+    return <>{ result }</>;
   };
 
   return (
