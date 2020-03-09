@@ -46,7 +46,7 @@ const Page: React.FC = () => {
         stores.config.updateConfig({
           accessToken: token,
         });
-        history.push('/');
+        history.replace('/');
       })
       .catch(() => {
         enqueueSnackbar('授权失败', { variant: 'error' });

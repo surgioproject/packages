@@ -8,6 +8,7 @@ import {
   Link as RouterLink,
   LinkProps as RouterLinkProps,
   Redirect,
+  useLocation,
 } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -31,7 +32,6 @@ import loadable from '@loadable/component';
 
 import './App.css';
 import useNavElements from './hooks/useNavElements';
-
 import { defaultFetcher } from './libs/utils';
 import { useStores } from './stores';
 import { Config } from './stores/config';
@@ -116,6 +116,7 @@ export default observer((props: ResponsiveDrawerProps) => {
   const theme = useTheme();
   const stores = useStores();
   const isShowNavElements = useNavElements();
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -123,7 +124,17 @@ export default observer((props: ResponsiveDrawerProps) => {
   };
 
   const validateAuth = () => {
-    return defaultFetcher<{accessToken?: string}>('/api/auth/validate');
+    const search = new URLSearchParams(location.search);
+
+    if (search.get('access_token')) {
+      stores.config.updateConfig({
+        accessToken: search.get('access_token'),
+      });
+
+      return defaultFetcher<{accessToken?: string}>('/api/auth/validate-token');
+    }
+
+    return defaultFetcher<{accessToken?: string}>('/api/auth/validate-cookie');
   };
 
   const updateConfig = () => {

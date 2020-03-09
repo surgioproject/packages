@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+      background: '#fff',
     },
   }),
 );
@@ -47,7 +48,7 @@ const Page: React.FC = () => {
 
   return (
     <Container maxWidth="md" className={classes.EmbedArtifactPage} >
-      <ArtifactCard artifact={artifact} />
+      <ArtifactCard artifact={artifact} isEmbed />
     </Container>
   );
 };

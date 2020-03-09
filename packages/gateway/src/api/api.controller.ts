@@ -5,6 +5,7 @@ import { ServerResponse } from 'http';
 import _ from 'lodash';
 import { formatSubscriptionUserInfo } from 'surgio/build/utils/subscription';
 
+import { BearerAuthGuard } from '../auth/bearer.guard';
 import { CookieAuthGuard } from '../auth/cookie.guard';
 import { SurgioService } from '../surgio/surgio.service';
 
@@ -34,9 +35,18 @@ export class ApiController {
     }
   }
 
+  @UseGuards(BearerAuthGuard)
+  @Get('/auth/validate-token')
+  public async validateToken(@Req() req): Promise<any> {
+    return {
+      status: 'ok',
+      data: req.user,
+    };
+  }
+
   @UseGuards(CookieAuthGuard)
-  @Get('/auth/validate')
-  public async validateAuth(@Req() req): Promise<any> {
+  @Get('/auth/validate-cookie')
+  public async validateCookie(@Req() req): Promise<any> {
     return {
       status: 'ok',
       data: req.user,
@@ -56,7 +66,7 @@ export class ApiController {
     };
   }
 
-  @UseGuards(CookieAuthGuard)
+  @UseGuards(BearerAuthGuard)
   @Get('/artifacts')
   public async listArtifacts(): Promise<any> {
     const artifactList = this.surgioService.surgioHelper.artifactList;
@@ -67,7 +77,7 @@ export class ApiController {
     };
   }
 
-  @UseGuards(CookieAuthGuard)
+  @UseGuards(BearerAuthGuard)
   @Get('/artifacts/:name')
   public async getArtifact(@Res() res: FastifyReply<ServerResponse>, @Param() params): Promise<void> {
     const artifactList = this.surgioService.surgioHelper.artifactList.filter(item => item.name === params.name);
@@ -82,7 +92,7 @@ export class ApiController {
     }
   }
 
-  @UseGuards(CookieAuthGuard)
+  @UseGuards(BearerAuthGuard)
   @Get('/providers')
   public async listProviders(): Promise<any> {
     const providerList = this.surgioService.listProviders();
@@ -93,7 +103,7 @@ export class ApiController {
     };
   }
 
-  @UseGuards(CookieAuthGuard)
+  @UseGuards(BearerAuthGuard)
   @Get('/providers/:name/subscription')
   public async getProviderSubscription(@Param() params): Promise<any> {
     const provider = this.surgioService.surgioHelper.providerMap.get(params.name);

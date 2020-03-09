@@ -18,7 +18,6 @@ import { useStores } from '../../stores';
 import ArtifactActionButtons from '../ArtifactActionButtons';
 import ArtifactCopyButtons from '../ArtifactCopyButtons';
 import QrCodeButton from '../QrCodeButton';
-import QrCodeIcon from '../QrCodeIcon';
 
 const useStyles = makeStyles(theme => ({
   ArtifactCard: {
@@ -47,16 +46,16 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(0.5),
   },
   actionButton: {
-    margin: theme.spacing(1),
-    textDecoration: 'none',
+    margin: theme.spacing(0.5, 1),
   },
 }));
 
 export interface ArtifactCardProps {
   artifact: ArtifactConfig;
+  isEmbed?: boolean;
 }
 
-function ArtifactCard({ artifact }: ArtifactCardProps) {
+function ArtifactCard({artifact, isEmbed}: ArtifactCardProps) {
   const classes = useStyles();
   const { config: configStore } = useStores();
   const providers = [artifact.provider].concat(artifact.combineProviders || []);
@@ -146,7 +145,9 @@ function ArtifactCard({ artifact }: ArtifactCardProps) {
           <ArtifactCopyButtons artifact={artifact} />
         </div>
 
-        <ArtifactActionButtons artifact={artifact} />
+        <div className={classes.actionButton}>
+          <ArtifactActionButtons artifact={artifact} />
+        </div>
       </CardActions>
     </Card>
   );
