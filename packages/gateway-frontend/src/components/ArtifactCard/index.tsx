@@ -3,6 +3,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
 import Card from '@material-ui/core/Card';
+import Popover from '@material-ui/core/Popover';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -16,22 +17,14 @@ import { getDownloadUrl } from '../../libs/utils';
 import { useStores } from '../../stores';
 import ArtifactActionButtons from '../ArtifactActionButtons';
 import ArtifactCopyButtons from '../ArtifactCopyButtons';
+import QrCodeButton from '../QrCodeButton';
+import QrCodeIcon from '../QrCodeIcon';
 
 const useStyles = makeStyles(theme => ({
   ArtifactCard: {
     '& .MuiCardActions-root': {
       flexWrap: 'wrap',
     },
-  },
-  urlContainer: {
-    'background-color': '#eee',
-    'padding': theme.spacing(2, 3),
-    '-webkit-overflow-scrolling': 'touch',
-    'overflow-x': 'scroll',
-    'font-family': [
-      'fira-code',
-      'monospace',
-    ].join(','),
   },
   contentSection: {
     margin: theme.spacing(1.5, 0),
@@ -93,12 +86,6 @@ function ArtifactCard({ artifact }: ArtifactCardProps) {
       <CardHeader title={artifact.name} />
 
       <CardContent>
-        {/*<Typography className={classes.urlContainer}*/}
-        {/*            component="pre"*/}
-        {/*            paragraph>*/}
-        {/*  { previewUrl }*/}
-        {/*</Typography>*/}
-
         <div data-testid="display-provider-list"
              className={classes.contentSection}>
           <Typography gutterBottom variant="body1">
@@ -150,6 +137,10 @@ function ArtifactCard({ artifact }: ArtifactCardProps) {
             预览
           </Button>
         </Link>
+
+        <div className={classes.actionButton}>
+          <QrCodeButton text={previewUrl} />
+        </div>
 
         <div className={classes.actionButton}>
           <ArtifactCopyButtons artifact={artifact} />
