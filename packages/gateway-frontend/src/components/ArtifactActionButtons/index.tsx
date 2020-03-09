@@ -10,18 +10,18 @@ import { JsonObject } from 'type-fest';
 import { getDownloadUrl } from '../../libs/utils';
 import { useStores } from '../../stores';
 
-export interface ActionButtonsProps {
+export interface ArtifactActionButtonsProps {
   artifact: ArtifactConfig;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    ActionButtons: {},
+    ArtifactActionButtons: {},
     actionButton: {}
   }),
 );
 
-function ActionButtons({ artifact }: ActionButtonsProps) {
+function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
   const classes = useStyles();
   const { config: configStore } = useStores();
   const previewUrl = getDownloadUrl(artifact.name, true, configStore.config.accessToken);
@@ -145,7 +145,7 @@ function ActionButtons({ artifact }: ActionButtonsProps) {
 
   return (
     <div data-testid="action-buttons"
-         className={classes.ActionButtons}>
+         className={classes.ArtifactActionButtons}>
       <SurgeButtons />
       <ClashButtons />
       <QuantumultXButtons />
@@ -153,4 +153,4 @@ function ActionButtons({ artifact }: ActionButtonsProps) {
   );
 }
 
-export default observer(ActionButtons);
+export default observer(ArtifactActionButtons);

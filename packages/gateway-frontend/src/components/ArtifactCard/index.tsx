@@ -14,7 +14,7 @@ import { ArtifactConfig } from 'surgio/build/types';
 
 import { getDownloadUrl } from '../../libs/utils';
 import { useStores } from '../../stores';
-import ActionButtons from '../ActionButtons';
+import ArtifactActionButtons from '../ArtifactActionButtons';
 import ArtifactCopyButtons from '../ArtifactCopyButtons';
 
 const useStyles = makeStyles(theme => ({
@@ -155,7 +155,7 @@ function ArtifactCard({ artifact }: ArtifactCardProps) {
           <ArtifactCopyButtons artifact={artifact} />
         </div>
 
-        <ActionButtons artifact={artifact} />
+        <ArtifactActionButtons artifact={artifact} />
       </CardActions>
     </Card>
   );
