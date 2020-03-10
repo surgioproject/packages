@@ -47,7 +47,7 @@ const Page: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="md" className={classes.EmbedArtifactPage} >
+    <Container className={classes.EmbedArtifactPage} >
       <ArtifactCard artifact={artifact} isEmbed />
     </Container>
   );
