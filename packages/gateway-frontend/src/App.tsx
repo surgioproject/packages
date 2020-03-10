@@ -3,12 +3,12 @@ import { observer } from 'mobx-react';
 import { SnackbarProvider } from 'notistack';
 import clsx from 'clsx';
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
   Link as RouterLink,
   LinkProps as RouterLinkProps,
   Redirect,
+  useLocation,
 } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -31,6 +31,7 @@ import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/sty
 import loadable from '@loadable/component';
 
 import './App.css';
+import useNavElements from './hooks/useNavElements';
 import { defaultFetcher } from './libs/utils';
 import { useStores } from './stores';
 import { Config } from './stores/config';
@@ -41,11 +42,17 @@ const ArtifactListPage = loadable(() => import('./pages/ArtifactList'), {});
 const ProviderListPage = loadable(() => import('./pages/ProviderList'), {});
 const HomePage = loadable(() => import('./pages/Home'), {});
 const AuthPage = loadable(() => import('./pages/Auth'), {});
+const EmbedArtifactPage = loadable(() => import('./pages/embeds/Artifact'), {});
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
+    },
+    noDrawer: {
+      '& > main': {
+        width: '100%',
+      },
     },
     drawer: {
       [theme.breakpoints.up('md')]: {
@@ -108,6 +115,8 @@ export default observer((props: ResponsiveDrawerProps) => {
   const classes = useStyles();
   const theme = useTheme();
   const stores = useStores();
+  const isShowNavElements = useNavElements();
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -115,7 +124,17 @@ export default observer((props: ResponsiveDrawerProps) => {
   };
 
   const validateAuth = () => {
-    return defaultFetcher<{accessToken?: string}>('/api/auth/validate');
+    const search = new URLSearchParams(location.search);
+
+    if (search.get('access_token')) {
+      stores.config.updateConfig({
+        accessToken: search.get('access_token'),
+      });
+
+      return defaultFetcher<{accessToken?: string}>('/api/auth/validate-token');
+    }
+
+    return defaultFetcher<{accessToken?: string}>('/api/auth/validate-cookie');
   };
 
   const updateConfig = () => {
@@ -172,71 +191,78 @@ export default observer((props: ResponsiveDrawerProps) => {
   );
 
   return (
-    <Router>
+    <>
       <SnackbarProvider maxSnack={3}>
         <CssBaseline />
 
-        <div className={clsx(classes.root, 'app-root')}>
+        <div className={clsx(classes.root, 'app-root', !isShowNavElements && classes.noDrawer)}>
           { stores.config.isReady && (
             <>
-              <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                  <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    edge="start"
-                    onClick={handleDrawerToggle}
-                    className={classes.menuButton}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                  <Typography variant="h6" noWrap className={classes.pageTitle}>
-                    <Link component={RouterLink} to="/">
-                      Surgio Dashboard
-                    </Link>
-                  </Typography>
-                  <div>
-                    <Link href="https://github.com/geekdada/surgio"
-                          rel="noopener noreferrer"
-                          target="_blank">
-                      <GitHubIcon className={classes.appBarIcons} />
-                    </Link>
-                  </div>
-                </Toolbar>
-              </AppBar>
+              {
+                isShowNavElements && (
+                  <>
+                    <AppBar position="fixed" className={classes.appBar}>
+                      <Toolbar>
+                        <IconButton
+                          color="inherit"
+                          aria-label="open drawer"
+                          edge="start"
+                          onClick={handleDrawerToggle}
+                          className={classes.menuButton}
+                        >
+                          <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" noWrap className={classes.pageTitle}>
+                          <Link component={RouterLink} to="/">
+                            Surgio Dashboard
+                          </Link>
+                        </Typography>
+                        <div>
+                          <Link href="https://github.com/geekdada/surgio"
+                                rel="noopener noreferrer"
+                                target="_blank">
+                            <GitHubIcon className={classes.appBarIcons} />
+                          </Link>
+                        </div>
+                      </Toolbar>
+                    </AppBar>
 
-              <nav className={classes.drawer} aria-label="folders">
-                <Hidden lgUp>
-                  <Drawer
-                    container={container}
-                    variant="temporary"
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    classes={{
-                      paper: classes.drawerPaper,
-                    }}
-                    ModalProps={{
-                      keepMounted: true, // Better open performance on mobile.
-                    }}
-                  >
-                    {drawer}
-                  </Drawer>
-                </Hidden>
-                <Hidden smDown>
-                  <Drawer
-                    classes={{
-                      paper: classes.drawerPaper,
-                    }}
-                    variant="permanent"
-                    open
-                  >
-                    {drawer}
-                  </Drawer>
-                </Hidden>
-              </nav>
+                    <nav className={classes.drawer} aria-label="folders">
+                      <Hidden lgUp>
+                        <Drawer
+                          container={container}
+                          variant="temporary"
+                          open={mobileOpen}
+                          onClose={handleDrawerToggle}
+                          classes={{
+                            paper: classes.drawerPaper,
+                          }}
+                          ModalProps={{
+                            keepMounted: true, // Better open performance on mobile.
+                          }}
+                        >
+                          {drawer}
+                        </Drawer>
+                      </Hidden>
+                      <Hidden smDown>
+                        <Drawer
+                          classes={{
+                            paper: classes.drawerPaper,
+                          }}
+                          variant="permanent"
+                          open
+                        >
+                          {drawer}
+                        </Drawer>
+                      </Hidden>
+                    </nav>
+                  </>
+                )
+              }
 
               <main className={classes.content}>
-                <div className={classes.toolbar} />
+                { isShowNavElements && <div className={classes.toolbar} /> }
+
                 <Switch>
                   <Route path="/list-artifact">
                     <Redirect to="/artifacts" />
@@ -250,6 +276,9 @@ export default observer((props: ResponsiveDrawerProps) => {
                   <Route path="/auth">
                     <AuthPage />
                   </Route>
+                  <Route path="/embed/artifact/:artifactName">
+                    <EmbedArtifactPage />
+                  </Route>
                   <Route exact path="/">
                     <HomePage />
                   </Route>
@@ -262,7 +291,7 @@ export default observer((props: ResponsiveDrawerProps) => {
           ) }
         </div>
       </SnackbarProvider>
-    </Router>
+    </>
   );
 });
 

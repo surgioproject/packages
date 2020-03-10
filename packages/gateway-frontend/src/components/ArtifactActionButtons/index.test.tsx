@@ -3,12 +3,12 @@ import React from 'react';
 import { ArtifactConfig } from 'surgio/build/types';
 import { CATEGORIES } from 'surgio/build/utils/constant';
 
-import ActionButtons from './';
+import ArtifactActionButtons from './';
 
-describe('<ActionButtons />', () => {
+describe('<ArtifactActionButtons />', () => {
   test('renders empty component', () => {
     const artifact = generateArtifact();
-    const { getByTestId } = render(<ActionButtons artifact={artifact} />);
+    const { getByTestId } = render(<ArtifactActionButtons artifact={artifact} />);
 
     expect(getByTestId('action-buttons').innerHTML).toBe('');
   });
@@ -17,7 +17,7 @@ describe('<ActionButtons />', () => {
     const artifact = generateArtifact({
       name: 'Surge.conf',
     });
-    const { getByTestId } = render(<ActionButtons artifact={artifact} />);
+    const { getByTestId } = render(<ArtifactActionButtons artifact={artifact} />);
 
     expect(
       getByTestId('action-buttons')?.querySelector('a')?.textContent
@@ -32,7 +32,7 @@ describe('<ActionButtons />', () => {
         CATEGORIES.SURGE,
       ]
     });
-    const { getByTestId } = render(<ActionButtons artifact={artifact} />);
+    const { getByTestId } = render(<ArtifactActionButtons artifact={artifact} />);
 
     expect(
       getByTestId('action-buttons')?.querySelector('a')?.textContent
@@ -44,7 +44,7 @@ describe('<ActionButtons />', () => {
     const artifact = generateArtifact({
       name: 'Clash.conf',
     });
-    const { getByTestId } = render(<ActionButtons artifact={artifact} />);
+    const { getByTestId } = render(<ArtifactActionButtons artifact={artifact} />);
 
     expect(
       getByTestId('action-buttons')?.querySelector('a')?.textContent
@@ -59,7 +59,7 @@ describe('<ActionButtons />', () => {
         CATEGORIES.CLASH,
       ]
     });
-    const { getByTestId } = render(<ActionButtons artifact={artifact} />);
+    const { getByTestId } = render(<ArtifactActionButtons artifact={artifact} />);
 
     expect(
       getByTestId('action-buttons')?.querySelector('a')?.textContent
@@ -74,7 +74,7 @@ describe('<ActionButtons />', () => {
         CATEGORIES.QUANTUMULT_X_SERVER,
       ]
     });
-    const { getByTestId } = render(<ActionButtons artifact={artifact} />);
+    const { getByTestId } = render(<ArtifactActionButtons artifact={artifact} />);
 
     expect(
       getByTestId('quanx-server-remote')
@@ -89,7 +89,7 @@ describe('<ActionButtons />', () => {
         CATEGORIES.QUANTUMULT_X_FILTER,
       ]
     });
-    const { getByTestId } = render(<ActionButtons artifact={artifact} />);
+    const { getByTestId } = render(<ArtifactActionButtons artifact={artifact} />);
 
     expect(
       getByTestId('quanx-filter-remote')
@@ -104,7 +104,7 @@ describe('<ActionButtons />', () => {
         CATEGORIES.QUANTUMULT_X_REWRITE,
       ]
     });
-    const { getByTestId } = render(<ActionButtons artifact={artifact} />);
+    const { getByTestId } = render(<ArtifactActionButtons artifact={artifact} />);
 
     expect(
       getByTestId('quanx-rewrite-remote')
