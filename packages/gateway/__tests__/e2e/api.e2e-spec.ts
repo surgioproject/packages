@@ -7,7 +7,7 @@ describe('ApiController (e2e)', () => {
   let app: NestFastifyApplication;
   let token;
   let tokenCookie;
-  let surgioService;
+  let surgioService: SurgioService;
 
   beforeAll(async () => {
     app = await bootstrap();
@@ -30,19 +30,18 @@ describe('ApiController (e2e)', () => {
     await app.close();
   });
 
-  test('/api/auth/validate (GET)', async () => {
+  test('/api/auth/validate-cookie (GET)', async () => {
     expect((
       await app.inject({
-        url: '/api/auth/validate',
+        url: '/api/auth/validate-cookie',
         cookies: {
           _t: tokenCookie
         },
       } as any)
     ).statusCode).toBe(200);
-
     expect((
       await app.inject({
-        url: '/api/auth/validate',
+        url: '/api/auth/validate-cookie',
         cookies: {
           _t: 'wrong'
         },
@@ -50,13 +49,29 @@ describe('ApiController (e2e)', () => {
     ).statusCode).toBe(401);
   });
 
+  test('/api/auth/validate-token (GET)', async () => {
+    expect((
+      await app.inject({
+        url: '/api/auth/validate-token',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    ).statusCode).toBe(200);
+    expect((
+      await app.inject({
+        url: '/api/auth/validate-token',
+        headers: {
+          Authorization: `Bearer wrong`,
+        },
+      })
+    ).statusCode).toBe(401);
+  });
+
   test('/api/config (GET)', async () => {
     const res = await app.inject({
       url: '/api/config',
-      cookies: {
-        _t: tokenCookie
-      },
-    } as any);
+    });
 
     expect(res.statusCode).toBe(200);
   });
@@ -64,10 +79,10 @@ describe('ApiController (e2e)', () => {
   test('/api/artifacts (GET)', async () => {
     const res = await app.inject({
       url: '/api/artifacts',
-      cookies: {
-        _t: tokenCookie
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    } as any);
+    });
 
     expect(res.statusCode).toBe(200);
     expect(res.payload).toMatchSnapshot();
@@ -76,10 +91,10 @@ describe('ApiController (e2e)', () => {
   test('/api/providers (GET)', async () => {
     const res = await app.inject({
       url: '/api/providers',
-      cookies: {
-        _t: tokenCookie
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    } as any);
+    });
 
     expect(res.statusCode).toBe(200);
     expect(res.payload).toMatchSnapshot();
