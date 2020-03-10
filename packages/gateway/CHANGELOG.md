@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.6.4...@surgio/gateway@0.7.0) (2020-03-10)
+
+
+### Features
+
+* Artifact embed 页面 ([c030895](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/c030895a26e3d0f78e6f89959bbf85f8e6ae6136))
+
+
+
+
+
 ## [0.6.4](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.6.3...@surgio/gateway@0.6.4) (2020-02-29)
 
 

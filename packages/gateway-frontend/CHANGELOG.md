@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@0.4.3...@surgio/gateway-frontend@0.5.0) (2020-03-10)
+
+
+### Features
+
+* 方便获取 Embed 代码 ([c7253ee](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/c7253eed981f85e7755732d65ec3cb2096c4f177))
+* artifact 增加二维码按钮 ([55c8916](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/55c89160806955aa9c4f6880aa742c17b43c2dd8))
+* Artifact embed 页面 ([c030895](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/c030895a26e3d0f78e6f89959bbf85f8e6ae6136))
+* embed 模式的 artifact 页面 ([93eba45](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/93eba4557f4b14aa77f6956d754ff05f0629ec80))
+
+
+
+
+
 ## [0.4.3](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@0.4.2...@surgio/gateway-frontend@0.4.3) (2020-02-29)
 
 
