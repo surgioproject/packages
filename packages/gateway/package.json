@@ -37,6 +37,7 @@
     "@surgio/gateway-frontend": "file:../gateway-frontend",
     "cookie-signature": "^1.1.0",
     "fastify": "^2.12.0",
+    "fastify-accepts": "^1.0.0",
     "fastify-cookie": "^3.5.0",
     "fastify-static": "^2.6.0",
     "got": "^10.2.1",
@@ -50,7 +51,8 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.3",
-    "semver": "^7.1.3"
+    "semver": "^7.1.3",
+    "youch": "^2.0.10"
   },
   "files": [
     "dist"

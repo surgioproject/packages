@@ -64,6 +64,7 @@ export class AppController {
             }
           }
         }
+
         res.send(artifact.render());
       }
     } else {
