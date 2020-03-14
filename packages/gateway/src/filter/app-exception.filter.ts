@@ -7,15 +7,14 @@ import Youch from 'youch';
 export class AppExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AppExceptionsFilter.name);
 
-  public catch(exception: any, host: ArgumentsHost): void {
+  public catch(exception: HttpException|Error, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<FastifyReply<ServerResponse>>();
     const request = ctx.getRequest<FastifyRequest>();
     const accepts = request.accepts();
-    const isHttpException = exception instanceof HttpException;
     let responsePayload;
 
-    if (isHttpException) {
+    if (exception instanceof HttpException) {
       const status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
 
@@ -26,13 +25,10 @@ export class AppExceptionsFilter implements ExceptionFilter {
       if (typeof exceptionResponse === 'string') {
         responsePayload = {
           statusCode: status,
-          message: exceptionResponse,
+          error: exceptionResponse,
         };
       } else {
-        responsePayload = {
-          statusCode: status,
-          message: (exceptionResponse as Error)?.message || 'Error',
-        };
+        responsePayload = exceptionResponse;
       }
     } else {
       const status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -44,8 +40,7 @@ export class AppExceptionsFilter implements ExceptionFilter {
 
       responsePayload = {
         statusCode: status,
-        message: exception.message || 'Error',
-        code: exception.code || 'Error',
+        error: exception.message || 'Error',
       };
     }
 
@@ -53,14 +48,23 @@ export class AppExceptionsFilter implements ExceptionFilter {
       case 'html': {
         const youch = new Youch(exception, request.req);
 
-        youch.toHTML()
+        youch
+          .addLink(({ message }) => {
+            const url = `https://stackoverflow.com/search?q=${encodeURIComponent(`[adonis.js] ${message}`)}`
+            return `
+<div>
+  <p>加入交流群汇报问题：<a href="https://t.me/surgiotg" target="_blank" rel="noopener">https://t.me/surgiotg</a></p>
+</div>
+            `;
+          })
+          .toHTML()
           .then(html => {
             response
               .type('text/html')
               .send(html);
           })
           .catch(err => {
-            response.send(err);
+            this.logger.error(err.message, err.context);
           });
         break;
       }
