@@ -4,6 +4,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { ServerFactoryFunction } from 'fastify';
 import FastifyCookie from 'fastify-cookie';
+import FastifyAccepts from 'fastify-accepts';
 
 import { AppModule } from './app.module';
 import { AppExceptionsFilter } from './filter/app-exception.filter';
@@ -28,6 +29,8 @@ export async function bootstrap(options: BootstrapOptions = {}): Promise<NestFas
     secret, // for cookies signature
     parseOptions: {}, // options for parsing cookies
   });
+
+  app.register(FastifyAccepts);
 
   return app;
 }

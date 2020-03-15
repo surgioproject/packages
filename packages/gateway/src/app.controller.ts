@@ -2,6 +2,7 @@ import { Controller, Get, Res, Param, Query, HttpException, HttpStatus, UseGuard
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ServerResponse } from 'http';
 import { Artifact } from 'surgio/build/generator/artifact';
+import _ from 'lodash';
 
 import { BearerAuthGuard } from './auth/bearer.guard';
 import { SurgioService } from './surgio/surgio.service';
@@ -23,6 +24,7 @@ export class AppController {
     const dl: string = query.dl;
     const format: string = query.format;
     const filter: string = query.filter;
+    const urlParams = _.omit<Record<string, string>>(query, ['dl', 'format', 'filter', 'access_token']);
     const artifactName: string = params.name;
     const artifact = format !== void 0 ?
       await this.surgioService.transformArtifact(artifactName, format, filter) :
@@ -64,7 +66,8 @@ export class AppController {
             }
           }
         }
-        res.send(artifact.render());
+
+        res.send(artifact.render(undefined, { urlParams }));
       }
     } else {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
