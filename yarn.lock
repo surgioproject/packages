@@ -7170,9 +7170,9 @@ fecha@^2.3.3:
   integrity sha512-lUGBnIamTAwk4znq5BcqsDaxSmZ9nDVJaij6NvRt/Tg4R69gERA+otPKbS86ROw9nxVMw2/mp1fnaiWqbs6Sdg==
 
 fetch-mock@^9.0.0-beta.2:
-  version "9.1.2"
-  resolved "https://registry.yarnpkg.com/fetch-mock/-/fetch-mock-9.1.2.tgz#9cb7bede34a52d80e14f743319a1f5fc2007a7a7"
-  integrity sha512-XzUVQ3Ej6D2Hk+JkZV0SMyKojZFpu33KLyrKW0NPixfq9k7Jjoq6oh+vDCKn7GNzF6wGyKmMotJ0G7lZftRC3w==
+  version "9.2.1"
+  resolved "https://registry.yarnpkg.com/fetch-mock/-/fetch-mock-9.2.1.tgz#bf1ae34800cf27570a9c1058d3472461d159c696"
+  integrity sha512-VgnqSA7KUI9uJceekpzrVyJvy3U6qZo2BmzVz8RuWvF4Wc5EV7TbFFZwQM7OGV4CKmsMPYarOyxqd74aM3xO3w==
   dependencies:
     babel-runtime "^6.26.0"
     core-js "^3.0.0"
@@ -15307,10 +15307,10 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-surgio@^1.13.0:
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/surgio/-/surgio-1.14.0.tgz#f9ac61f9c2e892af70967941dd7e9d9c5cf7a846"
-  integrity sha512-rTbxfwu0M2sE0z8KgyOmgoglIUTNL82WhucQQMPiqa6j1fPJpLQasm8SEttPzHyiM9o/+pOk7ixr/Cx/tW6m/w==
+surgio@^1.15.0:
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/surgio/-/surgio-1.15.0.tgz#987367dbc5e36449b02c68f93daba856610e099c"
+  integrity sha512-MEOcOeHkvAz9so8WgjYhOiMHNZtjpS9VlRmBmX/QBJviRtE4IeQjHNCli24XYX1/Yjx3FS1Ii7ope+zh+FP+IQ==
   dependencies:
     "@hapi/joi" "^16.1.8"
     "@surgio/logger" "^1.0.0"

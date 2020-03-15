@@ -62,7 +62,7 @@
     "rimraf": "^3.0.0",
     "sinon": "^9.0.0",
     "supertest": "^4.0.2",
-    "surgio": "^1.13.0",
+    "surgio": "^1.15.0",
     "swr": "^0.1.18",
     "tailwindcss": "^1.1.4",
     "ts-jest": "^24.1.0",
