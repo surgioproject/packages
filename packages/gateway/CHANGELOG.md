@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.7.0...@surgio/gateway@0.8.0) (2020-03-15)
+
+
+### Features
+
+* 读取 URL 参数，加入到 customParams 中 ([8b392f9](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/8b392f98dd6cf5a9017b085a5391173ac188b0d3))
+* 改造错误页面 ([a495549](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/a495549c081c594a4825068693d9f2e158827697))
+* 优化错误页面提示 ([83e2adc](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/83e2adc5f9703bc984fbf0cffaafa449dce795e6))
+
+
+
+
+
 # [0.7.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.6.4...@surgio/gateway@0.7.0) (2020-03-10)
 
 
