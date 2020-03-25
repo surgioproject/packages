@@ -40,16 +40,19 @@
     "conventional-changelog-cli": "^2.0.31",
     "execa": "^4.0.0",
     "fetch-mock": "^9.0.0-beta.2",
+    "husky": "^4.2.3",
     "jest": "^24.9.0",
     "ky": "^0.17.0",
     "ky-universal": "^0.5.0",
     "lerna": "^3.20.2",
     "light-my-request": "^3.7.1",
+    "lint-staged": "^10.0.9",
     "mobx": "^5.15.4",
     "mobx-react": "^6.1.4",
     "nock": "^12.0.1",
     "node-fetch": "^2.6.0",
     "notistack": "^0.9.8",
+    "npm-debug-log-cleaner": "^1.0.3",
     "npm-run-all": "^4.1.5",
     "postcss-import": "^12.0.1",
     "qrcode.react": "^1.0.0",
@@ -83,5 +86,14 @@
   "homepage": "https://surgio.royli.dev",
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "lint-staged": {
+    "*.js": "eslint",
+    "*.ts": "tslint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm-debug-log-cleaner && lint-staged"
+    }
+  }
 }
