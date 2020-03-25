@@ -20,7 +20,7 @@ export class ApiController {
   public async login(@Req() req, @Res() res: FastifyReply<ServerResponse>): Promise<void> {
     const accessToken = req.body.accessToken;
 
-    if (accessToken === this.surgioService.surgioHelper.config?.gateway.accessToken) {
+    if (accessToken === this.surgioService.surgioHelper.config?.gateway?.accessToken) {
       res.setCookie('_t', accessToken, {
         maxAge: this.surgioService.surgioHelper.config?.gateway?.cookieMaxAge
           ?? this.configService.get('defaultCookieMaxAge'),

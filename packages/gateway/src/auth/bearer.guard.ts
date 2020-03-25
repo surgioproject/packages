@@ -12,9 +12,9 @@ export class BearerAuthGuard extends AuthGuard('bearer') {
   public canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const needAuth = this.surgioHelper.config?.gateway.auth;
+    const needAuth = this.surgioHelper.config?.gateway?.auth;
 
-    if (needAuth) {
+    if (needAuth === true) {
       return super.canActivate(context);
     }
     return true;
