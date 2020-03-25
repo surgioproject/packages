@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.1](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.8.0...@surgio/gateway@0.8.1) (2020-03-25)
+
+
+### Bug Fixes
+
+* should allow turning off authentication ([db80c03](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/db80c03479b698215f1b95c7f8f5cf377489f4cb))
+
+
+
+
+
 # [0.8.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.7.0...@surgio/gateway@0.8.0) (2020-03-15)
 
 
