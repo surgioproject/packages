@@ -41,9 +41,9 @@ describe('SurgioService', () => {
     expect(
       await surgioService.transformArtifact('test.conf', 'clash-provider')
     ).toMatchSnapshot();
-    expect(
-      await surgioService.transformArtifact('test.conf', 'unknown')
-    ).toBeInstanceOf(HttpException);
+    await expect(
+      surgioService.transformArtifact('test.conf', 'unknown')
+    ).rejects.toThrowError(HttpException);
   });
 
   test('transformArtifact filter should work', async () => {

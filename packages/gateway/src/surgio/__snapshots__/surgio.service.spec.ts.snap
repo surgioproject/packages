@@ -132,7 +132,7 @@ proxies:
   username: username
   password: password
   tls: true
-  skipCertVerify: false
+  skip-cert-verify: false
 - type: ss
   cipher: chacha20-ietf-poly1305
   name: ss1
@@ -181,7 +181,7 @@ proxies:
   username: username
   password: password
   tls: true
-  skipCertVerify: false
+  skip-cert-verify: false
 - type: http
   name: http 2
   server: server

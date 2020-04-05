@@ -12,6 +12,7 @@ import { useSnackbar } from 'notistack';
 
 import { Provider } from '../../libs/types';
 import { defaultFetcher } from '../../libs/utils';
+import ProviderCopyButtons from '../ProviderCopyButtons';
 
 const useStyles = makeStyles(theme => ({
   ProviderCard: {
@@ -95,6 +96,9 @@ function ProviderCard({ provider }: ProviderCardProps) {
             >查询流量</Button>
           ) : null
         }
+        <div className={classes.actionButton}>
+          <ProviderCopyButtons providerNameList={[provider.name]} />
+        </div>
       </CardActions>
     </Card>
   );
