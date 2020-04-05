@@ -103,7 +103,7 @@ export class SurgioService {
         ].join('\n');
 
       default:
-        throw new HttpException('unsupported format', HttpStatus.BAD_REQUEST);
+        throw new HttpException('参数 format 必须指定', HttpStatus.BAD_REQUEST);
     }
   }
 }

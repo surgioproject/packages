@@ -91,4 +91,52 @@ describe('AppController (e2e)', () => {
       })
     ).statusCode).toBe(401);
   });
+
+  test('/export-providers (GET)', async () => {
+    const res = await app.inject({
+      url: '/export-providers',
+      query: {
+        providers: 'clash',
+        format: 'surge-policy',
+        access_token: token,
+      },
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toMatchSnapshot();
+  });
+
+  test('/export-providers (GET) multiple providers', async () => {
+    const res = await app.inject({
+      url: '/export-providers',
+      query: {
+        providers: 'clash,custom',
+        format: 'surge-policy',
+        access_token: token,
+      },
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toMatchSnapshot();
+  });
+
+  test('/export-providers (GET) unauthorized request', async () => {
+    expect((
+      await app.inject({
+        url: '/export-providers?providers=clash',
+        query: {
+          providers: 'clash',
+        },
+      })
+    ).statusCode).toBe(401);
+    expect((
+      await app.inject({
+        url: '/export-providers',
+        query: {
+          providers: 'clash',
+          access_token: 'wrong',
+        },
+      })
+    ).statusCode).toBe(401);
+  });
 });

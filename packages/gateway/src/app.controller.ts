@@ -47,7 +47,7 @@ export class AppController {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Get('/export-provider')
+  @Get('/export-providers')
   public async exportProvider(
     @Req() req: FastifyRequest,
     @Res() res: FastifyReply<ServerResponse>,
@@ -56,12 +56,12 @@ export class AppController {
     const providers: string[] = query.providers ? query.providers.split(',').map(item => item.trim()) : [];
 
     if (!providers.length) {
-      throw new HttpException('BAD REQUEST', HttpStatus.BAD_REQUEST);
+      throw new HttpException('参数 provider 必须指定至少一个值', HttpStatus.BAD_REQUEST);
     }
 
     providers.forEach(provider => {
       if (!this.surgioService.surgioHelper.providerMap.has(provider)) {
-        throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
+        throw new HttpException(`provider ${provider} 不存在`, HttpStatus.NOT_FOUND);
       }
     });
 
