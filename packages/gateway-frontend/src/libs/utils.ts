@@ -4,14 +4,26 @@ export const defaultFetcher = <T>(url: string): Promise<T> => client.get(url).th
 
 export const getDownloadUrl = (artifactName: string, inline: boolean = true, accessToken?: string | null): string => {
   const urlObject = new URL(`/get-artifact/${artifactName}`, window.location.origin);
+  if (accessToken) {
+    urlObject.searchParams.set('access_token', accessToken);
+  }
+  if (!inline) {
+    urlObject.searchParams.set('dl', '1');
+  }
+  return urlObject.toString();
+};
+
+export const getExportProviderUrl = (providers: string, format: string, inline: boolean = true, accessToken?: string | null): string => {
+  const urlObject = new URL(`/export-providers`, window.location.origin);
+
+  urlObject.searchParams.set('providers', providers);
+  urlObject.searchParams.set('format', format);
 
   if (accessToken) {
     urlObject.searchParams.set('access_token', accessToken);
   }
-
   if (!inline) {
     urlObject.searchParams.set('dl', '1');
   }
-
   return urlObject.toString();
 };
