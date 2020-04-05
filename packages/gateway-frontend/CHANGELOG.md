@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@0.5.0...@surgio/gateway-frontend@0.6.0) (2020-04-05)
+
+
+### Features
+
+* 支持直接在面板上复制 Provider 导出链接 ([207c157](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/207c157feec9e4e13b487daab8ec67cdce2688e6))
+
+
+
+
+
 # [0.5.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@0.4.3...@surgio/gateway-frontend@0.5.0) (2020-03-10)
 
 

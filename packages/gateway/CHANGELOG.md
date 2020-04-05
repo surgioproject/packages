@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.8.1...@surgio/gateway@0.9.0) (2020-04-05)
+
+
+### Bug Fixes
+
+* error handling ([69112fc](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/69112fcadf48b220a08ba4a0c1983d7429e94e20))
+
+
+### Features
+
+* add /export-provider ([af41c1a](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/af41c1ae90732fa3130fd990e0b62257c7165cfc))
+* API 支持直接输出 provider ([7f09fd3](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/7f09fd3f100b5e9715c4f5c9a77164891a1effd3))
+
+
+
+
+
 ## [0.8.1](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.8.0...@surgio/gateway@0.8.1) (2020-03-25)
 
 
