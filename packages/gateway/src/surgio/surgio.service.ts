@@ -34,71 +34,76 @@ export class SurgioService {
     return await artifactInstance.init();
   }
 
-  public async transformArtifact(artifactName: string, format: string, filter?: string): Promise<Artifact|string|HttpException> {
+  public async exportProvider(providerName: string, format: string, options: { readonly filter?: string; readonly combineProviders?: ReadonlyArray<string>; } = {}): Promise<Artifact> {
+    const artifactInstance = new Artifact(
+      this.surgioHelper.config,
+      {
+        name: `${providerName}.conf`,
+        provider: providerName,
+        template: undefined,
+        templateString: this.getTemplateByFormat(format, options.filter),
+        ...(options.combineProviders ? {
+          combineProviders: options.combineProviders,
+        } : null),
+      },
+      {
+        remoteSnippetList: this.surgioHelper.remoteSnippetList,
+        templateEngine: this.surgioHelper.templateEngine,
+      }
+    );
+
+    return await artifactInstance.init();
+  }
+
+  public async transformArtifact(artifactName: string, format: string, filter?: string): Promise<Artifact|string> {
     const target = this.surgioHelper.artifactList.filter(item => item.name === artifactName);
-    let filterName;
 
     if (!target.length) {
       return undefined;
     }
+
+    const artifact = {
+      ...target[0],
+      template: undefined,
+      templateString: this.getTemplateByFormat(format, filter),
+    };
+
+    return await generate(
+      this.surgioHelper.config,
+      artifact,
+      this.surgioHelper.remoteSnippetList,
+      this.surgioHelper.templateEngine
+    );
+  }
+
+  public listProviders(): ReadonlyArray<ReturnType<typeof getProvider>> {
+    return Array.from(this.surgioHelper.providerMap.values());
+  }
+
+  public getTemplateByFormat(format: string, filter?: string): string {
+    let filterName;
+
     if (filter) {
       filterName = filters.hasOwnProperty(filter) ? filter : `customFilters.${filter}`;
     }
 
     switch (format) {
-      case 'surge-policy': {
-        const artifact = {
-          ...target[0],
-          template: undefined,
-          templateString: `{{ getSurgeNodes(nodeList${filterName ? `, ${filterName}` : ''}) }}`,
-        };
-        return await generate(
-          this.surgioHelper.config,
-          artifact,
-          this.surgioHelper.remoteSnippetList,
-          this.surgioHelper.templateEngine
-        );
-      }
+      case 'surge-policy':
+        return `{{ getSurgeNodes(nodeList${filterName ? `, ${filterName}` : ''}) }}`;
 
-      case 'qx-server': {
-        const artifact = {
-          ...target[0],
-          template: undefined,
-          templateString: `{{ getQuantumultXNodes(nodeList${filterName ? `, ${filterName}` : ''}) }}`,
-        };
-        return await generate(
-          this.surgioHelper.config,
-          artifact,
-          this.surgioHelper.remoteSnippetList,
-          this.surgioHelper.templateEngine
-        );
-      }
+      case 'qx-server':
+        return `{{ getQuantumultXNodes(nodeList${filterName ? `, ${filterName}` : ''}) }}`;
 
-      case 'clash-provider': {
-        const artifact = {
-          ...target[0],
-          template: undefined,
-          templateString: [
-            '---',
-            'proxies:',
-            `{{ getClashNodes(nodeList${filterName ? `, ${filterName}` : ''}) | yaml }}`,
-            '...'
-          ].join('\n')
-        };
-        return await generate(
-          this.surgioHelper.config,
-          artifact,
-          this.surgioHelper.remoteSnippetList,
-          this.surgioHelper.templateEngine
-        );
-      }
+      case 'clash-provider':
+        return [
+          '---',
+          'proxies:',
+          `{{ getClashNodes(nodeList${filterName ? `, ${filterName}` : ''}) | yaml }}`,
+          '...'
+        ].join('\n');
 
       default:
-        return new HttpException( 'unsupported format', HttpStatus.BAD_REQUEST);
+        throw new HttpException('unsupported format', HttpStatus.BAD_REQUEST);
     }
-  }
-
-  public listProviders(): ReadonlyArray<ReturnType<typeof getProvider>> {
-    return Array.from(this.surgioHelper.providerMap.values());
   }
 }
