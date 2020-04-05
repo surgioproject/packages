@@ -120,6 +120,20 @@ describe('AppController (e2e)', () => {
     expect(res.payload).toMatchSnapshot();
   });
 
+  test('/export-providers (GET) multiple providers 404', async () => {
+    const res = await app.inject({
+      url: '/export-providers',
+      query: {
+        providers: 'clash,custom,notfound',
+        format: 'surge-policy',
+        access_token: token,
+      },
+    });
+
+    expect(res.statusCode).toBe(404);
+    expect(res.payload).toMatchSnapshot();
+  });
+
   test('/export-providers (GET) unauthorized request', async () => {
     expect((
       await app.inject({

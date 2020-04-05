@@ -23,6 +23,8 @@ Snell = snell, us.example.com, 443, psk=password, obfs=tls
 HTTPS = https, us.example.com, 443, username, password"
 `;
 
+exports[`AppController (e2e) /export-providers (GET) multiple providers 404 1`] = `"{\\"statusCode\\":404,\\"error\\":\\"provider notfound 不存在\\"}"`;
+
 exports[`AppController (e2e) /get-artifact (GET) 1`] = `
 "🇺🇸US 1 = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, obfs=tls, obfs-host=gateway-carry.icloud.com
 🇺🇸US 2 = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module
