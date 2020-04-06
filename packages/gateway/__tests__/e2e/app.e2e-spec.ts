@@ -134,6 +134,51 @@ describe('AppController (e2e)', () => {
     expect(res.payload).toMatchSnapshot();
   });
 
+  test('/export-providers (GET) global filter', async () => {
+    const res = await app.inject({
+      url: '/export-providers',
+      query: {
+        providers: 'clash,custom',
+        format: 'surge-policy',
+        filter: 'globalFilter',
+        access_token: token,
+      },
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toMatchSnapshot();
+  });
+
+  test('/export-providers (GET) internal filter', async () => {
+    const res = await app.inject({
+      url: '/export-providers',
+      query: {
+        providers: 'clash,custom',
+        format: 'surge-policy',
+        filter: 'hkFilter',
+        access_token: token,
+      },
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toMatchSnapshot();
+  });
+
+  test('/export-providers (GET) private filter', async () => {
+    const res = await app.inject({
+      url: '/export-providers',
+      query: {
+        providers: 'clash,custom',
+        format: 'surge-policy',
+        filter: 'testFilter',
+        access_token: token,
+      },
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toMatchSnapshot();
+  });
+
   test('/export-providers (GET) unauthorized request', async () => {
     expect((
       await app.inject({
