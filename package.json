@@ -38,6 +38,7 @@
     "autoprefixer": "^9.7.3",
     "clsx": "^1.0.4",
     "conventional-changelog-cli": "^2.0.31",
+    "eslint": "^6.8.0",
     "execa": "^4.0.0",
     "fetch-mock": "^9.0.0-beta.2",
     "husky": "^4.2.3",
@@ -87,10 +88,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "lint-staged": {
-    "*.js": "eslint",
-    "*.ts": "tslint"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "npm-debug-log-cleaner && lint-staged"
