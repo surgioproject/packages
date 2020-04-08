@@ -113,7 +113,6 @@ interface ResponsiveDrawerProps {
 export default observer((props: ResponsiveDrawerProps) => {
   const { container } = props;
   const classes = useStyles();
-  const theme = useTheme();
   const stores = useStores();
   const isShowNavElements = useNavElements();
   const location = useLocation();
@@ -162,7 +161,7 @@ export default observer((props: ResponsiveDrawerProps) => {
       .catch(err => {
         console.error(err);
       });
-  }, [stores.config]);
+  }, [stores.config, validateAuth]);
 
   const drawer = (
     <div>

@@ -123,8 +123,24 @@ export class AppController {
         }
       }
 
-      res.send(artifact.render(undefined, { urlParams }));
+      res.send(artifact.render(
+        undefined,
+        {
+          urlParams: urlParams ? this.processUrlParams(urlParams) : undefined,
+        })
+      );
     }
+  }
+
+  private processUrlParams(urlParams: Record<string, string>): object {
+    const result: NonNullable<any> = Object.create(null);
+
+    Object.keys(urlParams)
+      .forEach(key => {
+        _.set(result, key, urlParams[key]);
+      });
+
+    return result;
   }
 }
 
