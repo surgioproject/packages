@@ -17,7 +17,19 @@ module.exports = {
       name: 'test3.conf',
       template: 'test',
       provider: 'subscription-userinfo',
-    }
+    },
+    {
+      name: 'custom-params.conf',
+      template: 'custom-params',
+      provider: 'ss',
+      combineProviders: ['custom', 'clash'],
+      customParams: {
+        foo: 'original',
+        child: {
+          bar: 'original',
+        },
+      },
+    },
   ],
   urlBase: 'https://example.com/',
   binPath: {
