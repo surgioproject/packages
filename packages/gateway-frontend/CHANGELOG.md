@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@0.6.0...@surgio/gateway-frontend@0.7.0) (2020-04-08)
+
+
+### Bug Fixes
+
+* lint error ([4005f6b](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/4005f6bdb06a6ed6108bdc6e9fb3b04a13318124))
+* lint error ([f7158a8](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/f7158a8849926f1c42a8b6ac9e269226def35baf))
+
+
+
+
+
 # [0.6.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@0.5.0...@surgio/gateway-frontend@0.6.0) (2020-04-05)
 
 

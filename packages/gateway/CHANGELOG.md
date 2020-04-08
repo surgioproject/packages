@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.9.0...@surgio/gateway@0.10.0) (2020-04-08)
+
+
+### Bug Fixes
+
+* lint error ([f7158a8](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/f7158a8849926f1c42a8b6ac9e269226def35baf))
+* some surgio api has chagned ([2701c22](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/2701c22205548c3fcadefd3c311cbfc59d7577d0))
+
+
+### Features
+
+* 网关 URL 中自定义参数可以定义成员变量 ([cf05f8d](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/cf05f8d6200852f167428ff25c2b2e8079f4f8c1))
+* URL 参数 filter 应用自定义过滤器需要写完整 ([8156c47](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/8156c47914459cda48e58a06351faf4333c33886))
+
+
+### BREAKING CHANGES
+
+* 原本自定义过滤器的引用需要在名称前加入 `customFilters.`，例如：
+
+```
+?filter=customFilters.myFilter
+```
+
+
+
+
+
 # [0.9.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.8.1...@surgio/gateway@0.9.0) (2020-04-05)
 
 
