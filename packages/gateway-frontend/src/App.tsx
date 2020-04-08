@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { SnackbarProvider } from 'notistack';
 import clsx from 'clsx';
@@ -27,7 +27,7 @@ import DnsIcon from '@material-ui/icons/Dns';
 import SubjectIcon from '@material-ui/icons/Subject';
 import MenuIcon from '@material-ui/icons/Menu';
 import GitHubIcon from '@material-ui/icons/GitHub';
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import loadable from '@loadable/component';
 
 import './App.css';
@@ -113,7 +113,6 @@ interface ResponsiveDrawerProps {
 export default observer((props: ResponsiveDrawerProps) => {
   const { container } = props;
   const classes = useStyles();
-  const theme = useTheme();
   const stores = useStores();
   const isShowNavElements = useNavElements();
   const location = useLocation();
@@ -123,7 +122,7 @@ export default observer((props: ResponsiveDrawerProps) => {
     setMobileOpen(!mobileOpen);
   };
 
-  const validateAuth = () => {
+  const validateAuth = useCallback(() => {
     const search = new URLSearchParams(location.search);
 
     if (search.get('access_token')) {
@@ -135,7 +134,7 @@ export default observer((props: ResponsiveDrawerProps) => {
     }
 
     return defaultFetcher<{accessToken?: string}>('/api/auth/validate-cookie');
-  };
+  }, [location.search, stores.config]);
 
   const updateConfig = () => {
     return defaultFetcher<Partial<Config>>('/api/config');
@@ -162,7 +161,7 @@ export default observer((props: ResponsiveDrawerProps) => {
       .catch(err => {
         console.error(err);
       });
-  }, [stores.config]);
+  }, [stores.config, validateAuth]);
 
   const drawer = (
     <div>

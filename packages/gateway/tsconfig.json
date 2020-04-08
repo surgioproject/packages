@@ -14,7 +14,8 @@
     "allowSyntheticDefaultImports": true, // https://zhuanlan.zhihu.com/p/29022311
     "resolveJsonModule": true,
     "allowJs": true,
-    "strict": false
+    "strict": false,
+    "strictNullChecks": true
   },
   "exclude": ["node_modules", "dist", "coverage", "__tests__", "**/*.spec.ts", "**/*.test.ts"]
 }

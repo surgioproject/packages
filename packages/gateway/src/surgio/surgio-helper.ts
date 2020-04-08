@@ -15,7 +15,7 @@ export class SurgioHelper {
   public remoteSnippetList: ReadonlyArray<RemoteSnippet>;
   public artifactList: ReadonlyArray<ArtifactConfig>;
   public providerMap: Map<string, PossibleProviderType> = new Map();
-  public readonly templateEngine?: Environment;
+  public readonly templateEngine: Environment;
 
   private readonly pkgFile?: PackageJson;
 
@@ -45,7 +45,7 @@ export class SurgioHelper {
       encoding: 'utf8',
     });
 
-    async function readProvider(path): Promise<PossibleProviderType> {
+    async function readProvider(path): Promise<PossibleProviderType|undefined> {
       let provider;
 
       try {

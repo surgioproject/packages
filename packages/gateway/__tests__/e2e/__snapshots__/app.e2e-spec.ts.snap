@@ -54,3 +54,17 @@ ss4 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubu
 🇺🇸US 1, 🇺🇸US 2, 🇺🇸US 3, 🇺🇲 US, Snell, HTTPS, ss1, ss2, ss3, vmess, http 1, http 2, snell, ss4, ss-wss
 "
 `;
+
+exports[`AppController (e2e) /get-artifact (GET) custom params 1`] = `
+"original
+----
+original
+"
+`;
+
+exports[`AppController (e2e) /get-artifact (GET) custom params 2`] = `
+"new
+----
+new
+"
+`;

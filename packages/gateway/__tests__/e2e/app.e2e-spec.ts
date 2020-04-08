@@ -92,6 +92,45 @@ describe('AppController (e2e)', () => {
     ).statusCode).toBe(401);
   });
 
+  test('/get-artifact (GET) custom params', async () => {
+    {
+      const res = await app.inject({
+        url: '/get-artifact/custom-params.conf',
+        query: {
+          access_token: token,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.payload).toMatchSnapshot();
+    }
+
+    {
+      const res = await app.inject({
+        url: '/get-artifact/custom-params.conf',
+        query: {
+          access_token: token,
+          foo: 'new',
+          'child.bar': 'new',
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.payload).toMatchSnapshot();
+    }
+  });
+
+  test('customParams should not contaminate prototype', async () => {
+    await app.inject({
+      url: '/get-artifact/custom-params.conf',
+      query: {
+        access_token: token,
+        'constructor.prototype.hacked': 'bar',
+      },
+    });
+    expect(({} as any).hacked).toBeUndefined();
+  });
+
   test('/export-providers (GET)', async () => {
     const res = await app.inject({
       url: '/export-providers',
@@ -140,7 +179,7 @@ describe('AppController (e2e)', () => {
       query: {
         providers: 'clash,custom',
         format: 'surge-policy',
-        filter: 'globalFilter',
+        filter: 'customFilters.globalFilter',
         access_token: token,
       },
     });
@@ -170,7 +209,7 @@ describe('AppController (e2e)', () => {
       query: {
         providers: 'clash,custom',
         format: 'surge-policy',
-        filter: 'testFilter',
+        filter: 'customFilters.testFilter',
         access_token: token,
       },
     });

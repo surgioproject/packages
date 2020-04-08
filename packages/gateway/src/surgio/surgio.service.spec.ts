@@ -28,7 +28,8 @@ describe('SurgioService', () => {
   test('getArtifact should work', async () => {
     const artifact = await surgioService.getArtifact('test.conf');
 
-    expect(artifact.render()).toMatchSnapshot();
+    expect(artifact).not.toBeUndefined();
+    expect(artifact?.render()).toMatchSnapshot();
   });
 
   test('transformArtifact format should work', async () => {
@@ -48,13 +49,13 @@ describe('SurgioService', () => {
 
   test('transformArtifact filter should work', async () => {
     expect(
-      await surgioService.transformArtifact('test.conf', 'surge-policy', 'globalFilter')
+      await surgioService.transformArtifact('test.conf', 'surge-policy', 'customFilters.globalFilter')
     ).toMatchSnapshot();
     expect(
-      await surgioService.transformArtifact('test.conf', 'qx-server', 'globalFilter')
+      await surgioService.transformArtifact('test.conf', 'qx-server', 'customFilters.globalFilter')
     ).toMatchSnapshot();
     expect(
-      await surgioService.transformArtifact('test.conf', 'clash-provider', 'globalFilter')
+      await surgioService.transformArtifact('test.conf', 'clash-provider', 'customFilters.globalFilter')
     ).toMatchSnapshot();
   });
 
