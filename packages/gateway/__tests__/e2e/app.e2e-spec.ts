@@ -140,7 +140,7 @@ describe('AppController (e2e)', () => {
       query: {
         providers: 'clash,custom',
         format: 'surge-policy',
-        filter: 'globalFilter',
+        filter: 'customFilters.globalFilter',
         access_token: token,
       },
     });
@@ -170,7 +170,7 @@ describe('AppController (e2e)', () => {
       query: {
         providers: 'clash,custom',
         format: 'surge-policy',
-        filter: 'testFilter',
+        filter: 'customFilters.testFilter',
         access_token: token,
       },
     });

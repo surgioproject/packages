@@ -3,7 +3,6 @@ import { generate } from 'surgio/build/generate';
 import { Artifact } from 'surgio/build/generator/artifact';
 import { getProvider } from 'surgio/build/provider';
 import { CommandConfig } from 'surgio/build/types';
-import * as filters from 'surgio/build/utils/filter';
 
 import { SurgioHelper } from './surgio-helper';
 
@@ -81,24 +80,18 @@ export class SurgioService {
   }
 
   public getTemplateByFormat(format: string, filter?: string): string {
-    let filterName;
-
-    if (filter) {
-      filterName = filters.hasOwnProperty(filter) ? filter : `customFilters.${filter}`;
-    }
-
     switch (format) {
       case 'surge-policy':
-        return `{{ getSurgeNodes(nodeList${filterName ? `, ${filterName}` : ''}) }}`;
+        return `{{ getSurgeNodes(nodeList${filter ? `, ${filter}` : ''}) }}`;
 
       case 'qx-server':
-        return `{{ getQuantumultXNodes(nodeList${filterName ? `, ${filterName}` : ''}) }}`;
+        return `{{ getQuantumultXNodes(nodeList${filter ? `, ${filter}` : ''}) }}`;
 
       case 'clash-provider':
         return [
           '---',
           'proxies:',
-          `{{ getClashNodes(nodeList${filterName ? `, ${filterName}` : ''}) | yaml }}`,
+          `{{ getClashNodes(nodeList${filter ? `, ${filter}` : ''}) | yaml }}`,
           '...'
         ].join('\n');
 
