@@ -21,9 +21,9 @@ export class AppController {
     @Query() query: GetArtifactQuery,
     @Req() req: FastifyRequest
   ): Promise<void> {
-    const dl: string = query.dl;
-    const format: string = query.format;
-    const filter: string = query.filter;
+    const dl = query.dl;
+    const format = query.format;
+    const filter = query.filter;
     const urlParams = _.omit(query, ['dl', 'format', 'filter', 'access_token']);
     const artifactName: string = params.name;
     const artifact = format !== void 0 ?
@@ -40,6 +40,7 @@ export class AppController {
 
       this.logger.warn(`[download-artifact] ${artifactName} ${req.headers['user-agent'] || '-'}`);
 
+      // @ts-ignore
       await this.sendPayload(req, res, artifact, urlParams);
     } else {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
@@ -65,9 +66,9 @@ export class AppController {
       }
     });
 
-    const dl: string = query.dl;
-    const format: string = query.format;
-    const filter: string = query.filter;
+    const format = query.format;
+    const dl = query.dl;
+    const filter = query.filter;
     const urlParams = _.omit(query, ['dl', 'format', 'filter', 'access_token', 'providers']);
     const artifact = await this.surgioService.exportProvider(providers[0], format, {
       filter,
@@ -86,6 +87,7 @@ export class AppController {
 
       this.logger.warn(`[download-artifact] ${artifact.artifact.name} ${req.headers['user-agent'] || '-'}`);
 
+      // @ts-ignore
       await this.sendPayload(req, res, artifact, urlParams);
     } else {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
@@ -100,7 +102,7 @@ export class AppController {
   ): Promise<void> {
     if (typeof artifact === 'string') {
       res.send(artifact);
-    } else if (artifact instanceof Artifact) {
+    } else {
       // 只支持输出单个 Provider 的流量信息
       if (artifact.providerMap.size === 1) {
         const providers = artifact.providerMap.values();
@@ -127,18 +129,18 @@ export class AppController {
 }
 
 interface GetArtifactQuery {
-  readonly format?: string;
+  readonly format: string;
   readonly filter?: string;
   readonly dl?: string;
   readonly access_token?: string;
-  readonly [key: string]: string;
+  readonly [key: string]: string|undefined;
 }
 
 interface ExportProviderQuery {
   readonly providers: string;
-  readonly format?: string;
+  readonly format: string;
   readonly filter?: string;
   readonly dl?: string;
   readonly access_token?: string;
-  readonly [key: string]: string;
+  readonly [key: string]: string|undefined;
 }

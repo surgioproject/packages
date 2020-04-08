@@ -15,7 +15,7 @@ export class SurgioService {
     return this.surgioHelper.config;
   }
 
-  public async getArtifact(artifactName: string): Promise<Artifact> {
+  public async getArtifact(artifactName: string): Promise<Artifact|undefined> {
     const target = this.surgioHelper.artifactList.filter(item => item.name === artifactName);
 
     if (!target.length) {
@@ -55,7 +55,7 @@ export class SurgioService {
     return await artifactInstance.init();
   }
 
-  public async transformArtifact(artifactName: string, format: string, filter?: string): Promise<Artifact|string> {
+  public async transformArtifact(artifactName: string, format: string, filter?: string): Promise<Artifact|string|undefined> {
     const target = this.surgioHelper.artifactList.filter(item => item.name === artifactName);
 
     if (!target.length) {
