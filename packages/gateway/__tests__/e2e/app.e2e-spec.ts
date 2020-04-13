@@ -218,6 +218,33 @@ describe('AppController (e2e)', () => {
     expect(res.payload).toMatchSnapshot();
   });
 
+  test('/export-providers (GET) using template', async () => {
+    const res = await app.inject({
+      url: '/export-providers',
+      query: {
+        providers: 'clash,custom',
+        template: 'export',
+        access_token: token,
+      },
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toMatchSnapshot();
+  });
+
+  test('/export-providers (GET) using wrong template', async () => {
+    const res = await app.inject({
+      url: '/export-providers',
+      query: {
+        providers: 'clash,custom',
+        template: 'notfound',
+        access_token: token,
+      },
+    });
+
+    expect(res.statusCode).toBe(500);
+  });
+
   test('/export-providers (GET) unauthorized request', async () => {
     expect((
       await app.inject({

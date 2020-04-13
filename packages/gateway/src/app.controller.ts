@@ -3,6 +3,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { ServerResponse } from 'http';
 import { Artifact } from 'surgio/build/generator/artifact';
 import _ from 'lodash';
+import { URL } from 'url';
 
 import { BearerAuthGuard } from './auth/bearer.guard';
 import { SurgioService } from './surgio/surgio.service';
@@ -67,15 +68,33 @@ export class AppController {
     });
 
     const format = query.format;
+    const template = query.template;
+
+    if (!format && !template) {
+      throw new HttpException('参数 format 和 template 必须指定至少一个值', HttpStatus.BAD_REQUEST);
+    }
+
     const dl = query.dl;
     const filter = query.filter;
     const urlParams = _.omit(query, ['dl', 'format', 'filter', 'access_token', 'providers']);
-    const artifact = await this.surgioService.exportProvider(providers[0], format, {
-      filter,
-      ...(providers.length > 1 ? {
-        combineProviders: providers.splice(1),
-      } : null),
-    });
+    let artifact: Artifact;
+
+    if (format) {
+      artifact = await this.surgioService.exportProvider(providers[0], format, undefined, {
+        filter,
+        ...(providers.length > 1 ? {
+          combineProviders: providers.splice(1),
+        } : null),
+      });
+    } else {
+      artifact = await this.surgioService.exportProvider(providers[0], undefined, template, {
+        filter,
+        downloadUrl: (new URL(req.req.url as string, this.surgioService.config.publicUrl)).toString(),
+        ...(providers.length > 1 ? {
+          combineProviders: providers.splice(1),
+        } : null),
+      });
+    }
 
     if (artifact) {
       res.header('content-type', 'text/plain; charset=utf-8');
@@ -98,7 +117,7 @@ export class AppController {
     req: FastifyRequest,
     res: FastifyReply<ServerResponse>,
     artifact: string|Artifact,
-    rawUrlParams?: Record<string, string>,
+    urlParams?: Record<string, string>,
   ): Promise<void> {
     if (typeof artifact === 'string') {
       res.send(artifact);
@@ -126,8 +145,7 @@ export class AppController {
       res.send(artifact.render(
         undefined,
         {
-          urlParams: rawUrlParams ? this.processUrlParams(rawUrlParams) : undefined,
-          rawUrlParams,
+          urlParams: urlParams ? this.processUrlParams(urlParams) : undefined,
         })
       );
     }
@@ -155,7 +173,8 @@ interface GetArtifactQuery {
 
 interface ExportProviderQuery {
   readonly providers: string;
-  readonly format: string;
+  readonly format?: string;
+  readonly template?: string;
   readonly filter?: string;
   readonly dl?: string;
   readonly access_token?: string;
