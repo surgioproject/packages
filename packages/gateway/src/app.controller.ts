@@ -98,7 +98,7 @@ export class AppController {
     req: FastifyRequest,
     res: FastifyReply<ServerResponse>,
     artifact: string|Artifact,
-    urlParams?: Record<string, string>,
+    rawUrlParams?: Record<string, string>,
   ): Promise<void> {
     if (typeof artifact === 'string') {
       res.send(artifact);
@@ -126,7 +126,8 @@ export class AppController {
       res.send(artifact.render(
         undefined,
         {
-          urlParams: urlParams ? this.processUrlParams(urlParams) : undefined,
+          urlParams: rawUrlParams ? this.processUrlParams(rawUrlParams) : undefined,
+          rawUrlParams,
         })
       );
     }
