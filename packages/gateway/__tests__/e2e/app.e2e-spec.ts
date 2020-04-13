@@ -268,6 +268,9 @@ describe('AppController (e2e)', () => {
   test('/render (GET)', async () => {
     const res = await app.inject({
       url: '/render?template=render',
+      query: {
+        access_token: token,
+      },
     });
 
     expect(res.statusCode).toBe(200);
@@ -276,7 +279,10 @@ describe('AppController (e2e)', () => {
 
   test('/render (GET) sub folder', async () => {
     const res = await app.inject({
-      url: '/render?template=sub-folder/render',
+      url: '/render?template=sub-folder%2Frender',
+      query: {
+        access_token: token,
+      },
     });
 
     expect(res.statusCode).toBe(200);
@@ -286,6 +292,9 @@ describe('AppController (e2e)', () => {
   test('/render (GET) not found', async () => {
     const res = await app.inject({
       url: '/render?template=render-not-found',
+      query: {
+        access_token: token,
+      },
     });
 
     expect(res.statusCode).toBe(404);
