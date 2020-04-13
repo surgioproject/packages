@@ -116,6 +116,7 @@ export class AppController {
     }
   }
 
+  @UseGuards(BearerAuthGuard)
   @Get('/render')
   @Head('/render')
   public async renderTemplate(
