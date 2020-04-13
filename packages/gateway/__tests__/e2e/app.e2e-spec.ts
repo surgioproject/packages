@@ -264,4 +264,30 @@ describe('AppController (e2e)', () => {
       })
     ).statusCode).toBe(401);
   });
+
+  test('/render (GET)', async () => {
+    const res = await app.inject({
+      url: '/render?template=render',
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toMatchSnapshot();
+  });
+
+  test('/render (GET) sub folder', async () => {
+    const res = await app.inject({
+      url: '/render?template=sub-folder/render',
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toMatchSnapshot();
+  });
+
+  test('/render (GET) not found', async () => {
+    const res = await app.inject({
+      url: '/render?template=render-not-found',
+    });
+
+    expect(res.statusCode).toBe(404);
+  });
 });

@@ -1,8 +1,9 @@
-import { Controller, Get, Res, Param, Query, HttpException, HttpStatus, UseGuards, Req, Logger } from '@nestjs/common';
+import { Controller, Get, Head, Res, Param, Query, HttpException, HttpStatus, UseGuards, Req, Logger } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ServerResponse } from 'http';
 import { Artifact } from 'surgio/build/generator/artifact';
 import _ from 'lodash';
+import { getUrl } from 'surgio/build/utils';
 import { URL } from 'url';
 
 import { BearerAuthGuard } from './auth/bearer.guard';
@@ -16,9 +17,10 @@ export class AppController {
 
   @UseGuards(BearerAuthGuard)
   @Get('/get-artifact/:name')
+  @Head('/get-artifact/:name')
   public async getArtifact(
     @Res() res: FastifyReply<ServerResponse>,
-    @Param() params,
+    @Param() params: { readonly name: string },
     @Query() query: GetArtifactQuery,
     @Req() req: FastifyRequest
   ): Promise<void> {
@@ -50,6 +52,7 @@ export class AppController {
 
   @UseGuards(BearerAuthGuard)
   @Get('/export-providers')
+  @Head('/export-providers')
   public async exportProvider(
     @Req() req: FastifyRequest,
     @Res() res: FastifyReply<ServerResponse>,
@@ -76,7 +79,7 @@ export class AppController {
 
     const dl = query.dl;
     const filter = query.filter;
-    const urlParams = _.omit(query, ['dl', 'format', 'filter', 'access_token', 'providers']);
+    const urlParams = _.omit(query, ['dl', 'format', 'template', 'filter', 'access_token', 'providers']);
     let artifact: Artifact;
 
     if (format) {
@@ -113,6 +116,41 @@ export class AppController {
     }
   }
 
+  @Get('/render')
+  @Head('/render')
+  public async renderTemplate(
+    @Req() req: FastifyRequest,
+    @Res() res: FastifyReply<ServerResponse>,
+    @Query() query: RenderTemplateQuery,
+  ): Promise<void> {
+    const { template } = query;
+    const config = this.surgioService.config;
+    const gatewayConfig = config?.gateway;
+    const gatewayHasToken = !!(gatewayConfig?.accessToken);
+
+    if (!template) {
+      throw new HttpException('参数 template 必须指定一个值', HttpStatus.BAD_REQUEST);
+    }
+
+    try {
+      res.header('content-type', 'text/plain; charset=utf-8');
+      res.header('cache-control', 'public, max-age=0, must-revalidate');
+
+      const html = this.surgioService.surgioHelper.templateEngine.render(`${template}.tpl`, {
+        downloadUrl: (new URL(req.req.url as string, this.surgioService.config.publicUrl)).toString(),
+        getUrl: (p: string) => getUrl(config.publicUrl, p, gatewayHasToken ? gatewayConfig?.accessToken : undefined),
+      });
+
+      res.send(html);
+    } catch (err) {
+      if (err.message.includes('template not found')) {
+        throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
+      } else {
+        throw err;
+      }
+    }
+  }
+
   private async sendPayload(
     req: FastifyRequest,
     res: FastifyReply<ServerResponse>,
@@ -142,11 +180,13 @@ export class AppController {
         }
       }
 
-      res.send(artifact.render(
-        undefined,
-        {
-          urlParams: urlParams ? this.processUrlParams(urlParams) : undefined,
-        })
+      res.send(
+        artifact.render(
+          undefined,
+          {
+            urlParams: urlParams ? this.processUrlParams(urlParams) : undefined,
+          }
+        )
       );
     }
   }
@@ -169,6 +209,10 @@ interface GetArtifactQuery {
   readonly dl?: string;
   readonly access_token?: string;
   readonly [key: string]: string|undefined;
+}
+
+interface RenderTemplateQuery {
+  readonly template: string;
 }
 
 interface ExportProviderQuery {
