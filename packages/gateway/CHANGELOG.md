@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.11.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.10.0...@surgio/gateway@0.11.0) (2020-04-13)
+
+
+### Bug Fixes
+
+* 开启 /render 路由鉴权 ([6d666f5](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/6d666f5f383a0874e085020554f34e96c764bdd5))
+* 托管地址未能与 URL 中的参数保持一致 ([a91f722](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/a91f72297c50a06815868057be6031e0843c81e2))
+* test ([4c8af0f](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/4c8af0fb531fa960cd3cc544c6d7368ab41dfc32))
+
+
+### Features
+
+* 新增路由 /render ([2d11f16](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/2d11f1609011ac8e3cad2be10c9204fef401270c))
+* 允许用户指定使用指定 template 导出 providers ([e8ae5cf](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/e8ae5cffaa00d2df7f936afaad9518bdd047f4cc))
+
+
+
+
+
 # [0.10.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.9.0...@surgio/gateway@0.10.0) (2020-04-08)
 
 
