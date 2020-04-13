@@ -33,10 +33,13 @@ export class SurgioService {
     return await artifactInstance.init();
   }
 
-  public async exportProvider(providerName: string, format: string, options: { readonly filter?: string; readonly combineProviders?: ReadonlyArray<string>; } = {}): Promise<Artifact> {
-    const artifactInstance = new Artifact(
-      this.surgioHelper.config,
-      {
+  public async exportProvider(
+    providerName: string,
+    format: string|undefined,
+    template: string|undefined,
+    options: ExportProviderOptions = {}): Promise<Artifact> {
+    const artifactConfig = format
+      ? {
         name: `${providerName}.conf`,
         provider: providerName,
         template: undefined,
@@ -44,7 +47,21 @@ export class SurgioService {
         ...(options.combineProviders ? {
           combineProviders: options.combineProviders,
         } : null),
-      },
+      }
+      : (template
+        ? {
+          name: `${providerName}.conf`,
+          downloadUrl: options.downloadUrl,
+          provider: providerName,
+          template,
+          ...(options.combineProviders ? {
+            combineProviders: options.combineProviders,
+          } : null),
+        }
+        : (() => {throw new Error('未指定 format 和 template')})());
+    const artifactInstance = new Artifact(
+      this.surgioHelper.config,
+      artifactConfig,
       {
         remoteSnippetList: this.surgioHelper.remoteSnippetList,
         templateEngine: this.surgioHelper.templateEngine,
@@ -99,4 +116,10 @@ export class SurgioService {
         throw new HttpException('参数 format 必须指定', HttpStatus.BAD_REQUEST);
     }
   }
+}
+
+export interface ExportProviderOptions {
+  readonly downloadUrl?: string;
+  readonly filter?: string;
+  readonly combineProviders?: ReadonlyArray<string>;
 }

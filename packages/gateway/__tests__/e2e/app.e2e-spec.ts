@@ -218,6 +218,33 @@ describe('AppController (e2e)', () => {
     expect(res.payload).toMatchSnapshot();
   });
 
+  test('/export-providers (GET) using template', async () => {
+    const res = await app.inject({
+      url: '/export-providers',
+      query: {
+        providers: 'clash,custom',
+        template: 'export',
+        access_token: token,
+      },
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toMatchSnapshot();
+  });
+
+  test('/export-providers (GET) using wrong template', async () => {
+    const res = await app.inject({
+      url: '/export-providers',
+      query: {
+        providers: 'clash,custom',
+        template: 'notfound',
+        access_token: token,
+      },
+    });
+
+    expect(res.statusCode).toBe(500);
+  });
+
   test('/export-providers (GET) unauthorized request', async () => {
     expect((
       await app.inject({
@@ -236,5 +263,40 @@ describe('AppController (e2e)', () => {
         },
       })
     ).statusCode).toBe(401);
+  });
+
+  test('/render (GET)', async () => {
+    const res = await app.inject({
+      url: '/render?template=render',
+      query: {
+        access_token: token,
+      },
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toMatchSnapshot();
+  });
+
+  test('/render (GET) sub folder', async () => {
+    const res = await app.inject({
+      url: '/render?template=sub-folder%2Frender',
+      query: {
+        access_token: token,
+      },
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toMatchSnapshot();
+  });
+
+  test('/render (GET) not found', async () => {
+    const res = await app.inject({
+      url: '/render?template=render-not-found',
+      query: {
+        access_token: token,
+      },
+    });
+
+    expect(res.statusCode).toBe(404);
   });
 });

@@ -2386,7 +2386,7 @@
   integrity sha512-+iTbntw2IZPb/anVDbypzfQa+ay64MW0Zo8aJ8gZPWMMK6/OubMVb6lUPMagqjOPnmtauXnFCACVl3O7ogjeqQ==
 
 "@surgio/gateway-frontend@file:packages/gateway-frontend":
-  version "0.6.0"
+  version "0.7.0"
   dependencies:
     "@loadable/component" "^5.12.0"
     lodash-es "^4.17.15"
@@ -15512,10 +15512,10 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-surgio@^1.18.4:
-  version "1.18.4"
-  resolved "https://registry.yarnpkg.com/surgio/-/surgio-1.18.4.tgz#1a1f43cadb0f9c6833ee2270887fe92388049115"
-  integrity sha512-HG0EAiGO59YV9j5PmAavvd0wF6muNEP94NBo4n5oYhREfObGWIClTxNwK5Zr6rWOpfLAqkNKkrX7aY5khLiltQ==
+surgio@^1.20.0:
+  version "1.20.0"
+  resolved "https://registry.yarnpkg.com/surgio/-/surgio-1.20.0.tgz#1e5796e0421a33e51d50f5b2fb3d524465be3d55"
+  integrity sha512-RhoDm5S1lsU/IX+f2kk59SVLg8EqyGj2NQlxQrJ3FhJy91NxXod39pihkMrGOFHq0R5Ng0gl0LU4OKK24BprQg==
   dependencies:
     "@hapi/joi" "^16.1.8"
     "@surgio/logger" "^1.0.0"
