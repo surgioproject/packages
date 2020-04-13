@@ -8,6 +8,7 @@ export function createAdapter(options: AdapterOptions = {}): FastifyAdapter {
   const adapter = new FastifyAdapter({
     serverFactory: options.serverFactory,
     logger: false,
+    trustProxy: true,
   });
 
   return adapter;
