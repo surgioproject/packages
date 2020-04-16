@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0-alpha.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@0.7.0...@surgio/gateway-frontend@0.8.0-alpha.0) (2020-04-16)
+
+
+### Bug Fixes
+
+* error ([e1b3cdc](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/e1b3cdc75e01daf66c8b5352c5da374dbfd3943f))
+* https://github.com/mobxjs/mobx-react-lite/#observer-batching ([838c704](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/838c7041c7c7d06b5a938a04f035ae275fc17272))
+* https://github.com/mobxjs/mobx-react-lite/#observer-batching ([489e63f](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/489e63f949f85536290e07d06ea7f63b1bd20ed9))
+
+
+
+
+
 # [0.7.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@0.6.0...@surgio/gateway-frontend@0.7.0) (2020-04-08)
 
 

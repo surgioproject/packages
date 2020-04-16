@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0-alpha.0](https://github.com/surgioproject/packages/compare/@surgio/logger@1.0.0...@surgio/logger@1.1.0-alpha.0) (2020-04-16)
+
+
+### Bug Fixes
+
+* build ([b37f969](https://github.com/surgioproject/packages/commit/b37f969f9f8fd4e0f083e57a93c013c9a925e1dc))
+
+
+
+
+
 # 1.0.0 (2020-02-24)
 
 

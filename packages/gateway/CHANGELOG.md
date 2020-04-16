@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.12.0-alpha.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.11.0...@surgio/gateway@0.12.0-alpha.0) (2020-04-16)
+
+
+### Bug Fixes
+
+* test ([bbbcb8f](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/bbbcb8f7143ce82c861aecfb94c76efa7840237b))
+
+
+### Features
+
+* 尝试使用新的启动方式 ([3760043](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/37600436e1b1df21c36866bd84df47c526abc56f))
+
+
+
+
+
 # [0.11.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.10.0...@surgio/gateway@0.11.0) (2020-04-13)
 
 
