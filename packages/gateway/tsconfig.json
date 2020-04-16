@@ -15,7 +15,8 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "strict": false,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "skipLibCheck": true
   },
   "exclude": ["node_modules", "dist", "coverage", "__tests__", "**/*.spec.ts", "**/*.test.ts"]
 }
