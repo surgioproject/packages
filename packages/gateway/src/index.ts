@@ -2,17 +2,40 @@ import { NowRequest, NowResponse } from '@now/node/dist';
 import { bootstrap } from './bootstrap';
 
 export const createHttpServer = (): ((req: NowRequest, res: NowResponse) => Promise<void>) => {
-  const ready = bootstrap()
-    .then(app => {
-      return app.init()
-        .then(() => app.getHttpAdapter().getInstance().ready())
-        .then(() => app);
+  let app;
+  let state = 'start';
+  const prepare = bootstrap()
+    .then(nestApp => {
+      return nestApp.init()
+        .then(() => nestApp.getHttpAdapter().getInstance().ready())
+        .then(() => nestApp);
     });
 
   return async (req: NowRequest, res: NowResponse) => {
-    const app = await ready;
+    if (process.env.SURGIO_TESTING_STARTUP) {
+      switch (state) {
+        case 'start':
+          res.status(503).send('Under Maintenance');
+          state = 'preparing';
+          prepare.then(nextApp => {
+            app = nextApp;
+            state = 'ready';
+          });
 
-    app.getHttpAdapter().getInstance().server.emit('request', req, res);
+          break;
+        case 'preparing':
+          res.status(503).send('Under Maintenance');
+
+          break;
+        case 'ready':
+          app.getHttpAdapter().getInstance().server.emit('request', req, res);
+
+          break;
+      }
+    } else {
+      const nestApp = await prepare;
+      nestApp.getHttpAdapter().getInstance().server.emit('request', req, res);
+    }
   };
 };
 
