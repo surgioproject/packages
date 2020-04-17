@@ -14,7 +14,7 @@ export class SurgioService {
     return this.surgioHelper.config;
   }
 
-  public async getArtifact(artifactName: string): Promise<Artifact|undefined> {
+  public async getArtifact(artifactName: string, downloadUrl?: string): Promise<Artifact|undefined> {
     const target = this.surgioHelper.artifactList.filter(item => item.name === artifactName);
 
     if (!target.length) {
@@ -23,7 +23,10 @@ export class SurgioService {
 
     const artifactInstance = new Artifact(
       this.surgioHelper.config,
-      target[0],
+      {
+        ...target[0],
+        downloadUrl,
+      },
       {
         remoteSnippetList: this.surgioHelper.remoteSnippetList,
         templateEngine: this.surgioHelper.templateEngine,
