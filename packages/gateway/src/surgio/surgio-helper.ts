@@ -32,8 +32,8 @@ export class SurgioHelper {
   public async init(): Promise<this> {
     await this.checkCoreVersion();
 
-    const remoteSnippetsConfig = this.config.remoteSnippets || [];
-    this.remoteSnippetList = await loadRemoteSnippetList(remoteSnippetsConfig);
+    // const remoteSnippetsConfig = this.config.remoteSnippets || [];
+    // this.remoteSnippetList = await loadRemoteSnippetList(remoteSnippetsConfig);
 
     await this.readProviders();
 

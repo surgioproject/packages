@@ -190,8 +190,8 @@ export default observer((props: ResponsiveDrawerProps) => {
   );
 
   return (
-    <>
-      <SnackbarProvider maxSnack={3}>
+    <SnackbarProvider maxSnack={3}>
+      <>
         <CssBaseline />
 
         <div className={clsx(classes.root, 'app-root', !isShowNavElements && classes.noDrawer)}>
@@ -289,8 +289,8 @@ export default observer((props: ResponsiveDrawerProps) => {
             </>
           ) }
         </div>
-      </SnackbarProvider>
-    </>
+      </>
+    </SnackbarProvider>
   );
 });
 

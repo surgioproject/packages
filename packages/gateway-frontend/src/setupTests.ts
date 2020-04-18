@@ -5,6 +5,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import fetch, { Headers, Request, Response } from 'node-fetch';
 import AbortController from 'abort-controller';
+import 'mobx-react-lite/batchingForReactDom';
 
 global.fetch = fetch;
 global.Headers = Headers;

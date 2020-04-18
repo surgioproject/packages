@@ -31,7 +31,10 @@ export class AppController {
     const artifactName: string = params.name;
     const artifact = format !== void 0 ?
       await this.surgioService.transformArtifact(artifactName, format, filter) :
-      await this.surgioService.getArtifact(artifactName);
+      await this.surgioService.getArtifact(
+        artifactName,
+        (new URL(req.req.url as string, this.surgioService.config.publicUrl)).toString()
+      );
 
     if (artifact) {
       res.header('content-type', 'text/plain; charset=utf-8');

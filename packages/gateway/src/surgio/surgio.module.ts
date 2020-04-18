@@ -15,12 +15,12 @@ export class SurgioModule {
         SurgioService,
         {
           provide: 'SURGIO_HELPER',
-          useFactory: async (): Promise<SurgioHelper> => {
+          useFactory: (): Promise<SurgioHelper> => {
             const configFile = path.join(options.cwd, 'surgio.conf.js');
             const config = loadConfig(options.cwd, configFile);
             const helper = new SurgioHelper(options.cwd, config);
 
-            return await helper.init();
+            return helper.init();
           },
         },
       ],

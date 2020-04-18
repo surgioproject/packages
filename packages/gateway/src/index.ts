@@ -2,17 +2,16 @@ import { NowRequest, NowResponse } from '@now/node/dist';
 import { bootstrap } from './bootstrap';
 
 export const createHttpServer = (): ((req: NowRequest, res: NowResponse) => Promise<void>) => {
-  const ready = bootstrap()
-    .then(app => {
-      return app.init()
-        .then(() => app.getHttpAdapter().getInstance().ready())
-        .then(() => app);
+  const prepare = bootstrap()
+    .then(nestApp => {
+      return nestApp.init()
+        .then(() => nestApp.getHttpAdapter().getInstance().ready())
+        .then(() => nestApp);
     });
 
   return async (req: NowRequest, res: NowResponse) => {
-    const app = await ready;
-
-    app.getHttpAdapter().getInstance().server.emit('request', req, res);
+    const nestApp = await prepare;
+    nestApp.getHttpAdapter().getInstance().server.emit('request', req, res);
   };
 };
 

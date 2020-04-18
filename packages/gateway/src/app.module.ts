@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 
 import { AppController } from './app.controller';
 import { ApiModule } from './api/api.module';
+import { PrepareMiddleware } from './middleware/prepare.middleware';
 import { SurgioModule } from './surgio/surgio.module';
 import { SurgioService } from './surgio/surgio.service';
 import { AuthModule } from './auth/auth.module';
@@ -34,4 +35,13 @@ const FE_MODULE = require.resolve('@surgio/gateway-frontend');
   controllers: [AppController],
   providers: [SurgioService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer
+      .apply(PrepareMiddleware)
+      .exclude(
+        { path: 'render', method: RequestMethod.ALL },
+      )
+      .forRoutes(AppController);
+  }
+}

@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.12.0-alpha.1](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.12.0-alpha.0...@surgio/gateway@0.12.0-alpha.1) (2020-04-17)
+
+
+### Bug Fixes
+
+* get-artifact 的托管地址变量随请求 URI 改变 ([e0fdabb](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/e0fdabb2beeec57008a49e721ab9cdbe375ddee4))
+
+
+### Features
+
+* 优化了远程片段加载的时机 ([c3b23f6](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/c3b23f67efd7ec60daeddb75197ec88e1a8c1f85))
+
+
+### Reverts
+
+* 关闭新启动方式开关 ([769d01c](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/769d01cb2738c14322951cd31b2e629e2bda5cf5))
+
+
+
+
+
+# [0.12.0-alpha.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.11.0...@surgio/gateway@0.12.0-alpha.0) (2020-04-16)
+
+
+### Bug Fixes
+
+* test ([bbbcb8f](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/bbbcb8f7143ce82c861aecfb94c76efa7840237b))
+
+
+### Features
+
+* 尝试使用新的启动方式 ([3760043](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/37600436e1b1df21c36866bd84df47c526abc56f))
+
+
+
+
+
 # [0.11.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.10.0...@surgio/gateway@0.11.0) (2020-04-13)
 
 
