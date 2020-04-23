@@ -19,6 +19,7 @@ const FE_MODULE = require.resolve('@surgio/gateway-frontend');
       rootPath: join(FE_MODULE, '../build'),
       serveStaticOptions: {
         etag: true,
+        maxAge: '31d',
       },
     }),
     ConfigModule.forRoot({

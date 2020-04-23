@@ -138,7 +138,7 @@ export class AppController {
 
     try {
       res.header('content-type', 'text/plain; charset=utf-8');
-      res.header('cache-control', 'public, max-age=0, must-revalidate');
+      res.header('cache-control', `s-maxage=${60 * 60 * 24}, stale-while-revalidate`);
 
       const html = this.surgioService.surgioHelper.templateEngine.render(`${template}.tpl`, {
         downloadUrl: (new URL(req.req.url as string, this.surgioService.config.publicUrl)).toString(),
