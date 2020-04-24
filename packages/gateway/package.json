@@ -28,18 +28,18 @@
     "test:ci": "run-s test test:e2e"
   },
   "dependencies": {
-    "@nestjs/common": "^7.0.7",
+    "@nestjs/common": "^7.0.8",
     "@nestjs/config": "^0.4.0",
-    "@nestjs/core": "^7.0.7",
+    "@nestjs/core": "^7.0.8",
     "@nestjs/passport": "^7.0.0",
-    "@nestjs/platform-fastify": "^7.0.7",
+    "@nestjs/platform-fastify": "^7.0.8",
     "@nestjs/serve-static": "^2.0.0",
     "@surgio/gateway-frontend": "file:../gateway-frontend",
     "cookie-signature": "^1.1.0",
     "fastify": "^2.13.1",
     "fastify-accepts": "^1.0.0",
     "fastify-cookie": "^3.5.0",
-    "fastify-static": "^2.6.0",
+    "fastify-static": "^2.7.0",
     "got": "^10.7.0",
     "http-errors": "^1.7.3",
     "lodash": "^4.17.15",
@@ -54,7 +54,7 @@
     "youch": "^2.0.10"
   },
   "devDependencies": {
-    "@nestjs/testing": "^7.0.7"
+    "@nestjs/testing": "^7.0.8"
   },
   "files": [
     "dist"
