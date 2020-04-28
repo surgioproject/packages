@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
-import { ServeStaticModule } from '@nestjs/serve-static';
+import { ServeStaticModule } from '@royli/serve-static';
 
 import { AppController } from './app.controller';
 import { ApiModule } from './api/api.module';
