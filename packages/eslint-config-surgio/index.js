@@ -13,11 +13,11 @@ module.exports = {
     commonjs: true,
   },
   rules: {
-    'array-bracket-spacing': ['off'],
-    'comma-dangle': ['off'],
-    'dot-notation': ['off'],
-    'valid-jsdoc': ['off'],
-    'no-unused-vars': ['off'],
+    'array-bracket-spacing': 'off',
+    'comma-dangle': 'off',
+    'dot-notation': 'off',
+    'valid-jsdoc': 'off',
+    'no-unused-vars': 'off',
     eqeqeq: ['error', 'allow-null']
   },
 };
