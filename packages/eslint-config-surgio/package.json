@@ -1,0 +1,21 @@
+{
+  "name": "@surgio/eslint-config-surgio",
+  "version": "0.1.0",
+  "description": "ESLint config for Surgio config stores",
+  "keywords": [
+    "surgio",
+    "eslint"
+  ],
+  "author": "Roy Li <me@dada.li>",
+  "homepage": "https://surgio.royli.dev",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/surgioproject/packages.git"
+  },
+  "scripts": {},
+  "bugs": {
+    "url": "https://github.com/surgioproject/packages/issues"
+  }
+}
