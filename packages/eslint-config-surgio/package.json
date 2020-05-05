@@ -17,5 +17,8 @@
   "scripts": {},
   "bugs": {
     "url": "https://github.com/surgioproject/packages/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
