@@ -18,6 +18,7 @@ module.exports = {
     'dot-notation': 'off',
     'valid-jsdoc': 'off',
     'no-unused-vars': 'off',
+    'no-mixed-spaces-and-tabs': 'off',
     eqeqeq: ['error', 'allow-null']
   },
 };
