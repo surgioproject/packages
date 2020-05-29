@@ -10,6 +10,8 @@
     "prepare-ci": "ts-node -P scripts/tsconfig.json scripts/ci-prepare.ts"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-angular": "^8.3.4",
     "@material-ui/core": "^4.9.11",
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.50",
@@ -88,6 +90,7 @@
   ],
   "husky": {
     "hooks": {
+      "commit-msg": "commitlint -c .commitlintrc.json -E HUSKY_GIT_PARAMS",
       "pre-commit": "npm-debug-log-cleaner && lint-staged"
     }
   }
