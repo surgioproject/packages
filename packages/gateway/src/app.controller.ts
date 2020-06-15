@@ -195,7 +195,9 @@ export class AppController {
     if (!req.url) {
       throw new HttpException('BAD REQUEST', HttpStatus.BAD_REQUEST);
     } else {
-      req.url = req.url.replace(/^\/proxy\/https:\/(\S)/, '/https://$1').replace(/^\/proxy\/http:\/(\S)/, '/http://$1');
+      req.url = req.url
+        .replace(/^(\/proxy)?\/https:\/{1,2}(.*)/, '/https://$2')
+        .replace(/^(\/proxy)?\/http:\/{1,2}(.*)/, '/http://$2');
       proxy.emit('request', req, res);
     }
   }
