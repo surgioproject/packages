@@ -2,7 +2,7 @@
   "command": {
     "version": {
       "conventionalCommits": true,
-      "message": "chore(release):"
+      "message": "chore(release): new release"
     }
   },
   "ignoreChanges": [
