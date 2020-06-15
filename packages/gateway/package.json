@@ -36,6 +36,7 @@
     "@nestjs/serve-static": "^2.1.1",
     "@surgio/gateway-frontend": "file:../gateway-frontend",
     "cookie-signature": "^1.1.0",
+    "cors-anywhere": "^0.4.3",
     "fastify": "^2.13.1",
     "fastify-accepts": "^1.0.0",
     "fastify-cookie": "^3.5.0",

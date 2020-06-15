@@ -1,13 +1,45 @@
-import { Controller, Get, Head, Res, Param, Query, HttpException, HttpStatus, UseGuards, Req, Logger } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Head,
+  Res,
+  Param,
+  Query,
+  HttpException,
+  HttpStatus,
+  UseGuards,
+  Req,
+  Logger,
+  All,
+} from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { ServerResponse } from 'http';
+import { IncomingMessage, ServerResponse } from 'http';
 import { Artifact } from 'surgio/build/generator/artifact';
 import _ from 'lodash';
 import { getUrl } from 'surgio/build/utils';
 import { URL } from 'url';
+import cors from 'cors-anywhere';
 
 import { BearerAuthGuard } from './auth/bearer.guard';
 import { SurgioService } from './surgio/surgio.service';
+
+function parseEnvList(env): ReadonlyArray<string> {
+  if (!env) {
+    return [];
+  }
+  return env.split(',');
+}
+
+const originBlacklist = parseEnvList(process.env.CORSANYWHERE_BLACKLIST);
+const originWhitelist = parseEnvList(process.env.CORSANYWHERE_WHITELIST);
+const proxy = cors.createServer({
+  originBlacklist,
+  originWhitelist,
+  removeHeaders: [
+    'cookie',
+    'cookie2',
+  ],
+});
 
 @Controller()
 export class AppController {
@@ -152,6 +184,19 @@ export class AppController {
       } else {
         throw err;
       }
+    }
+  }
+
+  @All('/proxy')
+  public async proxy(
+    @Req() req: IncomingMessage,
+    @Res() res: ServerResponse,
+  ): Promise<void> {
+    if (!req.url) {
+      throw new HttpException('BAD REQUEST', HttpStatus.BAD_REQUEST);
+    } else {
+      req.url = req.url.replace(/^\/proxy\/https:\/(\S)/, '/https://$1').replace(/^\/proxy\/http:\/(\S)/, '/http://$1');
+      proxy.emit('request', req, res);
     }
   }
 
