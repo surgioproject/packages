@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.13.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.12.2...@surgio/gateway@0.13.0) (2020-06-15)
+
+
+### Features
+
+* **controller:** proxy controller ([1fca26f](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/1fca26fc3435e31ba86b067fc4ebfbd881c1ac58))
+
+
+
+
+
 ## [0.12.2](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.12.1...@surgio/gateway@0.12.2) (2020-04-28)
 
 **Note:** Version bump only for package @surgio/gateway
