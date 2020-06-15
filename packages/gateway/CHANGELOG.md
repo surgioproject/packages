@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.13.1](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.13.0...@surgio/gateway@0.13.1) (2020-06-15)
+
+
+### Bug Fixes
+
+* missing dep ([75f924c](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/75f924c8a2a6712fbe3128fa3ae464a61837a341))
+* test ([47b004c](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/47b004c0a51b158531c10d18cad160c441aa8c88))
+
+
+
+
+
 # [0.13.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.12.2...@surgio/gateway@0.13.0) (2020-06-15)
 
 
