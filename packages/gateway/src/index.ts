@@ -1,3 +1,4 @@
+import 'source-map-support/register';
 import { NowRequest, NowResponse } from '@now/node/dist';
 import { bootstrap } from './bootstrap';
 

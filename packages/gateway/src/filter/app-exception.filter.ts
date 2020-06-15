@@ -11,7 +11,6 @@ export class AppExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<FastifyReply<ServerResponse>>();
     const request = ctx.getRequest<FastifyRequest>();
-    const accepts = request.accepts();
     let responsePayload;
 
     if (exception instanceof HttpException) {
@@ -43,6 +42,16 @@ export class AppExceptionsFilter implements ExceptionFilter {
         error: exception.message || 'Error',
       };
     }
+
+    if (!('accepts' in request)) {
+      const res = response as unknown as ServerResponse;
+
+      res.statusCode = responsePayload.statusCode;
+      res.end(JSON.stringify(responsePayload));
+      return;
+    }
+
+    const accepts = request.accepts();
 
     switch (accepts.type(['json', 'html'])) {
       case 'html': {
