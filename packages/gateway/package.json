@@ -52,6 +52,7 @@
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.5",
     "semver": "^7.3.2",
+    "source-map-support": "^0.5.19",
     "youch": "^2.0.10"
   },
   "devDependencies": {
