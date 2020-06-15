@@ -61,10 +61,11 @@
     "surgio": "^1.20.0"
   },
   "resolutions": {
-    "http-proxy": "^1.18.1"
+    "cors-anywhere/http-proxy": "^1.18.1"
   },
   "files": [
-    "dist"
+    "dist",
+    "yarn.lock"
   ],
   "jest": {
     "moduleFileExtensions": [

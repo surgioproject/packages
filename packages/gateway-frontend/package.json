@@ -32,7 +32,8 @@
   },
   "files": [
     "build",
-    "index.js"
+    "index.js",
+    "yarn.lock"
   ],
   "publishConfig": {
     "access": "public"
