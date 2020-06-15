@@ -36,7 +36,7 @@
     "@nestjs/serve-static": "^2.1.1",
     "@surgio/gateway-frontend": "file:../gateway-frontend",
     "cookie-signature": "^1.1.0",
-    "cors-anywhere": "^0.4.3",
+    "cors-anywhere": "https://github.com/geekdada/cors-anywhere",
     "fastify": "^2.13.1",
     "fastify-accepts": "^1.0.0",
     "fastify-cookie": "^3.5.0",
@@ -59,9 +59,6 @@
   },
   "peerDependencies": {
     "surgio": "^1.20.0"
-  },
-  "resolutions": {
-    "cors-anywhere/http-proxy": "^1.18.1"
   },
   "files": [
     "dist",

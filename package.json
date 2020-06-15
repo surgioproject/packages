@@ -79,9 +79,6 @@
     "type-fest": "^0.13.1",
     "typescript": "^3.7.4"
   },
-  "resolutions": {
-    "http-proxy": "^1.18.1"
-  },
   "repository": "https://github.com/surgioproject/packages",
   "author": "Yihang Li <me@royli.dev>",
   "bugs": {
@@ -89,12 +86,7 @@
   },
   "homepage": "https://surgio.royli.dev",
   "workspaces": {
-    "packages": ["packages/*"],
-    "nohoist": [
-      "@surgio/gateway/cors-anywhere",
-      "@surgio/gateway/cors-anywhere/**",
-      "@surgio/logger/winston"
-    ]
+    "packages": ["packages/*"]
   },
   "husky": {
     "hooks": {

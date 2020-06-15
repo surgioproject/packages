@@ -1,1 +1,1 @@
-import "./stub-request";
+import './stub-request';
