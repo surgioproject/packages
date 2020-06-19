@@ -10,12 +10,13 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc -p tsconfig.json",
-    "prepare": "run-s build",
+    "prepare": "npm run snyk-protect && run-s build",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:ci": "run-s test",
-    "lint": "tslint -p tsconfig.json -c tslint.json"
+    "lint": "tslint -p tsconfig.json -c tslint.json",
+    "snyk-protect": "snyk protect"
   },
   "files": [
     "dist"
@@ -48,6 +49,8 @@
     "url": "https://github.com/surgioproject/packages/issues"
   },
   "dependencies": {
-    "winston": "^3.2.1"
-  }
+    "winston": "^3.2.1",
+    "snyk": "^1.345.1"
+  },
+  "snyk": true
 }
