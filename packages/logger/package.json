@@ -18,8 +18,7 @@
     "lint": "tslint -p tsconfig.json -c tslint.json"
   },
   "files": [
-    "dist",
-    "yarn.lock"
+    "dist"
   ],
   "publishConfig": {
     "access": "public"
