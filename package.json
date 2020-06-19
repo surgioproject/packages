@@ -12,6 +12,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-angular": "^8.3.4",
+    "@loadable/component": "^5.12.0",
     "@material-ui/core": "^4.9.11",
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.50",
@@ -86,7 +87,9 @@
   },
   "homepage": "https://surgio.royli.dev",
   "workspaces": {
-    "packages": ["packages/*"]
+    "packages": [
+      "packages/*"
+    ]
   },
   "husky": {
     "hooks": {
