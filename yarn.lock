@@ -2627,6 +2627,30 @@
   dependencies:
     "@types/node" ">= 8"
 
+"@royli/cors-anywhere@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@royli/cors-anywhere/-/cors-anywhere-0.4.4.tgz#5e2c2f515074ccb931c5877b94365afdfacc8e46"
+  integrity sha512-WqM5AWO+bag0CvpkVBCp4ZEKNQ0XUSa5JVv4vF3rJJ/fFmGHbEfhMmdKEE6afwTiSgRwLCKUbxdvWNLjwneGQA==
+  dependencies:
+    http-proxy "1.18.1"
+    proxy-from-env "0.0.1"
+
+"@royli/hygen@^5.0.4":
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/@royli/hygen/-/hygen-5.0.4.tgz#43e6f05e9c783ec3cd80f25792b036210fa540fc"
+  integrity sha512-UD4V8xWdepHWelVPx3O9+0uQ0xhb8NJFKj383IA0IeFq523OYymc/gR4BfNpQ75tSjDe6/EIimzHPjbSIcsAuQ==
+  dependencies:
+    chalk "^2.4.2"
+    change-case "^3.1.0"
+    ejs "^2.6.1"
+    enquirer "^2.3.0"
+    execa "^1.0.0"
+    front-matter "^2.3.0"
+    fs-extra "^7.0.1"
+    ignore-walk "^3.0.2"
+    inflection "^1.12.0"
+    yargs-parser "^13.0.0"
+
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
@@ -2807,6 +2831,16 @@
   integrity sha512-PyRA9sm1Yayuj5OIoJ1hGt2YISX45w9WcFbh6ddT0Z/0yaFxOtGLInr4jUfU1EAFVs0Yfyfev4RNwBlUaHdlDQ==
   dependencies:
     defer-to-connect "^2.0.0"
+
+"@testing-library/dom@^7.16.2":
+  version "7.16.2"
+  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.16.2.tgz#f7a20b5548817e5c7ed26077913372d977be90af"
+  integrity sha512-4fT5l5L+5gfNhUZVCg0wnSszbRJ7A1ZHEz32v7OzH3mcY5lUsK++brI3IB2L9F5zO4kSDc2TRGEVa8v2hgl9vA==
+  dependencies:
+    "@babel/runtime" "^7.10.2"
+    aria-query "^4.0.2"
+    dom-accessibility-api "^0.4.5"
+    pretty-format "^25.5.0"
 
 "@testing-library/dom@^7.9.0":
   version "7.15.0"
@@ -5896,13 +5930,6 @@ core-util-is@1.0.2, core-util-is@^1.0.2, core-util-is@~1.0.0:
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
   integrity sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=
 
-"cors-anywhere@https://github.com/geekdada/cors-anywhere":
-  version "0.4.3"
-  resolved "https://github.com/geekdada/cors-anywhere#46e71077cb7c26fbd77cf3aa19ff5bdf8d84f317"
-  dependencies:
-    http-proxy "1.18.1"
-    proxy-from-env "0.0.1"
-
 cosmiconfig@^5.0.0, cosmiconfig@^5.1.0, cosmiconfig@^5.2.0, cosmiconfig@^5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/cosmiconfig/-/cosmiconfig-5.2.1.tgz#040f726809c591e77a17c0a3626ca45b4f168b1a"
@@ -8981,23 +9008,6 @@ husky@^4.2.5:
     please-upgrade-node "^3.2.0"
     slash "^3.0.0"
     which-pm-runs "^1.0.0"
-
-hygen@^5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/hygen/-/hygen-5.0.3.tgz#0ba9f6aff0a51dce4e71fc679da5a359cafb38c7"
-  integrity sha512-tepicT366of7FZKfuT/YtTOZ1mU7txQix2EgYEGOCBD4SN3+vf2tRITB/yA7Amd9NPhzijgCYkW/MlIsdXEEEQ==
-  dependencies:
-    chalk "^2.4.2"
-    change-case "^3.1.0"
-    ejs "^2.6.1"
-    enquirer "^2.3.0"
-    execa "^1.0.0"
-    front-matter "^2.3.0"
-    fs-extra "^7.0.1"
-    ignore-walk "^3.0.2"
-    inflection "^1.12.0"
-    ts-jest "^24.1.0"
-    yargs-parser "^13.0.0"
 
 hyphenate-style-name@^1.0.3:
   version "1.0.3"
@@ -16149,12 +16159,13 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-surgio@^1.20.1:
-  version "1.24.0"
-  resolved "https://registry.yarnpkg.com/surgio/-/surgio-1.24.0.tgz#7c82650c211692375552755ce18967830109d6e2"
-  integrity sha512-Ih1ZISpuwpB/DgovVFSZW/eYShoha+tcJAfKw1nprHNCWGbccioLcev7LD/YDJ6y5ySFICuQihHQfzxKRQWRmQ==
+surgio@^1.24.1:
+  version "1.24.1"
+  resolved "https://registry.yarnpkg.com/surgio/-/surgio-1.24.1.tgz#3213daefeaf54ad200e7c8ffd2b3c184fe8bc365"
+  integrity sha512-+W6koXew3AiQM4zEqdzeM0ymUNZy5PZfoB+JDH483DE+xBAjqWLZQ53Cln69T+HNJwYSIbcSSQLERw1J5hIL+Q==
   dependencies:
     "@hapi/joi" "^16.1.8"
+    "@royli/hygen" "^5.0.4"
     "@surgio/eslint-config-surgio" "^1.0.3"
     "@surgio/logger" "^1.1.0"
     agentkeepalive "^4.1.0"
@@ -16178,7 +16189,6 @@ surgio@^1.20.1:
     global-agent "^2.1.7"
     got "^11.0.2"
     http-errors "^1.7.3"
-    hygen "^5.0.3"
     inquirer "^7.1.0"
     koa "^2.11.0"
     koa-router "^7.4.0"

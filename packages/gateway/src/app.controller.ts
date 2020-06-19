@@ -18,7 +18,7 @@ import { Artifact } from 'surgio/build/generator/artifact';
 import _ from 'lodash';
 import { getUrl } from 'surgio/build/utils';
 import { URL } from 'url';
-import cors from 'cors-anywhere';
+import cors from '@royli/cors-anywhere';
 
 import { BearerAuthGuard } from './auth/bearer.guard';
 import { SurgioService } from './surgio/surgio.service';
