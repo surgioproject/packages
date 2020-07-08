@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.13.6...@surgio/gateway@1.0.0) (2020-07-08)
+
+
+### Features
+
+* Embed 模式可以将 URL 中的参数添加到 Artifact 的下载 URL 中 ([2b2ca45](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/2b2ca45ffd065ac5c69f63b3ef6d90ebe3cf81fe))
+
+
+
+
+
 ## [0.13.6](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.13.5...@surgio/gateway@0.13.6) (2020-06-19)
 
 **Note:** Version bump only for package @surgio/gateway
