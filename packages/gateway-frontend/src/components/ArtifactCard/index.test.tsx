@@ -57,6 +57,33 @@ describe('<ArtifactCard />', () => {
     expect(getAllByTestId('display-category-item')[0].textContent).toBe('test1');
     expect(getAllByTestId('display-category-item')[1].textContent).toBe('test2');
   });
+
+  test('embed artifact', () => {
+    const artifact = generateArtifact();
+    const { queryByTestId } = render(
+      <SnackbarProvider>
+        <ArtifactCard artifact={artifact} isEmbed={true} />
+      </SnackbarProvider>
+    );
+
+    expect(queryByTestId('expand-extra-button')).toBeNull();
+    expect(queryByTestId('collapse-area')).toBeNull();
+  });
+
+  test('artifact params', () => {
+    const artifact = generateArtifact();
+    const params = new URLSearchParams('?foo=1&bar=2');
+    const { getByTestId } = render(
+      <SnackbarProvider>
+        <ArtifactCard artifact={artifact} isEmbed={true} artifactParams={params} />
+      </SnackbarProvider>
+    );
+
+    expect(getByTestId('download-button'))
+      .toHaveAttribute('href', 'http://localhost/get-artifact/test.conf?dl=1&foo=1&bar=2');
+    expect(getByTestId('preview-button'))
+      .toHaveAttribute('href', 'http://localhost/get-artifact/test.conf?foo=1&bar=2');
+  });
 });
 
 function generateArtifact(partial?: Partial<ArtifactConfig>): ArtifactConfig {

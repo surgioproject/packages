@@ -201,6 +201,7 @@ function ArtifactCard({artifact, isEmbed, artifactParams}: ArtifactCardProps) {
         {
           !isEmbed && (
             <IconButton
+              data-testid="expand-extra-button"
               className={clsx(classes.expand, {
                 [classes.expandOpen]: expanded,
               })}
@@ -216,7 +217,11 @@ function ArtifactCard({artifact, isEmbed, artifactParams}: ArtifactCardProps) {
 
       {
         !isEmbed && (
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <Collapse in={expanded}
+                    timeout="auto"
+                    unmountOnExit
+                    data-testid="collapse-area"
+          >
             <CardContent>
               <Box paddingBottom={1}>
                 <Typography paragraph>Embed</Typography>
