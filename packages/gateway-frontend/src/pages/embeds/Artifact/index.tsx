@@ -4,7 +4,8 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { ArtifactConfig } from 'surgio/build/types';
 import useSWR from 'swr';
 import {
-  useParams
+  useParams,
+  useLocation
 } from "react-router-dom";
 import ArtifactCard from '../../../components/ArtifactCard';
 
@@ -29,6 +30,8 @@ const useStyles = makeStyles((theme: Theme) =>
 const Page: React.FC = () => {
   const classes = useStyles();
   const { artifactName } = useParams();
+  const location = useLocation();
+  const artifactParams = new URLSearchParams(location.search);
   const { data: artifact, error } = useSWR<ArtifactConfig>(
     `/api/artifacts/${artifactName}`,
     defaultFetcher,
@@ -46,9 +49,13 @@ const Page: React.FC = () => {
     );
   }
 
+  ['dl', 'access_token'].forEach(key => {
+    artifactParams.delete(key);
+  });
+
   return (
     <Container className={classes.EmbedArtifactPage} >
-      <ArtifactCard artifact={artifact} isEmbed />
+      <ArtifactCard artifact={artifact} isEmbed artifactParams={artifactParams} />
     </Container>
   );
 };

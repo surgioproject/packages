@@ -85,14 +85,15 @@ const useStyles = makeStyles(theme => ({
 export interface ArtifactCardProps {
   artifact: ArtifactConfig;
   isEmbed?: boolean;
+  artifactParams?: URLSearchParams;
 }
 
-function ArtifactCard({artifact, isEmbed}: ArtifactCardProps) {
+function ArtifactCard({artifact, isEmbed, artifactParams}: ArtifactCardProps) {
   const classes = useStyles();
   const { config: configStore } = useStores();
   const providers = [artifact.provider].concat(artifact.combineProviders || []);
-  const downloadUrl = getDownloadUrl(artifact.name, false, configStore.config.accessToken);
-  const previewUrl = getDownloadUrl(artifact.name, true, configStore.config.accessToken);
+  const downloadUrl = getDownloadUrl(artifact.name, false, configStore.config.accessToken, artifactParams);
+  const previewUrl = getDownloadUrl(artifact.name, true, configStore.config.accessToken, artifactParams);
   const [expanded, setExpanded] = React.useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -278,7 +279,7 @@ function getEmbedUrl(artifact: string, accessToken?: string|null): string {
   const url = new URL(`/embed/artifact/${artifact}`, window.location.origin);
 
   if (accessToken) {
-    url.searchParams.set('access_token', accessToken)
+    url.searchParams.set('access_token', accessToken);
   }
 
   return url.toString();
