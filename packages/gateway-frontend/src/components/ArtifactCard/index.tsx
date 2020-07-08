@@ -34,6 +34,9 @@ const useStyles = makeStyles(theme => ({
       flexWrap: 'wrap',
     },
   },
+  Embed: {
+    width: '100%',
+  },
   contentSection: {
     margin: theme.spacing(1.5, 0),
     '&:first-child': {
@@ -124,7 +127,9 @@ function ArtifactCard({artifact, isEmbed}: ArtifactCardProps) {
     : null;
 
   return (
-    <Card className={classes.ArtifactCard}>
+    <Card className={clsx(classes.ArtifactCard, {
+      [classes.Embed]: isEmbed,
+    })}>
       <CardHeader title={artifact.name} />
 
       <CardContent>
