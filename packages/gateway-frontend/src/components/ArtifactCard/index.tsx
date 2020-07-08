@@ -18,6 +18,7 @@ import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ShareIcon from '@material-ui/icons/Share';
 import { ArtifactConfig } from 'surgio/build/types';
 import Clipboard from 'react-clipboard.js';
 
@@ -32,6 +33,9 @@ const useStyles = makeStyles(theme => ({
     '& .MuiCardActions-root': {
       flexWrap: 'wrap',
     },
+  },
+  Embed: {
+    width: '100%',
   },
   contentSection: {
     margin: theme.spacing(1.5, 0),
@@ -81,14 +85,15 @@ const useStyles = makeStyles(theme => ({
 export interface ArtifactCardProps {
   artifact: ArtifactConfig;
   isEmbed?: boolean;
+  artifactParams?: URLSearchParams;
 }
 
-function ArtifactCard({artifact, isEmbed}: ArtifactCardProps) {
+function ArtifactCard({artifact, isEmbed, artifactParams}: ArtifactCardProps) {
   const classes = useStyles();
   const { config: configStore } = useStores();
   const providers = [artifact.provider].concat(artifact.combineProviders || []);
-  const downloadUrl = getDownloadUrl(artifact.name, false, configStore.config.accessToken);
-  const previewUrl = getDownloadUrl(artifact.name, true, configStore.config.accessToken);
+  const downloadUrl = getDownloadUrl(artifact.name, false, configStore.config.accessToken, artifactParams);
+  const previewUrl = getDownloadUrl(artifact.name, true, configStore.config.accessToken, artifactParams);
   const [expanded, setExpanded] = React.useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -123,7 +128,9 @@ function ArtifactCard({artifact, isEmbed}: ArtifactCardProps) {
     : null;
 
   return (
-    <Card className={classes.ArtifactCard}>
+    <Card className={clsx(classes.ArtifactCard, {
+      [classes.Embed]: isEmbed,
+    })}>
       <CardHeader title={artifact.name} />
 
       <CardContent>
@@ -194,6 +201,7 @@ function ArtifactCard({artifact, isEmbed}: ArtifactCardProps) {
         {
           !isEmbed && (
             <IconButton
+              data-testid="expand-extra-button"
               className={clsx(classes.expand, {
                 [classes.expandOpen]: expanded,
               })}
@@ -209,29 +217,57 @@ function ArtifactCard({artifact, isEmbed}: ArtifactCardProps) {
 
       {
         !isEmbed && (
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <Collapse in={expanded}
+                    timeout="auto"
+                    unmountOnExit
+                    data-testid="collapse-area"
+          >
             <CardContent>
-              <Typography paragraph>Embed</Typography>
+              <Box paddingBottom={1}>
+                <Typography paragraph>Embed</Typography>
 
-              <Grid container spacing={3}>
-                <Grid item xs={11}>
-                  <Typography className={classes.urlContainer}
-                              component="pre">
-                    { getEmbedCode(artifact.name, configStore.config.accessToken) }
-                  </Typography>
+                <Grid container spacing={3}>
+                  <Grid item xs={11}>
+                    <Typography className={classes.urlContainer}
+                                component="pre">
+                      { getEmbedCode(artifact.name, configStore.config.accessToken) }
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={1}>
+                    <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+                      <Clipboard component={IconButton}
+                                 data-testid="copy-button"
+                                 data-clipboard-text={getEmbedCode(artifact.name, configStore.config.accessToken)}
+                                 onSuccess={onCopySuccess}
+                                 onError={onCopyError}>
+                        <FileCopyIcon />
+                      </Clipboard>
+                    </Box>
+                  </Grid>
                 </Grid>
-                <Grid item xs={1}>
-                  <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-                    <Clipboard component={IconButton}
-                               data-testid="copy-button"
-                               data-clipboard-text={getEmbedCode(artifact.name, configStore.config.accessToken)}
-                               onSuccess={onCopySuccess}
-                               onError={onCopyError}>
-                      <FileCopyIcon />
-                    </Clipboard>
-                  </Box>
+              </Box>
+              <Box marginBottom={1}>
+                <Typography paragraph>Share</Typography>
+
+                <Grid container spacing={3}>
+                  <Grid item xs={1}>
+                    <Link target="_blank"
+                          rel="nofollow"
+                          href={getEmbedUrl(artifact.name, configStore.config.accessToken)}
+                    >
+                      <IconButton aria-label="share">
+                        <ShareIcon />
+                      </IconButton>
+                    </Link>
+                  </Grid>
+                  <Grid item xs={11}
+                        container
+                        direction="row"
+                        alignItems="center">
+                    <Typography variant="body2" color="textSecondary">（你可以分享这个地址给别人，拥有链接的人将无法看到其它 Artifact）</Typography>
+                  </Grid>
                 </Grid>
-              </Grid>
+              </Box>
             </CardContent>
           </Collapse>
         )
@@ -241,13 +277,17 @@ function ArtifactCard({artifact, isEmbed}: ArtifactCardProps) {
 }
 
 function getEmbedCode(artifact: string, accessToken?: string|null): string {
+  return `<iframe loading="lazy" src="${getEmbedUrl(artifact, accessToken)}" height="400px" width="100%"></iframe>`;
+}
+
+function getEmbedUrl(artifact: string, accessToken?: string|null): string {
   const url = new URL(`/embed/artifact/${artifact}`, window.location.origin);
 
   if (accessToken) {
-    url.searchParams.set('access_token', accessToken)
+    url.searchParams.set('access_token', accessToken);
   }
 
-  return `<iframe loading="lazy" src="${url.toString()}" height="400px" width="100%"></iframe>`;
+  return url.toString();
 }
 
 export default observer(ArtifactCard);

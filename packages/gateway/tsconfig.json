@@ -16,7 +16,8 @@
     "allowJs": true,
     "strict": false,
     "strictNullChecks": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "downlevelIteration": true
   },
   "exclude": ["node_modules", "dist", "coverage", "__tests__", "**/*.spec.ts", "**/*.test.ts"]
 }
