@@ -6,7 +6,7 @@ import { SurgioHelper } from '../surgio/surgio-helper';
 
 @Injectable()
 export class CookieAuthGuard extends AuthGuard('cookie') {
-  constructor(@Inject('SURGIO_HELPER') public surgioHelper: SurgioHelper) {
+  constructor(@Inject('SURGIO_HELPER') private surgioHelper: SurgioHelper) {
     super();
   }
 

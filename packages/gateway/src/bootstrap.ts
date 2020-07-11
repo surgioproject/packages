@@ -1,36 +1,25 @@
 import { NestFactory } from '@nestjs/core';
-import {
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
-import { ServerFactoryFunction } from 'fastify';
-import FastifyCookie from 'fastify-cookie';
-import FastifyAccepts from 'fastify-accepts';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import express from 'express';
 
 import { AppModule } from './app.module';
 import { AppExceptionsFilter } from './filter/app-exception.filter';
 import { createAdapter } from './app.adapter';
 
-export interface BootstrapOptions {
-  readonly serverFactory?: ServerFactoryFunction;
-}
-export async function bootstrap(options: BootstrapOptions = {}): Promise<NestFastifyApplication> {
-  const app = await NestFactory.create<NestFastifyApplication>(
+export async function bootstrap(): Promise<NestExpressApplication> {
+  const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
-    createAdapter({
-      serverFactory: options.serverFactory,
-    }),
+    createAdapter(),
   );
-  const configService = app.get('ConfigService');
-  const secret = configService.get('secret');
 
+  applyMiddlwares(app);
+
+  return app;
+}
+
+export function applyMiddlwares(app: NestExpressApplication): NestExpressApplication {
   app.useGlobalFilters(new AppExceptionsFilter());
-
-  app.register(FastifyCookie, {
-    secret, // for cookies signature
-    parseOptions: {}, // options for parsing cookies
-  });
-
-  app.register(FastifyAccepts);
+  app.use(express.json());
 
   return app;
 }

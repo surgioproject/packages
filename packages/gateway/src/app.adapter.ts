@@ -1,15 +1,7 @@
-import { FastifyAdapter } from '@nestjs/platform-fastify';
-import { ServerFactoryFunction } from 'fastify';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import express from 'express';
 
-export interface AdapterOptions {
-  readonly serverFactory?: ServerFactoryFunction;
-}
-export function createAdapter(options: AdapterOptions = {}): FastifyAdapter {
-  const adapter = new FastifyAdapter({
-    serverFactory: options.serverFactory,
-    logger: false,
-    trustProxy: true,
-  });
-
-  return adapter;
+export function createAdapter(): ExpressAdapter {
+  const instance = express();
+  return new ExpressAdapter(instance);
 }

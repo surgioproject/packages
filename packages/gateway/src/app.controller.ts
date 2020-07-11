@@ -12,7 +12,7 @@ import {
   Logger,
   All,
 } from '@nestjs/common';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import { Request, Response } from 'express';
 import { IncomingMessage, ServerResponse } from 'http';
 import { Artifact } from 'surgio/build/generator/artifact';
 import _ from 'lodash';
@@ -49,12 +49,11 @@ export class AppController {
 
   @UseGuards(BearerAuthGuard)
   @Get('/get-artifact/:name')
-  @Head('/get-artifact/:name')
   public async getArtifact(
-    @Res() res: FastifyReply<ServerResponse>,
+    @Res() res: Response,
     @Param() params: { readonly name: string },
     @Query() query: GetArtifactQuery,
-    @Req() req: FastifyRequest
+    @Req() req: Request
   ): Promise<void> {
     const dl = query.dl;
     const format = query.format;
@@ -65,7 +64,7 @@ export class AppController {
       await this.surgioService.transformArtifact(artifactName, format, filter) :
       await this.surgioService.getArtifact(
         artifactName,
-        (new URL(req.req.url as string, this.surgioService.config.publicUrl)).toString()
+        (new URL(req.url as string, this.surgioService.config.publicUrl)).toString()
       );
 
     if (artifact) {
@@ -87,10 +86,9 @@ export class AppController {
 
   @UseGuards(BearerAuthGuard)
   @Get('/export-providers')
-  @Head('/export-providers')
   public async exportProvider(
-    @Req() req: FastifyRequest,
-    @Res() res: FastifyReply<ServerResponse>,
+    @Req() req: Request,
+    @Res() res: Response,
     @Query() query: ExportProviderQuery,
   ): Promise<void> {
     const providers: string[] = query.providers ? query.providers.split(',').map(item => item.trim()) : [];
@@ -127,7 +125,7 @@ export class AppController {
     } else {
       artifact = await this.surgioService.exportProvider(providers[0], undefined, template, {
         filter,
-        downloadUrl: (new URL(req.req.url as string, this.surgioService.config.publicUrl)).toString(),
+        downloadUrl: (new URL(req.url as string, this.surgioService.config.publicUrl)).toString(),
         ...(providers.length > 1 ? {
           combineProviders: providers.splice(1),
         } : null),
@@ -153,10 +151,9 @@ export class AppController {
 
   @UseGuards(BearerAuthGuard)
   @Get('/render')
-  @Head('/render')
   public async renderTemplate(
-    @Req() req: FastifyRequest,
-    @Res() res: FastifyReply<ServerResponse>,
+    @Req() req: Request,
+    @Res() res: Response,
     @Query() query: RenderTemplateQuery,
   ): Promise<void> {
     const { template } = query;
@@ -173,7 +170,7 @@ export class AppController {
       res.header('cache-control', `s-maxage=${60 * 60 * 24}, stale-while-revalidate`);
 
       const html = this.surgioService.surgioHelper.templateEngine.render(`${template}.tpl`, {
-        downloadUrl: (new URL(req.req.url as string, this.surgioService.config.publicUrl)).toString(),
+        downloadUrl: (new URL(req.url as string, this.surgioService.config.publicUrl)).toString(),
         getUrl: (p: string) => getUrl(config.publicUrl, p, gatewayHasToken ? gatewayConfig?.accessToken : undefined),
       });
 
@@ -203,8 +200,8 @@ export class AppController {
   }
 
   private async sendPayload(
-    req: FastifyRequest,
-    res: FastifyReply<ServerResponse>,
+    req: Request,
+    res: Response,
     artifact: string|Artifact,
     urlParams?: Record<string, string>,
   ): Promise<void> {

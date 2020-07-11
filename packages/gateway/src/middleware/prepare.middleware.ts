@@ -1,6 +1,5 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { ServerResponse } from 'http';
+import { Request, Response } from 'express';
 import { loadRemoteSnippetList } from 'surgio/build/utils/remote-snippet';
 
 import { SurgioService } from '../surgio/surgio.service';
@@ -9,7 +8,7 @@ import { SurgioService } from '../surgio/surgio.service';
 export class PrepareMiddleware implements NestMiddleware {
   constructor(private readonly surgioService: SurgioService) {}
 
-  use(req: FastifyRequest, res: FastifyReply<ServerResponse>, next: () => void): void {
+  use(req: Response, res: Request, next: () => void): void {
     (async () => {
       const surgioHelper = this.surgioService.surgioHelper;
       const remoteSnippetsConfig = surgioHelper.config.remoteSnippets || [];

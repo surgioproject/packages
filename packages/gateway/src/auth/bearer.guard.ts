@@ -6,7 +6,7 @@ import { SurgioHelper } from '../surgio/surgio-helper';
 
 @Injectable()
 export class BearerAuthGuard extends AuthGuard('bearer') {
-  constructor(@Inject('SURGIO_HELPER') public surgioHelper: SurgioHelper) {
+  constructor(@Inject('SURGIO_HELPER') private surgioHelper: SurgioHelper) {
     super();
   }
 
