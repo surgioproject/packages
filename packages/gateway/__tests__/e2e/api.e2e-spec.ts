@@ -29,7 +29,7 @@ describe('ApiController (e2e)', () => {
         accessToken: token,
       });
     const cookies = extractCookies(auth.header);
-    tokenCookie = decodeURIComponent(cookies._t.value).replace(/^(s:)/, '');
+    tokenCookie = cookies._t.value;
   });
 
   afterAll(async () => {
