@@ -239,7 +239,7 @@ export class AppController {
     }
   }
 
-  private processUrlParams(urlParams: Record<string, string>): object {
+  private processUrlParams(urlParams: Record<string, string>): Record<string, string> {
     const result: NonNullable<any> = Object.create(null);
 
     Object.keys(urlParams)
