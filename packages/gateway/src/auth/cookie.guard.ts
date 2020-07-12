@@ -1,11 +1,12 @@
-import { ExecutionContext, Inject } from '@nestjs/common';
+import { ExecutionContext, Inject, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 
 import { SurgioHelper } from '../surgio/surgio-helper';
 
+@Injectable()
 export class CookieAuthGuard extends AuthGuard('cookie') {
-  constructor(@Inject('SURGIO_HELPER') public surgioHelper: SurgioHelper) {
+  constructor(@Inject('SURGIO_HELPER') private surgioHelper: SurgioHelper) {
     super();
   }
 

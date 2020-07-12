@@ -28,22 +28,19 @@
     "test:ci": "run-s test test:e2e"
   },
   "dependencies": {
-    "@nestjs/common": "^7.0.8",
+    "@nestjs/common": "^7.3.2",
     "@nestjs/config": "^0.5.0",
-    "@nestjs/core": "^7.0.8",
+    "@nestjs/core": "^7.3.2",
     "@nestjs/passport": "^7.0.0",
-    "@nestjs/platform-fastify": "^7.0.8",
+    "@nestjs/platform-express": "^7.3.2",
     "@nestjs/serve-static": "^2.1.1",
     "@royli/cors-anywhere": "^0.4.4",
     "@surgio/gateway-frontend": "file:../gateway-frontend",
-    "cookie-signature": "^1.1.0",
-    "fastify": "^2.13.1",
-    "fastify-accepts": "^1.0.0",
-    "fastify-cookie": "^3.5.0",
-    "fastify-static": "^2.7.0",
-    "got": "^10.7.0",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "got": "^11.5.0",
     "http-errors": "^1.7.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "nunjucks": "^3.2.1",
     "passport": "^0.4.1",
     "passport-cookie": "^1.0.6",
@@ -55,7 +52,7 @@
     "youch": "^2.0.10"
   },
   "devDependencies": {
-    "@nestjs/testing": "^7.0.8"
+    "@nestjs/testing": "^7.3.2"
   },
   "peerDependencies": {
     "surgio": "^1.20.0"
@@ -85,6 +82,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=12.0.0"
   },
   "gitHead": "da96fe077b24097d0a721392bd32ec4a88ac2ee0"
 }

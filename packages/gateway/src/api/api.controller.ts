@@ -1,7 +1,6 @@
 import { Controller, Get, HttpException, HttpStatus, Param, Post, Res, UseGuards, Req } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { FastifyReply } from 'fastify';
-import { ServerResponse } from 'http';
+import { Request, Response } from 'express';
 import _ from 'lodash';
 import { formatSubscriptionUserInfo } from 'surgio/build/utils/subscription';
 
@@ -17,13 +16,13 @@ export class ApiController {
   ) {}
 
   @Post('/auth')
-  public async login(@Req() req, @Res() res: FastifyReply<ServerResponse>): Promise<void> {
+  public async login(@Req() req: Request, @Res() res: Response): Promise<void> {
     const accessToken = req.body.accessToken;
 
     if (accessToken === this.surgioService.surgioHelper.config?.gateway?.accessToken) {
-      res.setCookie('_t', accessToken, {
-        maxAge: this.surgioService.surgioHelper.config?.gateway?.cookieMaxAge
-          ?? this.configService.get('defaultCookieMaxAge'),
+      res.cookie('_t', accessToken, {
+        maxAge: (this.surgioService.surgioHelper.config?.gateway?.cookieMaxAge
+          ?? this.configService.get('defaultCookieMaxAge') as number) * 1e3,
         httpOnly: true,
         signed: true,
       });
@@ -37,7 +36,7 @@ export class ApiController {
 
   @UseGuards(BearerAuthGuard)
   @Get('/auth/validate-token')
-  public async validateToken(@Req() req): Promise<any> {
+  public async validateToken(@Req() req: Request): Promise<any> {
     return {
       status: 'ok',
       data: req.user,
@@ -46,7 +45,7 @@ export class ApiController {
 
   @UseGuards(CookieAuthGuard)
   @Get('/auth/validate-cookie')
-  public async validateCookie(@Req() req): Promise<any> {
+  public async validateCookie(@Req() req: Request): Promise<any> {
     return {
       status: 'ok',
       data: req.user,
@@ -54,7 +53,7 @@ export class ApiController {
   }
 
   @Get('/config')
-  public async config(@Req() req): Promise<any> {
+  public async config(@Req() req: Request): Promise<any> {
     return {
       status: 'ok',
       data: {
@@ -79,7 +78,7 @@ export class ApiController {
 
   @UseGuards(BearerAuthGuard)
   @Get('/artifacts/:name')
-  public async getArtifact(@Res() res: FastifyReply<ServerResponse>, @Param() params): Promise<void> {
+  public async getArtifact(@Res() res: Response, @Param() params): Promise<void> {
     const artifactList = this.surgioService.surgioHelper.artifactList.filter(item => item.name === params.name);
 
     if (artifactList.length) {

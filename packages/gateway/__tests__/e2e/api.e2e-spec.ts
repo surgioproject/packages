@@ -1,102 +1,101 @@
-import { NestFastifyApplication } from '@nestjs/platform-fastify';
+import { NestFactory } from '@nestjs/core';
+// @ts-ignore
+import supertest from 'supertest';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
-import { bootstrap } from '../../src/bootstrap';
+import { AppModule } from '../../src/app.module';
+import { applyMiddlwares } from '../../src/bootstrap';
 import { SurgioService } from '../../src/surgio/surgio.service';
+import { extractCookies } from '../helper';
 
 describe('ApiController (e2e)', () => {
-  let app: NestFastifyApplication;
+  let app: NestExpressApplication;
   let token;
   let tokenCookie;
   let surgioService: SurgioService;
 
   beforeAll(async () => {
-    app = await bootstrap();
+    app = await NestFactory.create(AppModule);
+    applyMiddlwares(app);
+
     surgioService = app.get<SurgioService>('SurgioService');
     token = surgioService.config.gateway?.accessToken;
 
     await app.init();
 
-    const auth = await app.inject({
-      url: '/api/auth',
-      method: 'POST',
-      payload: {
+    const auth = await supertest(app.getHttpServer())
+      .post('/api/auth')
+      .send({
         accessToken: token,
-      },
-    });
-    tokenCookie = (auth as any).cookies[0].value;
+      });
+    const cookies = extractCookies(auth.header);
+    tokenCookie = cookies._t.value;
   });
 
   afterAll(async () => {
     await app.close();
   });
 
+  test('/api/auth (POST)', async () => {
+    const auth = await supertest(app.getHttpServer())
+      .post('/api/auth')
+      .send({
+        accessToken: token,
+      });
+    const cookies = extractCookies(auth.header);
+    expect(cookies._t.value).toBeDefined();
+    expect(Number(cookies._t.flags['Max-Age'])).toBe(60 * 60 * 24 * 31);
+    expect(cookies._t.flags.HttpOnly).toBe(true);
+  });
+
   test('/api/auth/validate-cookie (GET)', async () => {
-    expect((
-      await app.inject({
-        url: '/api/auth/validate-cookie',
-        cookies: {
-          _t: tokenCookie
-        },
-      } as any)
-    ).statusCode).toBe(200);
-    expect((
-      await app.inject({
-        url: '/api/auth/validate-cookie',
-        cookies: {
-          _t: 'wrong'
-        },
-      } as any)
-    ).statusCode).toBe(401);
+    await supertest(app.getHttpServer())
+      .get('/api/auth/validate-cookie')
+      .set('Cookie', `_t=${tokenCookie}`)
+      .expect(200);
+
+    await supertest(app.getHttpServer())
+      .get('/api/auth/validate-cookie')
+      .set('Cookie', `_t=wrong`)
+      .expect(401);
   });
 
   test('/api/auth/validate-token (GET)', async () => {
-    expect((
-      await app.inject({
-        url: '/api/auth/validate-token',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-    ).statusCode).toBe(200);
-    expect((
-      await app.inject({
-        url: '/api/auth/validate-token',
-        headers: {
-          Authorization: `Bearer wrong`,
-        },
-      })
-    ).statusCode).toBe(401);
+    await supertest(app.getHttpServer())
+      .get('/api/auth/validate-token')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    await supertest(app.getHttpServer())
+      .get('/api/auth/validate-token')
+      .set('Authorization', `Bearer wrong`)
+      .expect(401)
   });
 
   test('/api/config (GET)', async () => {
-    const res = await app.inject({
-      url: '/api/config',
-    });
-
-    expect(res.statusCode).toBe(200);
+    const res = await supertest(app.getHttpServer())
+      .get('/api/config')
+      .expect(200);
+    expect(res.body.data.needAuth).toBeDefined();
+    expect(res.body.data.backendVersion).toBeDefined();
+    expect(res.body.data.coreVersion).toBeDefined();
   });
 
   test('/api/artifacts (GET)', async () => {
-    const res = await app.inject({
-      url: '/api/artifacts',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await supertest(app.getHttpServer())
+      .get('/api/artifacts')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
 
-    expect(res.statusCode).toBe(200);
-    expect(res.payload).toMatchSnapshot();
+    expect(res.text).toMatchSnapshot();
   });
 
   test('/api/providers (GET)', async () => {
-    const res = await app.inject({
-      url: '/api/providers',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await supertest(app.getHttpServer())
+      .get('/api/providers')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
 
-    expect(res.statusCode).toBe(200);
-    expect(res.payload).toMatchSnapshot();
+    expect(res.text).toMatchSnapshot();
   });
 });

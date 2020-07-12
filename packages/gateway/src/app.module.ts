@@ -1,10 +1,11 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 
 import { AppController } from './app.controller';
 import { ApiModule } from './api/api.module';
+import { CookieParserMiddleware } from './middleware/cookie-parser.middleware';
 import { PrepareMiddleware } from './middleware/prepare.middleware';
 import { SurgioModule } from './surgio/surgio.module';
 import { SurgioService } from './surgio/surgio.service';
@@ -37,7 +38,16 @@ const FE_MODULE = require.resolve('@surgio/gateway-frontend');
   providers: [SurgioService],
 })
 export class AppModule {
+  constructor(private configService: ConfigService) {}
+
   configure(consumer: MiddlewareConsumer): void {
+    const secret = this.configService.get('secret');
+
+    CookieParserMiddleware.configure(secret);
+    consumer
+      .apply(CookieParserMiddleware)
+      .forRoutes('*');
+
     consumer
       .apply(PrepareMiddleware)
       .exclude(

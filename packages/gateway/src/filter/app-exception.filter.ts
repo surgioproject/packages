@@ -1,5 +1,5 @@
 import { ExceptionFilter, Catch, ArgumentsHost, Logger, HttpException, HttpStatus } from '@nestjs/common';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import { Request, Response } from 'express';
 import { ServerResponse } from 'http';
 import Youch from 'youch';
 
@@ -9,8 +9,8 @@ export class AppExceptionsFilter implements ExceptionFilter {
 
   public catch(exception: HttpException|Error, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<FastifyReply<ServerResponse>>();
-    const request = ctx.getRequest<FastifyRequest>();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
     let responsePayload;
 
     if (exception instanceof HttpException) {
@@ -19,7 +19,7 @@ export class AppExceptionsFilter implements ExceptionFilter {
 
       response.status(status);
 
-      this.logger.error(`${request.req.method} ${request.req.url} ${status} "${request.headers['user-agent'] || '-'}"`);
+      this.logger.error(`${request.method} ${request.url} ${status} "${request.headers['user-agent'] || '-'}"`);
 
       if (typeof exceptionResponse === 'string') {
         responsePayload = {
@@ -34,7 +34,7 @@ export class AppExceptionsFilter implements ExceptionFilter {
 
       response.status(status);
 
-      this.logger.error(`${request.req.method} ${request.req.url} ${status}`);
+      this.logger.error(`${request.method} ${request.url} ${status}`);
       this.logger.error(exception.stack || exception);
 
       responsePayload = {
@@ -51,35 +51,30 @@ export class AppExceptionsFilter implements ExceptionFilter {
       return;
     }
 
-    const accepts = request.accepts();
+    const accept = request.accepts('json', 'html');
 
-    switch (accepts.type(['json', 'html'])) {
-      case 'html': {
-        const youch = new Youch(exception, request.req);
+    if (accept === 'html') {
+      const youch = new Youch(exception, request);
 
-        youch
-          .addLink(({ message }) => {
-            const url = `https://stackoverflow.com/search?q=${encodeURIComponent(`[adonis.js] ${message}`)}`
-            return `
+      youch
+        .addLink(({ message }) => {
+          return `
 <div>
   <p>加入交流群汇报问题：<a href="https://t.me/surgiotg" target="_blank" rel="noopener">https://t.me/surgiotg</a></p>
 </div>
             `;
-          })
-          .toHTML()
-          .then(html => {
-            response
-              .type('text/html')
-              .send(html);
-          })
-          .catch(err => {
-            this.logger.error(err.message, err.context);
-          });
-        break;
-      }
-      default:
-        response.send(JSON.stringify(responsePayload));
+        })
+        .toHTML()
+        .then(html => {
+          response
+            .type('text/html')
+            .send(html);
+        })
+        .catch(err => {
+          this.logger.error(err.message, err.context);
+        });
+    } else {
+      response.send(JSON.stringify(responsePayload));
     }
-
   }
 }
