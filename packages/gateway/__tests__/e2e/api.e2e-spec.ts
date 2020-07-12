@@ -36,6 +36,18 @@ describe('ApiController (e2e)', () => {
     await app.close();
   });
 
+  test('/api/auth (POST)', async () => {
+    const auth = await supertest(app.getHttpServer())
+      .post('/api/auth')
+      .send({
+        accessToken: token,
+      });
+    const cookies = extractCookies(auth.header);
+    expect(cookies._t.value).toBeDefined();
+    expect(Number(cookies._t.flags['Max-Age'])).toBe(60 * 60 * 24 * 31);
+    expect(cookies._t.flags.HttpOnly).toBe(true);
+  });
+
   test('/api/auth/validate-cookie (GET)', async () => {
     await supertest(app.getHttpServer())
       .get('/api/auth/validate-cookie')
@@ -64,6 +76,9 @@ describe('ApiController (e2e)', () => {
     const res = await supertest(app.getHttpServer())
       .get('/api/config')
       .expect(200);
+    expect(res.body.data.needAuth).toBeDefined();
+    expect(res.body.data.backendVersion).toBeDefined();
+    expect(res.body.data.coreVersion).toBeDefined();
   });
 
   test('/api/artifacts (GET)', async () => {
