@@ -1,28 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AppController (e2e) /export-providers (GET) 1`] = `
-"ss1 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true
-ss2 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=false, obfs=tls, obfs-host=www.bing.com
+"ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
+ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid
 http 1 = https, server, 443, username, password, tls13=false, skip-cert-verify=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
-ss4 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=false, obfs=tls, obfs-host=example.com"
+ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com"
 `;
 
-exports[`AppController (e2e) /export-providers (GET) global filter 1`] = `"🇺🇲 US = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"`;
+exports[`AppController (e2e) /export-providers (GET) global filter 1`] = `"🇺🇲 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"`;
 
 exports[`AppController (e2e) /export-providers (GET) internal filter 1`] = `""`;
 
 exports[`AppController (e2e) /export-providers (GET) multiple providers 1`] = `
-"ss1 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true
-ss2 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=false, obfs=tls, obfs-host=www.bing.com
+"ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
+ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid
 http 1 = https, server, 443, username, password, tls13=false, skip-cert-verify=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
-ss4 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=false, obfs=tls, obfs-host=example.com
-🇺🇲 US = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
+ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com
+🇺🇲 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
 Snell = snell, us.example.com, 443, psk=password, obfs=tls
 HTTPS = https, us.example.com, 443, username, password"
 `;
@@ -30,42 +30,42 @@ HTTPS = https, us.example.com, 443, username, password"
 exports[`AppController (e2e) /export-providers (GET) multiple providers 404 1`] = `"{\\"statusCode\\":404,\\"error\\":\\"provider notfound 不存在\\"}"`;
 
 exports[`AppController (e2e) /export-providers (GET) private filter 1`] = `
-"ss1 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true
-ss2 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=false, obfs=tls, obfs-host=www.bing.com
+"ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
+ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid
-ss4 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=false, obfs=tls, obfs-host=example.com
-🇺🇲 US = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"
+ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com
+🇺🇲 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"
 `;
 
 exports[`AppController (e2e) /export-providers (GET) using template 1`] = `
 "https://example.com/export-providers?access_token=abcd&providers=clash,custom&template=export
 
-ss1 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true
-ss2 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=false, obfs=tls, obfs-host=www.bing.com
+ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
+ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid
 http 1 = https, server, 443, username, password, tls13=false, skip-cert-verify=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
-ss4 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=false, obfs=tls, obfs-host=example.com
-🇺🇲 US = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
+ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com
+🇺🇲 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
 Snell = snell, us.example.com, 443, psk=password, obfs=tls
 HTTPS = https, us.example.com, 443, username, password
 "
 `;
 
 exports[`AppController (e2e) /get-artifact (GET) 1`] = `
-"🇺🇸US 1 = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, obfs=tls, obfs-host=gateway-carry.icloud.com
-🇺🇸US 2 = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module
-🇺🇲 US = custom, us.example.com, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
+"🇺🇸US 1 = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com
+🇺🇸US 2 = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password
+🇺🇲 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
 Snell = snell, us.example.com, 443, psk=password, obfs=tls
 HTTPS = https, us.example.com, 443, username, password
-ss1 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=true
-ss2 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=false, obfs=tls, obfs-host=www.bing.com
+ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
+ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid
 http 1 = https, server, 443, username, password, tls13=false, skip-cert-verify=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
-ss4 = custom, server, 443, chacha20-ietf-poly1305, password, https://raw.githubusercontent.com/ConnersHua/SSEncrypt/master/SSEncrypt.module, udp-relay=false, obfs=tls, obfs-host=example.com
+ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com
 ----
 🇺🇸US 1, 🇺🇸US 2, 🇺🇸US 3, 🇺🇲 US, Snell, HTTPS, ss1, ss2, ss3, vmess, http 1, http 2, snell, ss4, ss-wss
 "
