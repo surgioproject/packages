@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.0.0...@surgio/gateway@1.0.1) (2020-07-12)
+
+
+### Bug Fixes
+
+* cookie authentication ([a583d95](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/a583d9563795d1cf49d572c886d803ce4ad94dd8))
+* cookie max-age ([167840a](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/167840a17ede4f3bf033587ed2feeebb0b5dce37))
+* guards should be injectable ([3e3b76b](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/3e3b76b22585d6b211bb8155a184cdb2a76352dc))
+
+
+
+
+
 # [1.0.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@0.13.6...@surgio/gateway@1.0.0) (2020-07-08)
 
 
