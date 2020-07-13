@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.0.3...@surgio/gateway@1.0.4) (2020-07-13)
+
+
+### Bug Fixes
+
+* old cookies could not be replaced ([2e10b68](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/2e10b6881b35d95043e7f82f8508e882c69d3c08))
+
+
+
+
+
 ## [1.0.3](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.0.2...@surgio/gateway@1.0.3) (2020-07-12)
 
 
