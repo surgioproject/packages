@@ -25,6 +25,14 @@ export class ApiController {
           ?? this.configService.get('defaultCookieMaxAge') as number) * 1e3,
         httpOnly: true,
         signed: true,
+        path: '/',
+      });
+      res.cookie('_t', accessToken, {
+        maxAge: (this.surgioService.surgioHelper.config?.gateway?.cookieMaxAge
+          ?? this.configService.get('defaultCookieMaxAge') as number) * 1e3,
+        httpOnly: true,
+        signed: true,
+        path: '/api',
       });
       res.send({
         status: 'ok',
