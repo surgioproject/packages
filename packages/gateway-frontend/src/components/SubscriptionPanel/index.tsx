@@ -40,10 +40,20 @@ function SubscriptionPanel() {
 
   const supportedProviderList = uniqWith(
     providerList
-      .filter(provider => provider.supportGetSubscriptionUserInfo && provider.url),
+      .filter(provider => {
+        if (provider.type === 'blackssl') {
+          return provider.supportGetSubscriptionUserInfo;
+        } else {
+          return provider.supportGetSubscriptionUserInfo && provider.url;
+        }
+      }),
     (provider, other) => {
-      // return new URL(provider.url as string).host === new URL(other.url as string).host;
-      return provider.url === other.url;
+      if (provider.type === 'blackssl' && other.type === 'blackssl') {
+        return provider.username === other.username;
+      } else if (other.type !== 'blackssl') {
+        return provider.url === other.url;
+      }
+      return false;
     }
   );
 

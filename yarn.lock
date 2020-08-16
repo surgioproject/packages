@@ -10981,7 +10981,7 @@ lodash@4.17.15, "lodash@>=3.5 <5", lodash@^4.17.11, lodash@^4.17.12, lodash@^4.1
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
 
-lodash@^4.17.17, lodash@^4.17.19:
+lodash@^4.17.19:
   version "4.17.19"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
   integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
@@ -11092,6 +11092,13 @@ lru-cache@^5.1.1:
   integrity sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==
   dependencies:
     yallist "^3.0.2"
+
+lru-cache@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-6.0.0.tgz#6d6fe6570ebd96aaf90fcad1dafa3b2566db3a94"
+  integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
+  dependencies:
+    yallist "^4.0.0"
 
 lru-queue@0.1:
   version "0.1.0"
@@ -16049,10 +16056,10 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-surgio@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/surgio/-/surgio-2.0.0.tgz#baeba072ab07f51e9090b4cabe83c7f19387eadb"
-  integrity sha512-T0x8jHr6RQWiAu2JfB/9IjwOBA3+ymVCrKyUD1otYxxfdhaKtQ+uIs2OJWS/YDXCbxVkmZDRBxinBnH+kZHo5w==
+surgio@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/surgio/-/surgio-2.3.3.tgz#19cb4dc6ab288d663cd5d51b2334ff7c90fcfff3"
+  integrity sha512-DVm4uGjW1HSodn4/dVS3uWgFnuV2ORMCifSbzkT63KRtZANwW9KZ4EVMuZWzuty0WqpsrqrWHNTZt6xVgN0Vlg==
   dependencies:
     "@hapi/joi" "^17.1.1"
     "@royli/hygen" "^5.0.4"
@@ -16080,8 +16087,8 @@ surgio@^2.0.0:
     got "11.4.0"
     inquirer "^7.1.0"
     listr "^0.14.3"
-    lodash "^4.17.17"
-    lru-cache "^5.1.1"
+    lodash "^4.17.19"
+    lru-cache "^6.0.0"
     merge-stream "^2.0.0"
     node-dir "^0.1.17"
     nunjucks "^3.2.1"

@@ -223,17 +223,14 @@ function ArtifactCard({artifact, isEmbed, artifactParams}: ArtifactCardProps) {
                     data-testid="collapse-area"
           >
             <CardContent>
-              <Box paddingBottom={1}>
+              <Box marginBottom={2}>
                 <Typography paragraph>Embed</Typography>
 
-                <Grid container spacing={3}>
-                  <Grid item xs={11}>
-                    <Typography className={classes.urlContainer}
-                                component="pre">
-                      { getEmbedCode(artifact.name, configStore.config.accessToken) }
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={1}>
+                <Grid container
+                      direction="row"
+                      justify="center"
+                      alignItems="center">
+                  <Grid item>
                     <Box display="flex" justifyContent="center" alignItems="center" height="100%">
                       <Clipboard component={IconButton}
                                  data-testid="copy-button"
@@ -244,13 +241,22 @@ function ArtifactCard({artifact, isEmbed, artifactParams}: ArtifactCardProps) {
                       </Clipboard>
                     </Box>
                   </Grid>
+                  <Grid item style={{ flex: 1, width: 0, marginLeft: 10 }}>
+                    <Typography className={classes.urlContainer}
+                                component="pre">
+                      { getEmbedCode(artifact.name, configStore.config.accessToken) }
+                    </Typography>
+                  </Grid>
                 </Grid>
               </Box>
-              <Box marginBottom={1}>
+              <Box>
                 <Typography paragraph>Share</Typography>
 
-                <Grid container spacing={3}>
-                  <Grid item xs={1}>
+                <Grid container
+                      direction="row"
+                      justify="center"
+                      alignItems="center">
+                  <Grid item>
                     <Link target="_blank"
                           rel="nofollow"
                           href={getEmbedUrl(artifact.name, configStore.config.accessToken)}
@@ -260,11 +266,12 @@ function ArtifactCard({artifact, isEmbed, artifactParams}: ArtifactCardProps) {
                       </IconButton>
                     </Link>
                   </Grid>
-                  <Grid item xs={11}
+                  <Grid item
+                        style={{ flex: 1, marginLeft: 10 }}
                         container
                         direction="row"
                         alignItems="center">
-                    <Typography variant="body2" color="textSecondary">（你可以分享这个地址给别人，拥有链接的人将无法看到其它 Artifact）</Typography>
+                    <Typography variant="body2" color="textSecondary">你可以分享这个地址给别人，拥有链接的人将无法看到其它 Artifact</Typography>
                   </Grid>
                 </Grid>
               </Box>

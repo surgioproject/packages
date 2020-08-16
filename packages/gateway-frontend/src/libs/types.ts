@@ -3,4 +3,5 @@ export interface Provider {
   type: string;
   url?: string;
   supportGetSubscriptionUserInfo: boolean;
+  username?: string;
 }
