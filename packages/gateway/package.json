@@ -19,7 +19,7 @@
     "start:prod": "node dist/main",
     "dev": "nest start --watch",
     "debug": "nest start --debug --watch",
-    "lint": "tslint -p tsconfig.json -c tslint.json",
+    "lint": "eslint . --ext .ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
