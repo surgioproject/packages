@@ -16245,7 +16245,7 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-surgio@^2.3.3:
+surgio@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/surgio/-/surgio-2.4.0.tgz#28176e8fd066c9a92131a898884aa93f66dbb12e"
   integrity sha512-QjPeg7gmnHZTY+SulhjhfrMMXZBp5URh1LzLf8sWANlgOaVigvUNSKqICgpKu/HSRNYgB8P3ZjPK2WixR0VV3g==

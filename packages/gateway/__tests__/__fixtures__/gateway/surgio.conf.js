@@ -44,6 +44,6 @@ module.exports = {
     v2ray: 'native',
   },
   customFilters: {
-    globalFilter: node => node.nodeName === '🇺🇲 US',
+    globalFilter: node => node.nodeName === '🇺🇸 US',
   },
 };

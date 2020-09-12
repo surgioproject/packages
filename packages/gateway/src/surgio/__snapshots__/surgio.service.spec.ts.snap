@@ -3,7 +3,7 @@
 exports[`SurgioService getArtifact should work 1`] = `
 "🇺🇸US 1 = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com
 🇺🇸US 2 = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password
-🇺🇲 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
+🇺🇸 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
 Snell = snell, us.example.com, 443, psk=password, obfs=tls
 HTTPS = https, us.example.com, 443, username, password
 ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
@@ -14,20 +14,20 @@ http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
 ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com
 ----
-🇺🇸US 1, 🇺🇸US 2, 🇺🇸US 3, 🇺🇲 US, Snell, HTTPS, ss1, ss2, ss3, vmess, http 1, http 2, snell, ss4, ss-wss
+🇺🇸US 1, 🇺🇸US 2, 🇺🇸US 3, 🇺🇸 US, Snell, HTTPS, ss1, ss2, ss3, vmess, http 1, http 2, snell, ss4, ss-wss
 "
 `;
 
-exports[`SurgioService transformArtifact filter should work 1`] = `"🇺🇲 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"`;
+exports[`SurgioService transformArtifact filter should work 1`] = `"🇺🇸 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"`;
 
-exports[`SurgioService transformArtifact filter should work 2`] = `"shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com, udp-relay=true, fast-open=true, tag=🇺🇲 US"`;
+exports[`SurgioService transformArtifact filter should work 2`] = `"shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com, udp-relay=true, fast-open=true, tag=🇺🇸 US"`;
 
 exports[`SurgioService transformArtifact filter should work 3`] = `
 "---
 proxies:
 - type: ss
   cipher: chacha20-ietf-poly1305
-  name: 🇺🇲 US
+  name: 🇺🇸 US
   password: password
   port: \\"443\\"
   server: us.example.com
@@ -43,7 +43,7 @@ proxies:
 exports[`SurgioService transformArtifact format should work 1`] = `
 "🇺🇸US 1 = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com
 🇺🇸US 2 = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password
-🇺🇲 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
+🇺🇸 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
 Snell = snell, us.example.com, 443, psk=password, obfs=tls
 HTTPS = https, us.example.com, 443, username, password
 ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
@@ -59,7 +59,7 @@ exports[`SurgioService transformArtifact format should work 2`] = `
 "shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com, tag=🇺🇸US 1
 shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, tag=🇺🇸US 2
 shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=wss, obfs-host=gateway-carry.icloud.com, obfs-uri=/, tag=🇺🇸US 3
-shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com, udp-relay=true, fast-open=true, tag=🇺🇲 US
+shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com, udp-relay=true, fast-open=true, tag=🇺🇸 US
 http=us.example.com:443, username=username, password=password, over-tls=true, tls-verification=true, tag=HTTPS
 shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, udp-relay=true, tag=ss1
 shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=www.bing.com, tag=ss2
@@ -109,7 +109,7 @@ proxies:
     headers: {}
 - type: ss
   cipher: chacha20-ietf-poly1305
-  name: 🇺🇲 US
+  name: 🇺🇸 US
   password: password
   port: \\"443\\"
   server: us.example.com
@@ -171,6 +171,7 @@ proxies:
   name: vmess
   server: server
   port: 443
+  udp: false
   uuid: uuid
   alterId: \\"32\\"
   tls: false
