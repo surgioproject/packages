@@ -88,7 +88,7 @@ const Page: React.FC = () => {
   const getArtifactListElement = () => {
     if (!artifactList) return null;
 
-    let result: JSX.Element[] = [];
+    const result: JSX.Element[] = [];
     const hasSelection = Object.keys(categorySelection).some(key => categorySelection[key]);
 
     if (!hasSelection) {

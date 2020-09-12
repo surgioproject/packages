@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-namespace,@typescript-eslint/ban-ts-comment */
+
 // jest-dom adds custom jest matchers for asserting on DOM nodes.
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
@@ -7,10 +9,15 @@ import fetch, { Headers, Request, Response } from 'node-fetch';
 import AbortController from 'abort-controller';
 import 'mobx-react-lite/batchingForReactDom';
 
+// @ts-ignore
 global.fetch = fetch;
+// @ts-ignore
 global.Headers = Headers;
+// @ts-ignore
 global.Request = Request;
+// @ts-ignore
 global.Response = Response;
+// @ts-ignore
 global.AbortController = AbortController;
 
 declare global {

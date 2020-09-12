@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, forwardRef } from 'react';
 import { observer } from 'mobx-react';
 import { SnackbarProvider } from 'notistack';
 import clsx from 'clsx';
@@ -305,9 +305,11 @@ function ListItemLink(props: ListItemLinkProps) {
 
   const renderLink = React.useMemo(
     () =>
-      React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
-        <RouterLink to={to} ref={ref} {...itemProps} />
-      )),
+      forwardRef<any, Omit<RouterLinkProps, 'to'>>(function ListItemInnerComponent(itemProps, ref) {
+        return (
+          <RouterLink to={to} ref={ref} {...itemProps} />
+        );
+      }),
     [to],
   );
 

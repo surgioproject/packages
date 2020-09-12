@@ -11,7 +11,7 @@ import MenuList from '@material-ui/core/MenuList';
 import { makeStyles } from '@material-ui/core/styles';
 import { observer } from 'mobx-react';
 import { useSnackbar } from 'notistack';
-import React from 'react';
+import React, { forwardRef } from 'react';
 import Clipboard from 'react-clipboard.js';
 
 import { getExportProviderUrl } from '../../libs/utils';
@@ -134,7 +134,7 @@ interface CopyButtonProps {
   children: React.ReactNode[];
 }
 
-const CopyButton = React.forwardRef<any, CopyButtonProps>((props, ref) => {
+const CopyButton = forwardRef<any, CopyButtonProps>(function CopyButton(props, ref) {
   return (
     <Button ref={ref}
             variant="contained"
