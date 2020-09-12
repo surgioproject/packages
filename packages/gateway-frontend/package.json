@@ -14,7 +14,7 @@
     "test:watch": "react-scripts test --watchAll",
     "test:cov": "react-scripts test --coverage --watchAll=false",
     "test:ci": "run-s test",
-    "lint": "eslint .",
+    "lint": "eslint . --ext .ts,.tsx",
     "prepare": "run-s build"
   },
   "browserslist": {
