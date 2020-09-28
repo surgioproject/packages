@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.3](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@1.0.2...@surgio/gateway-frontend@1.0.3) (2020-09-28)
+
+
+### Bug Fixes
+
+* add polyfill ([89c3f23](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/89c3f2398d7959d187da0b6c06b3d09c17a7f1b8))
+* eslint error ([4ad0cf8](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/4ad0cf8ff1437f84fa11b701f13f0711a14d6c7c))
+
+
+
+
+
 ## [1.0.2](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@1.0.1...@surgio/gateway-frontend@1.0.2) (2020-08-16)
 
 
