@@ -7,7 +7,6 @@
 import '@testing-library/jest-dom/extend-expect';
 import fetch, { Headers, Request, Response } from 'node-fetch';
 import AbortController from 'abort-controller';
-import 'mobx-react-lite/batchingForReactDom';
 
 // @ts-ignore
 global.fetch = fetch;
