@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.0.6...@surgio/gateway@1.1.0) (2020-10-15)
+
+
+### Features
+
+* support export ss, ssr, v2ray subcriptions ([5d0aed7](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/5d0aed71811fa1bf6a8023072da1866bba098ea0))
+
+
+
+
+
 ## [1.0.6](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.0.5...@surgio/gateway@1.0.6) (2020-09-28)
 
 **Note:** Version bump only for package @surgio/gateway

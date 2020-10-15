@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@1.0.3...@surgio/gateway-frontend@1.1.0) (2020-10-15)
+
+
+### Features
+
+* support export ss, ssr, v2ray subcriptions ([5d0aed7](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/5d0aed71811fa1bf6a8023072da1866bba098ea0))
+* use service worker ([7f96e72](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/7f96e721aaed16173d2d8a74260c1655a61e1a40))
+
+
+
+
+
 ## [1.0.3](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@1.0.2...@surgio/gateway-frontend@1.0.3) (2020-09-28)
 
 
