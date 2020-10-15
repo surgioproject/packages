@@ -14,8 +14,13 @@ export class SurgioService {
     return this.surgioHelper.config;
   }
 
-  public async getArtifact(artifactName: string, downloadUrl?: string): Promise<Artifact|undefined> {
-    const target = this.surgioHelper.artifactList.filter(item => item.name === artifactName);
+  public async getArtifact(
+    artifactName: string,
+    downloadUrl?: string
+  ): Promise<Artifact | undefined> {
+    const target = this.surgioHelper.artifactList.filter(
+      (item) => item.name === artifactName
+    );
 
     if (!target.length) {
       return undefined;
@@ -38,30 +43,43 @@ export class SurgioService {
 
   public async exportProvider(
     providerName: string,
-    format: string|undefined,
-    template: string|undefined,
-    options: ExportProviderOptions = {}): Promise<Artifact> {
+    format: string | undefined,
+    template: string | undefined,
+    options: ExportProviderOptions = {}
+  ): Promise<Artifact> {
     const artifactConfig = format
       ? {
-        name: `${providerName}.conf`,
-        provider: providerName,
-        template: undefined,
-        templateString: this.getTemplateByFormat(format, options.filter),
-        ...(options.combineProviders ? {
-          combineProviders: options.combineProviders,
-        } : null),
-      }
-      : (template
-        ? {
+          name: `${providerName}.conf`,
+          provider: providerName,
+          template: undefined,
+          templateString: this.getTemplateByFormat(
+            format,
+            options.filter,
+            providerName
+          ),
+          ...(options.combineProviders
+            ? {
+                combineProviders: options.combineProviders,
+              }
+            : null),
+        }
+      : template
+      ? {
           name: `${providerName}.conf`,
           downloadUrl: options.downloadUrl,
           provider: providerName,
           template,
-          ...(options.combineProviders ? {
-            combineProviders: options.combineProviders,
-          } : null),
+          ...(options.combineProviders
+            ? {
+                combineProviders: options.combineProviders,
+              }
+            : null),
         }
-        : (() => {throw new Error('未指定 format 和 template')})());
+      : (() => {
+          throw new Error('未指定 format 和 template');
+        })();
+
+    console.log(artifactConfig);
     const artifactInstance = new Artifact(
       this.surgioHelper.config,
       artifactConfig,
@@ -74,8 +92,14 @@ export class SurgioService {
     return await artifactInstance.init();
   }
 
-  public async transformArtifact(artifactName: string, format: string, filter?: string): Promise<Artifact|string|undefined> {
-    const target = this.surgioHelper.artifactList.filter(item => item.name === artifactName);
+  public async transformArtifact(
+    artifactName: string,
+    format: string,
+    filter?: string
+  ): Promise<Artifact | string | undefined> {
+    const target = this.surgioHelper.artifactList.filter(
+      (item) => item.name === artifactName
+    );
 
     if (!target.length) {
       return undefined;
@@ -84,7 +108,11 @@ export class SurgioService {
     const artifact = {
       ...target[0],
       template: undefined,
-      templateString: this.getTemplateByFormat(format, filter),
+      templateString: this.getTemplateByFormat(
+        format,
+        filter,
+        target[0].provider
+      ),
     };
 
     return await generate(
@@ -99,24 +127,46 @@ export class SurgioService {
     return Array.from(this.surgioHelper.providerMap.values());
   }
 
-  public getTemplateByFormat(format: string, filter?: string): string {
+  public getTemplateByFormat(
+    format: string,
+    filter?: string,
+    providerName?: string
+  ): string {
     switch (format) {
       case 'surge-policy':
         return `{{ getSurgeNodes(nodeList${filter ? `, ${filter}` : ''}) }}`;
 
       case 'qx-server':
-        return `{{ getQuantumultXNodes(nodeList${filter ? `, ${filter}` : ''}) }}`;
+        return `{{ getQuantumultXNodes(nodeList${
+          filter ? `, ${filter}` : ''
+        }) }}`;
 
       case 'clash-provider':
         return [
           '---',
           'proxies:',
           `{{ getClashNodes(nodeList${filter ? `, ${filter}` : ''}) | yaml }}`,
-          '...'
+          '...',
         ].join('\n');
 
+      case 'ss':
+        return `{{ getShadowsocksNodes(nodeList, ${JSON.stringify(
+          providerName || 'Surgio'
+        )}) | base64 }}`;
+
+      case 'ssr':
+        return `{{ getShadowsocksrNodes(nodeList, ${JSON.stringify(
+          providerName || 'Surgio'
+        )}) | base64 }}`;
+
+      case 'v2ray':
+        return `{{ getV2rayNNodes(nodeList) | base64 }}`;
+
       default:
-        throw new HttpException('参数 format 必须指定', HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          '参数 format 不存在或不正确',
+          HttpStatus.BAD_REQUEST
+        );
     }
   }
 }

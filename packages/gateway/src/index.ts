@@ -1,6 +1,6 @@
 import 'source-map-support/register';
 import { ConfigService } from '@nestjs/config';
-import { NowRequest, NowResponse } from '@now/node/dist';
+import { NowRequest, NowResponse } from '@vercel/node/dist';
 import { createServer, Server } from 'http';
 
 import { bootstrap } from './bootstrap';

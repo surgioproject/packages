@@ -19,9 +19,8 @@ import { CATEGORIES } from 'surgio/build/utils/constant';
 import { getDownloadUrl } from '../../libs/utils';
 import { useStores } from '../../stores';
 
-const useStyles = makeStyles(theme => ({
-  ArtifactCopyButtons: {
-  },
+const useStyles = makeStyles((theme) => ({
+  ArtifactCopyButtons: {},
 }));
 
 const options = [
@@ -29,6 +28,9 @@ const options = [
   '复制 Surge Policy 地址',
   '复制 Clash Provider 地址',
   '复制 Quantumult X Server Remote 地址',
+  '复制 SS 订阅',
+  '复制 SSR 订阅',
+  '复制 V2Ray 订阅',
 ];
 
 export interface ArtifactCopyButtonsProps {
@@ -44,9 +46,36 @@ function ArtifactCopyButtons({ artifact }: ArtifactCopyButtonsProps) {
   const { enqueueSnackbar } = useSnackbar();
   const urls: string[] = [
     getDownloadUrl(artifact.name, true, configStore.config.accessToken),
-    getDownloadUrl(`${artifact.name}?format=surge-policy`, true, configStore.config.accessToken),
-    getDownloadUrl(`${artifact.name}?format=clash-provider`, true, configStore.config.accessToken),
-    getDownloadUrl(`${artifact.name}?format=qx-server`, true, configStore.config.accessToken),
+    getDownloadUrl(
+      `${artifact.name}?format=surge-policy`,
+      true,
+      configStore.config.accessToken
+    ),
+    getDownloadUrl(
+      `${artifact.name}?format=clash-provider`,
+      true,
+      configStore.config.accessToken
+    ),
+    getDownloadUrl(
+      `${artifact.name}?format=qx-server`,
+      true,
+      configStore.config.accessToken
+    ),
+    getDownloadUrl(
+      `${artifact.name}?format=ss`,
+      true,
+      configStore.config.accessToken
+    ),
+    getDownloadUrl(
+      `${artifact.name}?format=ssr`,
+      true,
+      configStore.config.accessToken
+    ),
+    getDownloadUrl(
+      `${artifact.name}?format=v2ray`,
+      true,
+      configStore.config.accessToken
+    ),
   ];
 
   const onCopySuccess = () => {
@@ -59,18 +88,21 @@ function ArtifactCopyButtons({ artifact }: ArtifactCopyButtonsProps) {
 
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
-    index: number,
+    index: number
   ) => {
     setSelectedIndex(index);
     setOpen(false);
   };
 
   const handleToggle = () => {
-    setOpen(prevOpen => !prevOpen);
+    setOpen((prevOpen) => !prevOpen);
   };
 
   const handleClose = (event: React.MouseEvent<Document, MouseEvent>) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
+    if (
+      anchorRef.current &&
+      anchorRef.current.contains(event.target as HTMLElement)
+    ) {
       return;
     }
 
@@ -79,40 +111,50 @@ function ArtifactCopyButtons({ artifact }: ArtifactCopyButtonsProps) {
 
   return (
     <Grid item xs={12} className={classes.ArtifactCopyButtons}>
-      <ButtonGroup variant="contained"
-                   color="primary"
-                   ref={anchorRef}
-                   aria-label="split button">
-        <Clipboard component={CopyButton}
-                   data-testid="copy-button"
-                   data-clipboard-text={urls[selectedIndex]}
-                   onSuccess={onCopySuccess}
-                   onError={onCopyError}>
+      <ButtonGroup
+        variant="contained"
+        color="primary"
+        ref={anchorRef}
+        aria-label="split button"
+      >
+        <Clipboard
+          component={CopyButton}
+          data-testid="copy-button"
+          data-clipboard-text={urls[selectedIndex]}
+          onSuccess={onCopySuccess}
+          onError={onCopyError}
+        >
           {options[selectedIndex]}
         </Clipboard>
 
-        {
-          !artifact.categories?.includes(CATEGORIES.SNIPPET) && (
-            <Button
-              color="primary"
-              size="small"
-              aria-controls={open ? 'split-button-menu' : undefined}
-              aria-expanded={open ? 'true' : undefined}
-              aria-label="select url type"
-              aria-haspopup="menu"
-              onClick={handleToggle}
-            >
-              <ArrowDropDownIcon />
-            </Button>
-          )
-        }
+        {!artifact.categories?.includes(CATEGORIES.SNIPPET) && (
+          <Button
+            color="primary"
+            size="small"
+            aria-controls={open ? 'split-button-menu' : undefined}
+            aria-expanded={open ? 'true' : undefined}
+            aria-label="select url type"
+            aria-haspopup="menu"
+            onClick={handleToggle}
+          >
+            <ArrowDropDownIcon />
+          </Button>
+        )}
       </ButtonGroup>
-      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal style={{ zIndex: 2 }}>
+      <Popper
+        open={open}
+        anchorEl={anchorRef.current}
+        role={undefined}
+        transition
+        disablePortal
+        style={{ zIndex: 2 }}
+      >
         {({ TransitionProps, placement }) => (
           <Grow
             {...TransitionProps}
             style={{
-              transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+              transformOrigin:
+                placement === 'bottom' ? 'center top' : 'center bottom',
             }}
           >
             <Paper>
@@ -122,7 +164,7 @@ function ArtifactCopyButtons({ artifact }: ArtifactCopyButtonsProps) {
                     <MenuItem
                       key={option}
                       selected={index === selectedIndex}
-                      onClick={event => handleMenuItemClick(event, index)}
+                      onClick={(event) => handleMenuItemClick(event, index)}
                     >
                       {option}
                     </MenuItem>
@@ -141,14 +183,20 @@ interface CopyButtonProps {
   children: React.ReactNode[];
 }
 
-const CopyButton = forwardRef<any, CopyButtonProps>(function CopyButton(props, ref) {
+const CopyButton = forwardRef<any, CopyButtonProps>(function CopyButton(
+  props,
+  ref
+) {
   return (
-    <Button ref={ref}
-            variant="contained"
-            size="medium"
-            color="primary"
-            {...props}
-    >{ props.children }</Button>
+    <Button
+      ref={ref}
+      variant="contained"
+      size="medium"
+      color="primary"
+      {...props}
+    >
+      {props.children}
+    </Button>
   );
 });
 
