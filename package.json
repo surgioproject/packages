@@ -57,7 +57,7 @@
     "jest": "^24.9.0",
     "ky": "^0.24.0",
     "ky-universal": "^0.8.1",
-    "lerna": "^3.20.2",
+    "lerna": "^3.22.1",
     "light-my-request": "^4.0.1",
     "lint-staged": "^10.1.7",
     "lodash-es": "^4.17.15",
