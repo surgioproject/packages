@@ -7,12 +7,12 @@
   "repository": "https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend",
   "author": "Yihang Li <me@royli.dev>",
   "scripts": {
-    "dev": "react-scripts start",
+    "dev": "craco start",
     "prebuild": "rimraf build",
-    "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false",
-    "test:watch": "react-scripts test --watchAll",
-    "test:cov": "react-scripts test --coverage --watchAll=false",
+    "build": "craco build",
+    "test": "craco test --watchAll=false",
+    "test:watch": "craco test --watchAll",
+    "test:cov": "craco test --coverage --watchAll=false",
     "test:ci": "run-s test",
     "lint": "eslint . --ext .ts,.tsx",
     "prepare": "run-s build"

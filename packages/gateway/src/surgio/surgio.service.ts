@@ -79,7 +79,6 @@ export class SurgioService {
           throw new Error('未指定 format 和 template');
         })();
 
-    console.log(artifactConfig);
     const artifactInstance = new Artifact(
       this.surgioHelper.config,
       artifactConfig,

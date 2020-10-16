@@ -12,6 +12,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-angular": "^8.3.4",
+    "@craco/craco": "^5.7.0",
     "@loadable/component": "^5.12.0",
     "@material-ui/core": "^4.9.11",
     "@material-ui/icons": "^4.5.1",
@@ -45,6 +46,7 @@
     "autoprefixer": "^9.7.6",
     "clsx": "^1.0.4",
     "conventional-changelog-cli": "^2.0.31",
+    "craco-workbox": "^0.1.0",
     "date-fns": "^2.14.0",
     "eslint": "^6",
     "eslint-config-prettier": "^6.11.0",
