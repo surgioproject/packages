@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.1.0...@surgio/gateway@1.1.1) (2020-10-16)
+
+
+### Bug Fixes
+
+* service worker exclusion ([18ab90e](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/18ab90ebd0a4c90a52c5fc28670a3c8e5e9fdb05))
+
+
+
+
+
 # [1.1.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.0.6...@surgio/gateway@1.1.0) (2020-10-15)
 
 
