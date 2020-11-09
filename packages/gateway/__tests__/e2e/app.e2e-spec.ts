@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 // @ts-ignore
 import supertest from 'supertest';
+// @ts-ignore
+import Bluebird from 'bluebird';
 
 import { AppModule } from '../../src/app.module';
 import { applyMiddlwares } from '../../src/bootstrap';
@@ -26,9 +28,7 @@ describe('AppController (e2e)', () => {
   });
 
   test('/ (GET)', async () => {
-    await supertest(app.getHttpServer())
-      .get('/')
-      .expect(200)
+    await supertest(app.getHttpServer()).get('/').expect(200);
   });
 
   test('/get-artifact (GET)', async () => {
@@ -47,15 +47,17 @@ describe('AppController (e2e)', () => {
   });
 
   test('/get-artifact (GET) userinfo header', async () => {
-    const res = await supertest(app.getHttpServer())
-      .get(`/get-artifact/test3.conf?access_token=${token}`);
+    const res = await supertest(app.getHttpServer()).get(
+      `/get-artifact/test3.conf?access_token=${token}`
+    );
 
-    expect(res.get('subscription-userinfo'))
-      .toBe('upload=891332010; download=29921186546; total=322122547200; expire=1586330887');
+    expect(res.get('subscription-userinfo')).toBe(
+      'upload=891332010; download=29921186546; total=322122547200; expire=1586330887'
+    );
   });
 
   test('/get-artifact (GET) 404', async () => {
-    const res = await supertest(app.getHttpServer())
+    await supertest(app.getHttpServer())
       .get(`/get-artifact/notfound.conf?access_token=${token}`)
       .expect(404);
   });
@@ -80,22 +82,42 @@ describe('AppController (e2e)', () => {
 
     {
       const res = await supertest(app.getHttpServer())
-        .get(`/get-artifact/custom-params.conf?access_token=${token}&foo=new&child.bar=new`)
+        .get(
+          `/get-artifact/custom-params.conf?access_token=${token}&foo=new&child.bar=new`
+        )
         .expect(200);
 
       expect(res.text).toMatchSnapshot();
     }
   });
 
+  test('/get-artifact (GET) error cache', async () => {
+    await supertest(app.getHttpServer())
+      .get(`/get-artifact/clash-error-after-first.conf?access_token=${token}`)
+      .expect(200);
+
+    await Bluebird.delay(500);
+
+    const res = await supertest(app.getHttpServer()).get(
+      `/get-artifact/clash-error-after-first.conf?access_token=${token}`
+    );
+
+    expect(res.status).toBe(200);
+    expect(res.get('x-use-cache')).toBe('true');
+  });
+
   test('customParams should not contaminate prototype', async () => {
-    const res = await supertest(app.getHttpServer())
-      .get(`/get-artifact/custom-params.conf?access_token=${token}&constructor.prototype.hacked=bar`);
+    await supertest(app.getHttpServer()).get(
+      `/get-artifact/custom-params.conf?access_token=${token}&constructor.prototype.hacked=bar`
+    );
     expect(({} as any).hacked).toBeUndefined();
   });
 
   test('/export-providers (GET)', async () => {
     const res = await supertest(app.getHttpServer())
-      .get(`/export-providers?access_token=${token}&providers=clash&format=surge-policy`)
+      .get(
+        `/export-providers?access_token=${token}&providers=clash&format=surge-policy`
+      )
       .expect(200);
 
     expect(res.text).toMatchSnapshot();
@@ -103,15 +125,18 @@ describe('AppController (e2e)', () => {
 
   test('/export-providers (GET) multiple providers', async () => {
     const res = await supertest(app.getHttpServer())
-      .get(`/export-providers?access_token=${token}&providers=clash,custom&format=surge-policy`)
+      .get(
+        `/export-providers?access_token=${token}&providers=clash,custom&format=surge-policy`
+      )
       .expect(200);
 
     expect(res.text).toMatchSnapshot();
   });
 
   test('/export-providers (GET) multiple providers 404', async () => {
-    const res = await supertest(app.getHttpServer())
-      .get(`/export-providers?access_token=${token}&providers=clash,custom,notfound&format=surge-policy`);
+    const res = await supertest(app.getHttpServer()).get(
+      `/export-providers?access_token=${token}&providers=clash,custom,notfound&format=surge-policy`
+    );
 
     expect(res.status).toBe(404);
     expect(res.text).toMatchSnapshot();
@@ -119,7 +144,9 @@ describe('AppController (e2e)', () => {
 
   test('/export-providers (GET) global filter', async () => {
     const res = await supertest(app.getHttpServer())
-      .get(`/export-providers?access_token=${token}&providers=clash,custom&format=surge-policy&filter=customFilters.globalFilter`)
+      .get(
+        `/export-providers?access_token=${token}&providers=clash,custom&format=surge-policy&filter=customFilters.globalFilter`
+      )
       .expect(200);
 
     expect(res.text).toMatchSnapshot();
@@ -127,7 +154,9 @@ describe('AppController (e2e)', () => {
 
   test('/export-providers (GET) internal filter', async () => {
     const res = await supertest(app.getHttpServer())
-      .get(`/export-providers?access_token=${token}&providers=clash,custom&format=surge-policy&filter=hkFilter`)
+      .get(
+        `/export-providers?access_token=${token}&providers=clash,custom&format=surge-policy&filter=hkFilter`
+      )
       .expect(200);
 
     expect(res.text).toMatchSnapshot();
@@ -135,7 +164,9 @@ describe('AppController (e2e)', () => {
 
   test('/export-providers (GET) private filter', async () => {
     const res = await supertest(app.getHttpServer())
-      .get(`/export-providers?access_token=${token}&providers=clash,custom&format=surge-policy&filter=customFilters.testFilter`)
+      .get(
+        `/export-providers?access_token=${token}&providers=clash,custom&format=surge-policy&filter=customFilters.testFilter`
+      )
       .expect(200);
 
     expect(res.text).toMatchSnapshot();
@@ -143,15 +174,19 @@ describe('AppController (e2e)', () => {
 
   test('/export-providers (GET) using template', async () => {
     const res = await supertest(app.getHttpServer())
-      .get(`/export-providers?access_token=${token}&providers=clash,custom&template=export`)
+      .get(
+        `/export-providers?access_token=${token}&providers=clash,custom&template=export`
+      )
       .expect(200);
 
     expect(res.text).toMatchSnapshot();
   });
 
   test('/export-providers (GET) using wrong template', async () => {
-    const res = await supertest(app.getHttpServer())
-      .get(`/export-providers?access_token=${token}&providers=clash,custom&template=notfound`)
+    await supertest(app.getHttpServer())
+      .get(
+        `/export-providers?access_token=${token}&providers=clash,custom&template=notfound`
+      )
       .expect(500);
   });
 

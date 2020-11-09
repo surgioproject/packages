@@ -1,4 +1,11 @@
-import { ExceptionFilter, Catch, ArgumentsHost, Logger, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  Logger,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ServerResponse } from 'http';
 import Youch from 'youch';
@@ -7,7 +14,7 @@ import Youch from 'youch';
 export class AppExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AppExceptionsFilter.name);
 
-  public catch(exception: HttpException|Error, host: ArgumentsHost): void {
+  public catch(exception: HttpException | Error, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
@@ -19,7 +26,11 @@ export class AppExceptionsFilter implements ExceptionFilter {
 
       response.status(status);
 
-      this.logger.error(`${request.method} ${request.url} ${status} "${request.headers['user-agent'] || '-'}"`);
+      this.logger.error(
+        `${request.method} ${request.url} ${status} "${
+          request.headers['user-agent'] || '-'
+        }"`
+      );
 
       if (typeof exceptionResponse === 'string') {
         responsePayload = {
@@ -44,7 +55,7 @@ export class AppExceptionsFilter implements ExceptionFilter {
     }
 
     if (!('accepts' in request)) {
-      const res = response as unknown as ServerResponse;
+      const res = (response as unknown) as ServerResponse;
 
       res.statusCode = responsePayload.statusCode;
       res.end(JSON.stringify(responsePayload));
@@ -57,7 +68,7 @@ export class AppExceptionsFilter implements ExceptionFilter {
       const youch = new Youch(exception, request);
 
       youch
-        .addLink(({ message }) => {
+        .addLink(() => {
           return `
 <div>
   <p>加入交流群汇报问题：<a href="https://t.me/surgiotg" target="_blank" rel="noopener">https://t.me/surgiotg</a></p>
@@ -65,12 +76,10 @@ export class AppExceptionsFilter implements ExceptionFilter {
             `;
         })
         .toHTML()
-        .then(html => {
-          response
-            .type('text/html')
-            .send(html);
+        .then((html) => {
+          response.type('text/html').send(html);
         })
-        .catch(err => {
+        .catch((err) => {
           this.logger.error(err.message, err.context);
         });
     } else {

@@ -30,6 +30,11 @@ module.exports = {
         },
       },
     },
+    {
+      name: 'clash-error-after-first.conf',
+      template: 'test',
+      provider: 'clash-error-after-first',
+    },
   ],
   urlBase: 'https://example.com/',
   binPath: {
@@ -39,11 +44,12 @@ module.exports = {
   gateway: {
     accessToken: 'abcd',
     auth: true,
+    useCacheOnError: true,
   },
   surgeConfig: {
     v2ray: 'native',
   },
   customFilters: {
-    globalFilter: node => node.nodeName === '🇺🇸 US',
+    globalFilter: (node) => node.nodeName === '🇺🇸 US',
   },
 };

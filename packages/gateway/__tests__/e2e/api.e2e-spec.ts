@@ -1,5 +1,4 @@
 import { NestFactory } from '@nestjs/core';
-// @ts-ignore
 import supertest from 'supertest';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
@@ -23,11 +22,9 @@ describe('ApiController (e2e)', () => {
 
     await app.init();
 
-    const auth = await supertest(app.getHttpServer())
-      .post('/api/auth')
-      .send({
-        accessToken: token,
-      });
+    const auth = await supertest(app.getHttpServer()).post('/api/auth').send({
+      accessToken: token,
+    });
     const cookies = extractCookies(auth.header);
     tokenCookie = cookies._t.value;
   });
@@ -37,11 +34,9 @@ describe('ApiController (e2e)', () => {
   });
 
   test('/api/auth (POST)', async () => {
-    const auth = await supertest(app.getHttpServer())
-      .post('/api/auth')
-      .send({
-        accessToken: token,
-      });
+    const auth = await supertest(app.getHttpServer()).post('/api/auth').send({
+      accessToken: token,
+    });
     const cookies = extractCookies(auth.header);
     expect(cookies._t.value).toBeDefined();
     expect(Number(cookies._t.flags['Max-Age'])).toBe(60 * 60 * 24 * 31);
@@ -69,7 +64,7 @@ describe('ApiController (e2e)', () => {
     await supertest(app.getHttpServer())
       .get('/api/auth/validate-token')
       .set('Authorization', `Bearer wrong`)
-      .expect(401)
+      .expect(401);
   });
 
   test('/api/config (GET)', async () => {

@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Head,
   Res,
   Param,
   Query,
@@ -19,9 +18,14 @@ import _ from 'lodash';
 import { getUrl } from 'surgio/build/utils';
 import { URL } from 'url';
 import cors from '@royli/cors-anywhere';
+import LRU from 'lru-cache';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 
 import { BearerAuthGuard } from './auth/bearer.guard';
 import { SurgioService } from './surgio/surgio.service';
+
+dayjs.extend(duration);
 
 function parseEnvList(env): ReadonlyArray<string> {
   if (!env) {
@@ -30,6 +34,10 @@ function parseEnvList(env): ReadonlyArray<string> {
   return env.split(',');
 }
 
+const resCache = new LRU<string, string>({
+  max: 100,
+  maxAge: dayjs.duration({ hours: 12 }).asMilliseconds(),
+});
 const originBlacklist = parseEnvList(process.env.CORSANYWHERE_BLACKLIST);
 const originWhitelist = parseEnvList(process.env.CORSANYWHERE_WHITELIST);
 const proxy = cors.createServer({
@@ -57,20 +65,32 @@ export class AppController {
     const filter = query.filter;
     const urlParams = _.omit(query, ['dl', 'format', 'filter', 'access_token']);
     const artifactName: string = params.name;
-    const artifact =
-      format !== void 0
-        ? await this.surgioService.transformArtifact(
-            artifactName,
-            format,
-            filter
-          )
-        : await this.surgioService.getArtifact(
-            artifactName,
-            new URL(
-              req.url as string,
-              this.surgioService.config.publicUrl
-            ).toString()
-          );
+    let artifact: string | undefined | Artifact;
+    let isCache = false;
+
+    try {
+      artifact =
+        format !== void 0
+          ? await this.surgioService.transformArtifact(
+              artifactName,
+              format,
+              filter
+            )
+          : await this.surgioService.getArtifact(
+              artifactName,
+              new URL(req.url, this.surgioService.config.publicUrl).toString()
+            );
+    } catch (err) {
+      if (resCache.has(req.url)) {
+        isCache = true;
+        artifact = resCache.get(req.url) as string;
+
+        this.logger.warn('Artifact 生成错误，使用缓存');
+        this.logger.warn(err.stack || err);
+      } else {
+        throw err;
+      }
+    }
 
     if (typeof artifact !== 'undefined') {
       res.header('content-type', 'text/plain; charset=utf-8');
@@ -84,13 +104,13 @@ export class AppController {
       }
 
       this.logger.warn(
-        `[download-artifact] ${artifactName} ${
+        `[download-artifact] ${artifactName} "${
           req.headers['user-agent'] || '-'
-        }`
+        }"`
       );
 
       // @ts-ignore
-      await this.sendPayload(req, res, artifact, urlParams);
+      await this.sendPayload(req, res, artifact, urlParams, isCache);
     } else {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     }
@@ -143,43 +163,56 @@ export class AppController {
       'access_token',
       'providers',
     ]);
-    let artifact: Artifact;
+    let artifact: Artifact | string;
+    let isCache = false;
 
-    if (format) {
-      artifact = await this.surgioService.exportProvider(
-        providers[0],
-        format,
-        undefined,
-        {
-          filter,
-          ...(providers.length > 1
-            ? {
-                combineProviders: providers.splice(1),
-              }
-            : null),
-        }
-      );
-    } else {
-      artifact = await this.surgioService.exportProvider(
-        providers[0],
-        undefined,
-        template,
-        {
-          filter,
-          downloadUrl: new URL(
-            req.url as string,
-            this.surgioService.config.publicUrl
-          ).toString(),
-          ...(providers.length > 1
-            ? {
-                combineProviders: providers.splice(1),
-              }
-            : null),
-        }
-      );
+    try {
+      if (format) {
+        artifact = await this.surgioService.exportProvider(
+          providers[0],
+          format,
+          undefined,
+          {
+            filter,
+            ...(providers.length > 1
+              ? {
+                  combineProviders: providers.splice(1),
+                }
+              : null),
+          }
+        );
+      } else {
+        artifact = await this.surgioService.exportProvider(
+          providers[0],
+          undefined,
+          template,
+          {
+            filter,
+            downloadUrl: new URL(
+              req.url as string,
+              this.surgioService.config.publicUrl
+            ).toString(),
+            ...(providers.length > 1
+              ? {
+                  combineProviders: providers.splice(1),
+                }
+              : null),
+          }
+        );
+      }
+    } catch (err) {
+      if (resCache.has(req.url)) {
+        isCache = true;
+        artifact = resCache.get(req.url) as string;
+
+        this.logger.warn('Provider 导出错误，使用缓存');
+        this.logger.warn(err.stack || err);
+      } else {
+        throw err;
+      }
     }
 
-    if (artifact) {
+    if (artifact instanceof Artifact) {
       res.header('content-type', 'text/plain; charset=utf-8');
       res.header('cache-control', 'private, no-cache, no-stores');
 
@@ -191,15 +224,15 @@ export class AppController {
       }
 
       this.logger.warn(
-        `[download-artifact] ${artifact.artifact.name} ${
+        `[download-artifact] ${artifact.artifact.name} "${
           req.headers['user-agent'] || '-'
-        }`
+        }"`
       );
 
       // @ts-ignore
-      await this.sendPayload(req, res, artifact, urlParams);
+      await this.sendPayload(req, res, artifact, urlParams, isCache);
     } else {
-      throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
+      await this.sendPayload(req, res, artifact, undefined, isCache);
     }
   }
 
@@ -274,34 +307,59 @@ export class AppController {
     req: Request,
     res: Response,
     artifact: string | Artifact,
-    urlParams?: Record<string, string>
+    urlParams?: Record<string, string>,
+    isCachedPayload?: boolean
   ): Promise<void> {
+    const config = this.surgioService.config;
+    const gatewayConfig = config?.gateway;
+
     if (typeof artifact === 'string') {
+      if (gatewayConfig?.useCacheOnError && !isCachedPayload) {
+        resCache.set(req.url, artifact);
+      }
+
+      if (isCachedPayload) {
+        res.header('x-use-cache', 'true');
+      }
+
       res.send(artifact);
     } else {
       // 只支持输出单个 Provider 的流量信息
-      if (artifact.providerMap.size === 1) {
+      if (!isCachedPayload && artifact.providerMap.size === 1) {
         const providers = artifact.providerMap.values();
         const provider = providers.next().value;
 
         if (provider.supportGetSubscriptionUserInfo) {
-          const subscriptionUserInfo = await provider.getSubscriptionUserInfo();
+          try {
+            const subscriptionUserInfo = await provider.getSubscriptionUserInfo();
 
-          if (subscriptionUserInfo) {
-            const values = ['upload', 'download', 'total', 'expire'].map(
-              (key) => `${key}=${subscriptionUserInfo[key] || 0}`
-            );
+            if (subscriptionUserInfo) {
+              const values = ['upload', 'download', 'total', 'expire'].map(
+                (key) => `${key}=${subscriptionUserInfo[key] || 0}`
+              );
 
-            res.header('subscription-userinfo', values.join('; '));
+              res.header('subscription-userinfo', values.join('; '));
+            }
+          } catch (err) {
+            this.logger.error('处理订阅信息失败');
+            this.logger.error(err.stack || err);
           }
         }
       }
 
-      res.send(
-        artifact.render(undefined, {
-          urlParams: urlParams ? this.processUrlParams(urlParams) : undefined,
-        })
-      );
+      const body = artifact.render(undefined, {
+        urlParams: urlParams ? this.processUrlParams(urlParams) : undefined,
+      });
+
+      if (gatewayConfig?.useCacheOnError && !isCachedPayload) {
+        resCache.set(req.url, body);
+      }
+
+      if (isCachedPayload) {
+        res.header('x-use-cache', 'true');
+      }
+
+      res.send(body);
     }
   }
 
