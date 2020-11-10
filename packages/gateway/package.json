@@ -20,12 +20,13 @@
     "dev": "nest start --watch",
     "debug": "nest start --debug --watch",
     "lint": "eslint . --ext .ts",
-    "test": "jest",
+    "test": "run-s test:ci",
+    "test:unit": "jest",
+    "test:e2e": "jest --config __tests__/jest-e2e.json",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register jest --runInBand",
-    "test:e2e": "jest --config __tests__/jest-e2e.json",
-    "test:ci": "run-s test test:e2e"
+    "test:ci": "run-s test:unit test:e2e"
   },
   "dependencies": {
     "@nestjs/common": "^7.3.2",

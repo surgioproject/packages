@@ -49,22 +49,34 @@ describe('SurgioService', () => {
 
   test('transformArtifact filter should work', async () => {
     expect(
-      await surgioService.transformArtifact('test.conf', 'surge-policy', 'customFilters.globalFilter')
+      await surgioService.transformArtifact(
+        'test.conf',
+        'surge-policy',
+        'customFilters.globalFilter'
+      )
     ).toMatchSnapshot();
     expect(
-      await surgioService.transformArtifact('test.conf', 'qx-server', 'customFilters.globalFilter')
+      await surgioService.transformArtifact(
+        'test.conf',
+        'qx-server',
+        'customFilters.globalFilter'
+      )
     ).toMatchSnapshot();
     expect(
-      await surgioService.transformArtifact('test.conf', 'clash-provider', 'customFilters.globalFilter')
+      await surgioService.transformArtifact(
+        'test.conf',
+        'clash-provider',
+        'customFilters.globalFilter'
+      )
     ).toMatchSnapshot();
   });
 
   test('listProviders', () => {
     const providers = surgioService.listProviders();
 
-    expect(providers).toHaveLength(5);
+    expect(providers).toHaveLength(6);
 
-    providers.forEach(item => {
+    providers.forEach((item) => {
       expect(item.name).toBeDefined();
     });
   });
