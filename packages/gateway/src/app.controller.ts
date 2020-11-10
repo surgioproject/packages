@@ -36,7 +36,7 @@ function parseEnvList(env): ReadonlyArray<string> {
 
 const resCache = new LRU<string, string>({
   max: 100,
-  maxAge: dayjs.duration({ hours: 12 }).asMilliseconds(),
+  maxAge: dayjs.duration({ days: 7 }).asMilliseconds(),
 });
 const originBlacklist = parseEnvList(process.env.CORSANYWHERE_BLACKLIST);
 const originWhitelist = parseEnvList(process.env.CORSANYWHERE_WHITELIST);
