@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.2.0...@surgio/gateway@1.2.1) (2020-11-10)
+
+
+### Bug Fixes
+
+* response cache expires too soon ([d681615](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/d681615b5f8a40693f63b1caf4fab05dfb50e2c1))
+
+
+
+
+
 # [1.2.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.1.1...@surgio/gateway@1.2.0) (2020-11-10)
 
 
