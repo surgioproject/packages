@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.1.1...@surgio/gateway@1.2.0) (2020-11-10)
+
+
+### Features
+
+* add artifact response cache ([e0b4517](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/e0b45179341222a795194226eb591b99967d955c))
+
+
+
+
+
 ## [1.1.1](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.1.0...@surgio/gateway@1.1.1) (2020-10-16)
 
 
