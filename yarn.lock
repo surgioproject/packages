@@ -16326,10 +16326,10 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-surgio@^2.4.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/surgio/-/surgio-2.6.0.tgz#c27993e0337b25feeb8ccd30343c1a9227a81122"
-  integrity sha512-6isFZj7IswpantToPSHwCOdrPjRduSQUtF63FmqNJdcC1+vP5UCNpIQCb89+9cvqAgT97jXe5K8qHofb0/aEJg==
+surgio@^2.7.0:
+  version "2.7.3"
+  resolved "https://registry.yarnpkg.com/surgio/-/surgio-2.7.3.tgz#b5a391b2a7dcddc3f18d42dea1f2e4c380500027"
+  integrity sha512-HVT33c1+TJGiy2cwMeMoqZ1BtCmLiKCr+pCRplJ06y4PtMtpX0djo3ZgXGJIf5fm1xZZK/XBITKP03grXQ/z8A==
   dependencies:
     "@hapi/joi" "^17.1.1"
     "@royli/hygen" "^5.0.4"
@@ -16349,6 +16349,7 @@ surgio@^2.4.0:
     emoji-regex "^9.0.0"
     env2 "^2.2.2"
     eslint "^7.8.1"
+    espree "^7.3.0"
     execa "^4.0.3"
     filesize "^6.1.0"
     fs-extra "^9.0.0"
@@ -16366,6 +16367,7 @@ surgio@^2.4.0:
     query-string "^6.12.1"
     rimraf "^3.0.0"
     shelljs "^0.8.3"
+    source-map-support "^0.5.19"
     update-notifier "^5.0.0"
     urlsafe-base64 "^1.0.0"
     winston "^3.2.1"
