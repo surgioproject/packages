@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.2.1...@surgio/gateway@1.3.0) (2021-02-17)
+
+
+### Features
+
+* add clean cache button ([52e68eb](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/52e68eb970c6e1d87317159cf37a0c80d02a7640))
+
+
+
+
+
 ## [1.2.1](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.2.0...@surgio/gateway@1.2.1) (2020-11-10)
 
 
