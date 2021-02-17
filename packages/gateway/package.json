@@ -41,6 +41,7 @@
     "cookie-parser": "^1.4.5",
     "dayjs": "^1.9.5",
     "express": "^4.17.1",
+    "fs-extra": "^9.1.0",
     "http-errors": "^1.7.3",
     "lodash": "^4.17.19",
     "lru-cache": "^6.0.0",

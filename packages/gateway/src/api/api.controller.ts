@@ -1,4 +1,14 @@
-import { Controller, Get, HttpException, HttpStatus, Param, Post, Res, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import _ from 'lodash';
@@ -12,24 +22,29 @@ import { SurgioService } from '../surgio/surgio.service';
 export class ApiController {
   constructor(
     private readonly surgioService: SurgioService,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {}
 
   @Post('/auth')
   public async login(@Req() req: Request, @Res() res: Response): Promise<void> {
     const accessToken = req.body.accessToken;
 
-    if (accessToken === this.surgioService.surgioHelper.config?.gateway?.accessToken) {
+    if (
+      accessToken ===
+      this.surgioService.surgioHelper.config?.gateway?.accessToken
+    ) {
       res.cookie('_t', accessToken, {
-        maxAge: (this.surgioService.surgioHelper.config?.gateway?.cookieMaxAge
-          ?? this.configService.get('defaultCookieMaxAge') as number) * 1e3,
+        maxAge:
+          (this.surgioService.surgioHelper.config?.gateway?.cookieMaxAge ??
+            (this.configService.get('defaultCookieMaxAge') as number)) * 1e3,
         httpOnly: true,
         signed: true,
         path: '/',
       });
       res.cookie('_t', accessToken, {
-        maxAge: (this.surgioService.surgioHelper.config?.gateway?.cookieMaxAge
-          ?? this.configService.get('defaultCookieMaxAge') as number) * 1e3,
+        maxAge:
+          (this.surgioService.surgioHelper.config?.gateway?.cookieMaxAge ??
+            (this.configService.get('defaultCookieMaxAge') as number)) * 1e3,
         httpOnly: true,
         signed: true,
         path: '/api',
@@ -65,11 +80,25 @@ export class ApiController {
     return {
       status: 'ok',
       data: {
-        ..._.pick(this.surgioService.surgioHelper.config, ['urlBase', 'publicUrl']),
+        ..._.pick(this.surgioService.surgioHelper.config, [
+          'urlBase',
+          'publicUrl',
+        ]),
         backendVersion: require('../../package.json').version,
         coreVersion: require('surgio/package.json').version,
-        needAuth: this.surgioService.surgioHelper.config?.gateway?.auth ?? false,
+        needAuth:
+          this.surgioService.surgioHelper.config?.gateway?.auth ?? false,
       },
+    };
+  }
+
+  @UseGuards(BearerAuthGuard)
+  @Post('/clean-cache')
+  public async cleanCache(): Promise<any> {
+    await this.surgioService.surgioHelper.cleanCache();
+
+    return {
+      status: 'ok',
     };
   }
 
@@ -86,14 +115,19 @@ export class ApiController {
 
   @UseGuards(BearerAuthGuard)
   @Get('/artifacts/:name')
-  public async getArtifact(@Res() res: Response, @Param() params): Promise<void> {
-    const artifactList = this.surgioService.surgioHelper.artifactList.filter(item => item.name === params.name);
+  public async getArtifact(
+    @Res() res: Response,
+    @Param() params
+  ): Promise<void> {
+    const artifactList = this.surgioService.surgioHelper.artifactList.filter(
+      (item) => item.name === params.name
+    );
 
     if (artifactList.length) {
       res.send({
         status: 'ok',
         data: artifactList[0],
-      })
+      });
     } else {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     }
@@ -106,14 +140,23 @@ export class ApiController {
 
     return {
       status: 'ok',
-      data: providerList.map(provider => _.pick(provider, ['name', 'type', 'url', 'supportGetSubscriptionUserInfo'])),
+      data: providerList.map((provider) =>
+        _.pick(provider, [
+          'name',
+          'type',
+          'url',
+          'supportGetSubscriptionUserInfo',
+        ])
+      ),
     };
   }
 
   @UseGuards(BearerAuthGuard)
   @Get('/providers/:name/subscription')
   public async getProviderSubscription(@Param() params): Promise<any> {
-    const provider = this.surgioService.surgioHelper.providerMap.get(params.name);
+    const provider = this.surgioService.surgioHelper.providerMap.get(
+      params.name
+    );
 
     if (!provider) {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);

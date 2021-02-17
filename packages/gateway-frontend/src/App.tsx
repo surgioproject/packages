@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, forwardRef } from 'react';
+import { useSnackbar } from 'notistack';
+import React, { useCallback, useEffect, forwardRef, useState } from 'react';
 import { observer } from 'mobx-react';
-import { SnackbarProvider } from 'notistack';
 import clsx from 'clsx';
 import {
   Switch,
@@ -16,6 +16,7 @@ import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -32,6 +33,7 @@ import loadable from '@loadable/component';
 
 import './App.css';
 import useNavElements from './hooks/useNavElements';
+import client from './libs/http';
 import { defaultFetcher } from './libs/utils';
 import { useStores } from './stores';
 import { Config } from './stores/config';
@@ -103,20 +105,21 @@ const useStyles = makeStyles((theme: Theme) =>
     appBarIcons: {
       color: '#fff',
     },
-  }),
+  })
 );
 
 interface ResponsiveDrawerProps {
   container?: Element;
 }
 
-export default observer((props: ResponsiveDrawerProps) => {
+const App = observer((props: ResponsiveDrawerProps) => {
   const { container } = props;
   const classes = useStyles();
   const stores = useStores();
   const isShowNavElements = useNavElements();
   const location = useLocation();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -130,11 +133,21 @@ export default observer((props: ResponsiveDrawerProps) => {
         accessToken: search.get('access_token'),
       });
 
-      return defaultFetcher<{accessToken?: string}>('/api/auth/validate-token');
+      return defaultFetcher<{ accessToken?: string }>(
+        '/api/auth/validate-token'
+      );
     }
 
-    return defaultFetcher<{accessToken?: string}>('/api/auth/validate-cookie');
+    return defaultFetcher<{ accessToken?: string }>(
+      '/api/auth/validate-cookie'
+    );
   }, [location.search, stores.config]);
+
+  const cleanCache = () => {
+    client.post('/api/clean-cache').then(() => {
+      enqueueSnackbar('清除成功', { variant: 'success' });
+    });
+  };
 
   const updateConfig = () => {
     return defaultFetcher<Partial<Config>>('/api/config');
@@ -142,7 +155,7 @@ export default observer((props: ResponsiveDrawerProps) => {
 
   useEffect(() => {
     validateAuth()
-      .then(user => {
+      .then((user) => {
         if (user.accessToken) {
           stores.config.updateConfig({
             accessToken: user.accessToken,
@@ -151,14 +164,14 @@ export default observer((props: ResponsiveDrawerProps) => {
 
         return updateConfig();
       })
-      .catch(err => {
+      .catch((err) => {
         // 授权失败，直接获取配置信息
         return updateConfig();
       })
-      .then(config => {
+      .then((config) => {
         stores.config.updateConfig(config);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
       });
   }, [stores.config, validateAuth]);
@@ -166,131 +179,149 @@ export default observer((props: ResponsiveDrawerProps) => {
   const drawer = (
     <div>
       <div className={clsx(classes.toolbar, classes.versionInfo)}>
-        {
-          stores.config.isReady && (
-            <>
-              <Typography variant="body2">
-                <span>Core: </span>
-                <code>v{stores.config.config.coreVersion}</code>
-              </Typography>
-              <Typography variant="body2">
-                <span>Backend: </span>
-                <code>v{stores.config.config.backendVersion}</code>
-              </Typography>
-            </>
-          )
-        }
+        {stores.config.isReady && (
+          <>
+            <Typography variant="body2">
+              <span>Core: </span>
+              <code>v{stores.config.config.coreVersion}</code>
+            </Typography>
+            <Typography variant="body2">
+              <span>Backend: </span>
+              <code>v{stores.config.config.backendVersion}</code>
+            </Typography>
+          </>
+        )}
       </div>
       <Divider />
       <List>
-        <ListItemLink to="/artifacts" primary="Artifacts" icon={<SubjectIcon />} />
+        <ListItemLink
+          to="/artifacts"
+          primary="Artifacts"
+          icon={<SubjectIcon />}
+        />
         <ListItemLink to="/providers" primary="Providers" icon={<DnsIcon />} />
+        <li>
+          <ListItem button onClick={() => cleanCache()}>
+            <ListItemIcon>
+              <DeleteIcon />
+            </ListItemIcon>
+            <ListItemText primary="清除缓存" />
+          </ListItem>
+        </li>
       </List>
     </div>
   );
 
   return (
-    <SnackbarProvider maxSnack={3}>
-      <>
-        <CssBaseline />
+    <>
+      <CssBaseline />
 
-        <div className={clsx(classes.root, 'app-root', !isShowNavElements && classes.noDrawer)}>
-          { stores.config.isReady && (
-            <>
-              {
-                isShowNavElements && (
-                  <>
-                    <AppBar position="fixed" className={classes.appBar}>
-                      <Toolbar>
-                        <IconButton
-                          color="inherit"
-                          aria-label="open drawer"
-                          edge="start"
-                          onClick={handleDrawerToggle}
-                          className={classes.menuButton}
-                        >
-                          <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" noWrap className={classes.pageTitle}>
-                          <Link component={RouterLink} to="/">
-                            Surgio Dashboard
-                          </Link>
-                        </Typography>
-                        <div>
-                          <Link href="https://github.com/geekdada/surgio"
-                                rel="noopener noreferrer"
-                                target="_blank">
-                            <GitHubIcon className={classes.appBarIcons} />
-                          </Link>
-                        </div>
-                      </Toolbar>
-                    </AppBar>
+      <div
+        className={clsx(
+          classes.root,
+          'app-root',
+          !isShowNavElements && classes.noDrawer
+        )}
+      >
+        {stores.config.isReady && (
+          <>
+            {isShowNavElements && (
+              <>
+                <AppBar position="fixed" className={classes.appBar}>
+                  <Toolbar>
+                    <IconButton
+                      color="inherit"
+                      aria-label="open drawer"
+                      edge="start"
+                      onClick={handleDrawerToggle}
+                      className={classes.menuButton}
+                    >
+                      <MenuIcon />
+                    </IconButton>
+                    <Typography
+                      variant="h6"
+                      noWrap
+                      className={classes.pageTitle}
+                    >
+                      <Link component={RouterLink} to="/">
+                        Surgio Dashboard
+                      </Link>
+                    </Typography>
+                    <div>
+                      <Link
+                        href="https://github.com/geekdada/surgio"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <GitHubIcon className={classes.appBarIcons} />
+                      </Link>
+                    </div>
+                  </Toolbar>
+                </AppBar>
 
-                    <nav className={classes.drawer} aria-label="folders">
-                      <Hidden lgUp>
-                        <Drawer
-                          container={container}
-                          variant="temporary"
-                          open={mobileOpen}
-                          onClose={handleDrawerToggle}
-                          classes={{
-                            paper: classes.drawerPaper,
-                          }}
-                          ModalProps={{
-                            keepMounted: true, // Better open performance on mobile.
-                          }}
-                        >
-                          {drawer}
-                        </Drawer>
-                      </Hidden>
-                      <Hidden smDown>
-                        <Drawer
-                          classes={{
-                            paper: classes.drawerPaper,
-                          }}
-                          variant="permanent"
-                          open
-                        >
-                          {drawer}
-                        </Drawer>
-                      </Hidden>
-                    </nav>
-                  </>
-                )
-              }
+                <nav className={classes.drawer} aria-label="folders">
+                  <Hidden lgUp>
+                    <Drawer
+                      container={container}
+                      variant="temporary"
+                      open={mobileOpen}
+                      onClose={handleDrawerToggle}
+                      classes={{
+                        paper: classes.drawerPaper,
+                      }}
+                      ModalProps={{
+                        keepMounted: true, // Better open performance on mobile.
+                      }}
+                    >
+                      {drawer}
+                    </Drawer>
+                  </Hidden>
+                  <Hidden smDown>
+                    <Drawer
+                      classes={{
+                        paper: classes.drawerPaper,
+                      }}
+                      variant="permanent"
+                      open
+                    >
+                      {drawer}
+                    </Drawer>
+                  </Hidden>
+                </nav>
+              </>
+            )}
 
-              <main className={classes.content}>
-                { isShowNavElements && <div className={classes.toolbar} /> }
+            <main className={classes.content}>
+              {isShowNavElements && <div className={classes.toolbar} />}
 
-                <Switch>
-                  <Route path="/list-artifact">
-                    <Redirect to="/artifacts" />
-                  </Route>
-                  <Route path="/artifacts">
-                    <ArtifactListPage />
-                  </Route>
-                  <Route path="/providers">
-                    <ProviderListPage />
-                  </Route>
-                  <Route path="/auth">
-                    <AuthPage />
-                  </Route>
-                  <Route path="/embed/artifact/:artifactName">
-                    <EmbedArtifactPage />
-                  </Route>
-                  <Route exact path="/">
-                    <HomePage />
-                  </Route>
-                  <Route path="*">
-                    <NotFoundPage />
-                  </Route>
-                </Switch>
-              </main>
-            </>
-          ) }
-        </div>
-      </>
-    </SnackbarProvider>
+              <Switch>
+                <Route path="/list-artifact">
+                  <Redirect to="/artifacts" />
+                </Route>
+                <Route path="/artifacts">
+                  <ArtifactListPage />
+                </Route>
+                <Route path="/providers">
+                  <ProviderListPage />
+                </Route>
+                <Route path="/auth">
+                  <AuthPage />
+                </Route>
+                <Route path="/embed/artifact/:artifactName">
+                  <EmbedArtifactPage />
+                </Route>
+                <Route exact path="/">
+                  <HomePage />
+                </Route>
+                <Route path="*">
+                  <NotFoundPage />
+                </Route>
+              </Switch>
+            </main>
+          </>
+        )}
+      </div>
+    </>
   );
 });
 
@@ -305,12 +336,12 @@ function ListItemLink(props: ListItemLinkProps) {
 
   const renderLink = React.useMemo(
     () =>
-      forwardRef<any, Omit<RouterLinkProps, 'to'>>(function ListItemInnerComponent(itemProps, ref) {
-        return (
-          <RouterLink to={to} ref={ref} {...itemProps} />
-        );
-      }),
-    [to],
+      forwardRef<any, Omit<RouterLinkProps, 'to'>>(
+        function ListItemInnerComponent(itemProps, ref) {
+          return <RouterLink to={to} ref={ref} {...itemProps} />;
+        }
+      ),
+    [to]
   );
 
   return (
@@ -322,3 +353,5 @@ function ListItemLink(props: ListItemLinkProps) {
     </li>
   );
 }
+
+export default App;

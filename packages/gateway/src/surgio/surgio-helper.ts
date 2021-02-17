@@ -1,18 +1,23 @@
+import os from 'os';
 import { basename, join } from 'path';
-import fs, { promises as fsp } from 'fs';
+import fs from 'fs-extra';
+import { TMP_FOLDER_NAME } from 'surgio/build/utils/constant';
 import { Environment } from 'nunjucks';
 import semver from 'semver';
 import { Logger } from '@nestjs/common';
 import { getEngine } from 'surgio/build/generator/template';
 import { getProvider } from 'surgio/build/provider';
-import { ArtifactConfig, CommandConfig, RemoteSnippet } from 'surgio/build/types';
-import { loadRemoteSnippetList } from 'surgio/build/utils/remote-snippet';
+import {
+  ArtifactConfig,
+  CommandConfig,
+  RemoteSnippet,
+} from 'surgio/build/types';
 import { PackageJson } from 'type-fest';
 
 type PossibleProviderType = ReturnType<typeof getProvider>;
 
 export class SurgioHelper {
-  public remoteSnippetList: ReadonlyArray<RemoteSnippet>;
+  public remoteSnippetList?: ReadonlyArray<RemoteSnippet>;
   public artifactList: ReadonlyArray<ArtifactConfig>;
   public providerMap: Map<string, PossibleProviderType> = new Map();
   public readonly templateEngine: Environment;
@@ -31,21 +36,19 @@ export class SurgioHelper {
 
   public async init(): Promise<this> {
     await this.checkCoreVersion();
-
-    // const remoteSnippetsConfig = this.config.remoteSnippets || [];
-    // this.remoteSnippetList = await loadRemoteSnippetList(remoteSnippetsConfig);
-
     await this.readProviders();
 
     return this;
   }
 
   private async readProviders(): Promise<void> {
-    const files = await fsp.readdir(this.config.providerDir, {
+    const files = await fs.readdir(this.config.providerDir, {
       encoding: 'utf8',
     });
 
-    async function readProvider(path): Promise<PossibleProviderType|undefined> {
+    async function readProvider(
+      path
+    ): Promise<PossibleProviderType | undefined> {
       let provider;
 
       try {
@@ -78,12 +81,30 @@ export class SurgioHelper {
 
     if (!semver.satisfies(corePkgFile.version, peerVersion)) {
       Logger.warn('', undefined, false);
-      Logger.warn('Surgio 版本过低，请升级后重新运行！', undefined, false);
+      Logger.warn(
+        'Surgio 版本过低，请运行下面命令升级后重新运行！',
+        undefined,
+        false
+      );
       Logger.warn('', undefined, false);
       Logger.warn('  命令：', undefined, false);
       Logger.warn('  npm install surgio@latest', undefined, false);
       Logger.warn('', undefined, false);
       throw new Error('Surgio 版本过低');
+    }
+  }
+
+  public async cleanCache(): Promise<void> {
+    const tmpDir = join(os.tmpdir(), TMP_FOLDER_NAME);
+
+    if (this.remoteSnippetList) {
+      Logger.log('已清除远程片段');
+      this.remoteSnippetList = undefined;
+    }
+
+    if (fs.existsSync(tmpDir)) {
+      Logger.log('已清除文件缓存');
+      await fs.remove(tmpDir);
     }
   }
 }

@@ -83,7 +83,7 @@ export class SurgioService {
       this.surgioHelper.config,
       artifactConfig,
       {
-        remoteSnippetList: this.surgioHelper.remoteSnippetList,
+        remoteSnippetList: this.surgioHelper.remoteSnippetList || [],
         templateEngine: this.surgioHelper.templateEngine,
       }
     );
@@ -117,7 +117,7 @@ export class SurgioService {
     return await generate(
       this.surgioHelper.config,
       artifact,
-      this.surgioHelper.remoteSnippetList,
+      this.surgioHelper.remoteSnippetList || [],
       this.surgioHelper.templateEngine
     );
   }
