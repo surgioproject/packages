@@ -2863,7 +2863,7 @@
   integrity sha512-+iTbntw2IZPb/anVDbypzfQa+ay64MW0Zo8aJ8gZPWMMK6/OubMVb6lUPMagqjOPnmtauXnFCACVl3O7ogjeqQ==
 
 "@surgio/gateway-frontend@file:packages/gateway-frontend":
-  version "1.2.0"
+  version "1.4.0"
 
 "@svgr/babel-plugin-add-jsx-attribute@^4.2.0":
   version "4.2.0"
@@ -16651,10 +16651,10 @@ supports-color@^8.0.0:
   dependencies:
     has-flag "^4.0.0"
 
-surgio@^2.7.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/surgio/-/surgio-2.9.0.tgz#e0ad36eb87be8ddb2ee42acba10bd34def8745a9"
-  integrity sha512-Iuc0vP+a2bwTZDmKY2xpjBe3PRCmSSgc/dQtIBvtxQl2yItrDRRzXzUdrZVsmlvNydl4tAxus3U9IVUmuNW2Vw==
+surgio@^2.9.1:
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/surgio/-/surgio-2.9.1.tgz#3371df7aa75c914a8e55523d2e0d5cd815ff58c4"
+  integrity sha512-r6uYPVCbky1MFQQ51oc+SseXA5ew55SBxQ4xOnXugwiwj763N/NMFojIFTsuy4gRXnrYdvo99AHgotgUW1ya7Q==
   dependencies:
     "@hapi/joi" "^17.1.1"
     "@royli/hygen" "^5.0.4"
