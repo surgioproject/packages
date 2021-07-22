@@ -13,6 +13,7 @@ import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import _ from 'lodash';
 import { formatSubscriptionUserInfo } from 'surgio/build/utils/subscription';
+import { pkg as corePkgFile } from 'surgio';
 
 import { BearerAuthGuard } from '../auth/bearer.guard';
 import { CookieAuthGuard } from '../auth/cookie.guard';
@@ -85,7 +86,7 @@ export class ApiController {
           'publicUrl',
         ]),
         backendVersion: require('../../package.json').version,
-        coreVersion: require('surgio/package.json').version,
+        coreVersion: corePkgFile.version as string,
         needAuth:
           this.surgioService.surgioHelper.config?.gateway?.auth ?? false,
       },

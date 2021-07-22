@@ -13,6 +13,7 @@ import {
   RemoteSnippet,
 } from 'surgio/build/types';
 import { PackageJson } from 'type-fest';
+import { pkg as corePkgFile } from 'surgio';
 
 type PossibleProviderType = ReturnType<typeof getProvider>;
 
@@ -75,11 +76,10 @@ export class SurgioHelper {
   }
 
   private async checkCoreVersion(): Promise<void> {
-    const corePkgFile = require('surgio/package.json');
     const gatewayPkgFile = require('../../package.json');
     const peerVersion = gatewayPkgFile.peerDependencies.surgio;
 
-    if (!semver.satisfies(corePkgFile.version, peerVersion)) {
+    if (!semver.satisfies(corePkgFile.version as string, peerVersion)) {
       Logger.warn('', undefined, false);
       Logger.warn(
         'Surgio 版本过低，请运行下面命令升级后重新运行！',
