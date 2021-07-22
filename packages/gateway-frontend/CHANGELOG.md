@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@1.2.0...@surgio/gateway-frontend@1.3.0) (2021-07-22)
+
+
+### Features
+
+* remove polyfill ([9ccd921](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/9ccd9211d2d5fcc91716d81eaf82d0ef47f10ff6))
+
+
+
+
+
 # [1.2.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@1.1.1...@surgio/gateway-frontend@1.2.0) (2021-02-17)
 
 
