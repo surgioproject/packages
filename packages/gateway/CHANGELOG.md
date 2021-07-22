@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.3.0...@surgio/gateway@1.3.2) (2021-07-22)
+
+
+### Bug Fixes
+
+* bugfix ([72dc35b](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/72dc35b76ef77add4991ab1c19fc67a440eab9f0))
+
+
+
+
+
 ## [1.3.1](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.3.0...@surgio/gateway@1.3.1) (2021-07-22)
 
 
