@@ -9,15 +9,12 @@ import {
   UseGuards,
   Req,
   Logger,
-  All,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { IncomingMessage, ServerResponse } from 'http';
 import { Artifact } from 'surgio/build/generator/artifact';
 import _ from 'lodash';
 import { getUrl } from 'surgio/build/utils';
 import { URL } from 'url';
-import cors from '@royli/cors-anywhere';
 import LRU from 'lru-cache';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
@@ -27,23 +24,9 @@ import { SurgioService } from './surgio/surgio.service';
 
 dayjs.extend(duration);
 
-function parseEnvList(env): ReadonlyArray<string> {
-  if (!env) {
-    return [];
-  }
-  return env.split(',');
-}
-
 const resCache = new LRU<string, string>({
   max: 100,
   maxAge: dayjs.duration({ days: 7 }).asMilliseconds(),
-});
-const originBlacklist = parseEnvList(process.env.CORSANYWHERE_BLACKLIST);
-const originWhitelist = parseEnvList(process.env.CORSANYWHERE_WHITELIST);
-const proxy = cors.createServer({
-  originBlacklist,
-  originWhitelist,
-  removeHeaders: ['cookie', 'cookie2'],
 });
 
 @Controller()
@@ -288,21 +271,6 @@ export class AppController {
     }
   }
 
-  @All('/proxy')
-  public async proxy(
-    @Req() req: IncomingMessage,
-    @Res() res: ServerResponse
-  ): Promise<void> {
-    if (!req.url) {
-      throw new HttpException('BAD REQUEST', HttpStatus.BAD_REQUEST);
-    } else {
-      req.url = req.url
-        .replace(/^(\/proxy)?\/https:\/{1,2}(.*)/, '/https://$2')
-        .replace(/^(\/proxy)?\/http:\/{1,2}(.*)/, '/http://$2');
-      proxy.emit('request', req, res);
-    }
-  }
-
   private async sendPayload(
     req: Request,
     res: Response,
@@ -331,7 +299,8 @@ export class AppController {
 
         if (provider.supportGetSubscriptionUserInfo) {
           try {
-            const subscriptionUserInfo = await provider.getSubscriptionUserInfo();
+            const subscriptionUserInfo =
+              await provider.getSubscriptionUserInfo();
 
             if (subscriptionUserInfo) {
               const values = ['upload', 'download', 'total', 'expire'].map(

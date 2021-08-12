@@ -2785,14 +2785,6 @@
   dependencies:
     "@octokit/openapi-types" "^9.1.0"
 
-"@royli/cors-anywhere@^0.4.4":
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/@royli/cors-anywhere/-/cors-anywhere-0.4.4.tgz#5e2c2f515074ccb931c5877b94365afdfacc8e46"
-  integrity sha512-WqM5AWO+bag0CvpkVBCp4ZEKNQ0XUSa5JVv4vF3rJJ/fFmGHbEfhMmdKEE6afwTiSgRwLCKUbxdvWNLjwneGQA==
-  dependencies:
-    http-proxy "1.18.1"
-    proxy-from-env "0.0.1"
-
 "@royli/hygen@^5.0.4":
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/@royli/hygen/-/hygen-5.0.4.tgz#43e6f05e9c783ec3cd80f25792b036210fa540fc"
@@ -9375,7 +9367,7 @@ http-proxy-middleware@^1.0.4:
     is-plain-obj "^3.0.0"
     micromatch "^4.0.2"
 
-http-proxy@1.18.1, http-proxy@^1.17.0, http-proxy@^1.18.1:
+http-proxy@^1.17.0, http-proxy@^1.18.1:
   version "1.18.1"
   resolved "https://registry.yarnpkg.com/http-proxy/-/http-proxy-1.18.1.tgz#401541f0534884bbf95260334e72f88ee3976549"
   integrity sha512-7mz/721AbnJwIVbnaSv1Cz3Am0ZLT/UBwkC92VlxhXv/k/BBQfM2fXElQNC27BVGr0uwUpplYPQM9LnaBMR5NQ==
@@ -14423,11 +14415,6 @@ proxy-agent@^4.0.1:
     pac-proxy-agent "^4.1.0"
     proxy-from-env "^1.0.0"
     socks-proxy-agent "^5.0.0"
-
-proxy-from-env@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-0.0.1.tgz#b27c4946e9e6d5dbadb7598a6435d3014c4cfd49"
-  integrity sha1-snxJRunm1dutt1mKZDXTAUxM/Uk=
 
 proxy-from-env@^1.0.0:
   version "1.1.0"

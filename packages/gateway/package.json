@@ -35,7 +35,6 @@
     "@nestjs/passport": "^7.0.0",
     "@nestjs/platform-express": "^7.3.2",
     "@nestjs/serve-static": "^2.1.1",
-    "@royli/cors-anywhere": "^0.4.4",
     "@surgio/gateway-frontend": "file:../gateway-frontend",
     "bluebird": "^3.7.2",
     "cookie-parser": "^1.4.5",
