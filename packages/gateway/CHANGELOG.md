@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.3.3...@surgio/gateway@1.4.0) (2021-08-12)
+
+
+### Features
+
+* remove cors package and route ([9e275ad](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/9e275add6ee4548605a2571edb265d27e8f74040))
+
+
+
+
+
 ## [1.3.3](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/@surgio/gateway@1.3.2...@surgio/gateway@1.3.3) (2021-07-22)
 
 **Note:** Version bump only for package @surgio/gateway
