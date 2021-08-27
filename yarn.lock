@@ -16638,10 +16638,10 @@ supports-color@^8.0.0:
   dependencies:
     has-flag "^4.0.0"
 
-surgio@^2.9.1:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/surgio/-/surgio-2.9.1.tgz#3371df7aa75c914a8e55523d2e0d5cd815ff58c4"
-  integrity sha512-r6uYPVCbky1MFQQ51oc+SseXA5ew55SBxQ4xOnXugwiwj763N/NMFojIFTsuy4gRXnrYdvo99AHgotgUW1ya7Q==
+surgio@^2.10.1:
+  version "2.10.1"
+  resolved "https://registry.yarnpkg.com/surgio/-/surgio-2.10.1.tgz#e387da6b6780d1550bb999444bd845187b8336f8"
+  integrity sha512-mcUsQUNYAmHiQ97z9kSBdWozZwifCpXqvmro6M+yB7NC2J81AkRRkF+XrXKGrBuWNpwZkMKUQ1L1ooPdkIuZ4g==
   dependencies:
     "@hapi/joi" "^17.1.1"
     "@royli/hygen" "^5.0.4"

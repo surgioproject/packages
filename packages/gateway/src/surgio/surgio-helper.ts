@@ -6,7 +6,7 @@ import { Environment } from 'nunjucks';
 import semver from 'semver';
 import { Logger } from '@nestjs/common';
 import { getEngine } from 'surgio/build/generator/template';
-import { getProvider } from 'surgio/build/provider';
+import { getProvider, PossibleProviderType } from 'surgio/build/provider';
 import {
   ArtifactConfig,
   CommandConfig,
@@ -14,8 +14,6 @@ import {
 } from 'surgio/build/types';
 import { PackageJson } from 'type-fest';
 import { pkg as corePkgFile } from 'surgio';
-
-type PossibleProviderType = ReturnType<typeof getProvider>;
 
 export class SurgioHelper {
   public remoteSnippetList?: ReadonlyArray<RemoteSnippet>;
@@ -55,7 +53,7 @@ export class SurgioHelper {
       try {
         const providerName = basename(path, '.js');
 
-        provider = getProvider(providerName, require(path));
+        provider = await getProvider(providerName, require(path));
       } catch (err) {
         return undefined;
       }

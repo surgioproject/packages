@@ -1,7 +1,7 @@
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { generate } from 'surgio/build/generate';
 import { Artifact } from 'surgio/build/generator/artifact';
-import { getProvider } from 'surgio/build/provider';
+import { PossibleProviderType } from 'surgio/build/provider';
 import { CommandConfig } from 'surgio/build/types';
 
 import { SurgioHelper } from './surgio-helper';
@@ -122,7 +122,7 @@ export class SurgioService {
     );
   }
 
-  public listProviders(): ReadonlyArray<ReturnType<typeof getProvider>> {
+  public listProviders(): ReadonlyArray<PossibleProviderType> {
     return Array.from(this.surgioHelper.providerMap.values());
   }
 

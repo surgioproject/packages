@@ -58,7 +58,7 @@
     "@nestjs/testing": "^7.3.2"
   },
   "peerDependencies": {
-    "surgio": "^2.9.1"
+    "surgio": "^2.10.1"
   },
   "files": [
     "dist"
