@@ -3,7 +3,7 @@
 exports[`AppController (e2e) /export-providers (GET) 1`] = `
 "ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
-vmess = vmess, server, 443, username=uuid
+vmess = vmess, server, 443, username=uuid, vmess-aead=true
 http 1 = https, server, 443, username, password, skip-cert-verify=false, tls13=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
@@ -17,7 +17,7 @@ exports[`AppController (e2e) /export-providers (GET) internal filter 1`] = `""`;
 exports[`AppController (e2e) /export-providers (GET) multiple providers 1`] = `
 "ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
-vmess = vmess, server, 443, username=uuid
+vmess = vmess, server, 443, username=uuid, vmess-aead=true
 http 1 = https, server, 443, username, password, skip-cert-verify=false, tls13=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
@@ -32,7 +32,7 @@ exports[`AppController (e2e) /export-providers (GET) multiple providers 404 1`] 
 exports[`AppController (e2e) /export-providers (GET) private filter 1`] = `
 "ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
-vmess = vmess, server, 443, username=uuid
+vmess = vmess, server, 443, username=uuid, vmess-aead=true
 ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com
 🇺🇸 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"
 `;
@@ -42,7 +42,7 @@ exports[`AppController (e2e) /export-providers (GET) using template 1`] = `
 
 ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
-vmess = vmess, server, 443, username=uuid
+vmess = vmess, server, 443, username=uuid, vmess-aead=true
 http 1 = https, server, 443, username, password, skip-cert-verify=false, tls13=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
@@ -61,7 +61,7 @@ Snell = snell, us.example.com, 443, psk=password, obfs=tls
 HTTPS = https, us.example.com, 443, username, password
 ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
-vmess = vmess, server, 443, username=uuid
+vmess = vmess, server, 443, username=uuid, vmess-aead=true
 http 1 = https, server, 443, username, password, skip-cert-verify=false, tls13=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
