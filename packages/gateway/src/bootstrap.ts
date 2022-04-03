@@ -10,6 +10,9 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
     createAdapter(),
+    {
+      logger: process.env.NODE_ENV === 'production' ? ['error', 'warn'] : true,
+    }
   );
 
   applyMiddlwares(app);

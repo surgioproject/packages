@@ -51,6 +51,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.5",
     "semver": "^7.3.2",
+    "serverless-http": "^2.7.0",
     "source-map-support": "^0.5.19",
     "youch": "^2.0.10"
   },
