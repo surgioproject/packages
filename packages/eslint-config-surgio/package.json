@@ -14,11 +14,6 @@
     "type": "git",
     "url": "git+https://github.com/surgioproject/packages.git"
   },
-  "scripts": {
-    "build": "exit 0",
-    "test:ci": "exit 0",
-    "lint": "exit 0"
-  },
   "bugs": {
     "url": "https://github.com/surgioproject/packages/issues"
   },

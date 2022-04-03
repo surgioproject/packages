@@ -14,7 +14,7 @@ describe('ApiController (e2e)', () => {
   let surgioService: SurgioService;
 
   beforeAll(async () => {
-    app = await NestFactory.create(AppModule);
+    app = await NestFactory.create(AppModule, { logger: false });
     applyMiddlwares(app);
 
     surgioService = app.get<SurgioService>('SurgioService');

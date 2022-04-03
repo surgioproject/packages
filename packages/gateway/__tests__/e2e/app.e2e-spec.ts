@@ -1,8 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-// @ts-ignore
 import supertest from 'supertest';
-// @ts-ignore
 import Bluebird from 'bluebird';
 
 import { AppModule } from '../../src/app.module';
@@ -14,7 +12,7 @@ describe('AppController (e2e)', () => {
   let token;
 
   beforeAll(async () => {
-    app = await NestFactory.create(AppModule);
+    app = await NestFactory.create(AppModule, { logger: false });
     applyMiddlwares(app);
 
     const surgioService = app.get<SurgioService>('SurgioService');

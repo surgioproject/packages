@@ -44,4 +44,4 @@ jobs:
     - name: test, report coverage
       run: |
         yarn lint
-        yarn test:ci
+        yarn test

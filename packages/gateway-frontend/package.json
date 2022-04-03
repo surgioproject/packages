@@ -10,10 +10,10 @@
     "dev": "craco start",
     "prebuild": "rimraf build",
     "build": "craco build",
-    "test": "craco test --watchAll=false",
+    "test": "run-s test:ci",
     "test:watch": "craco test --watchAll",
     "test:cov": "craco test --coverage --watchAll=false",
-    "test:ci": "run-s test",
+    "test:ci": "craco test --watchAll=false",
     "lint": "eslint . --ext .ts,.tsx",
     "prepare": "run-s build"
   },
