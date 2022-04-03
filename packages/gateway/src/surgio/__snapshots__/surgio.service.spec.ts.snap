@@ -8,7 +8,7 @@ Snell = snell, us.example.com, 443, psk=password, obfs=tls
 HTTPS = https, us.example.com, 443, username, password
 ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
-vmess = vmess, server, 443, username=uuid
+vmess = vmess, server, 443, username=uuid, vmess-aead=true
 http 1 = https, server, 443, username, password, skip-cert-verify=false, tls13=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
@@ -48,7 +48,7 @@ Snell = snell, us.example.com, 443, psk=password, obfs=tls
 HTTPS = https, us.example.com, 443, username, password
 ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
-vmess = vmess, server, 443, username=uuid
+vmess = vmess, server, 443, username=uuid, vmess-aead=true
 http 1 = https, server, 443, username, password, skip-cert-verify=false, tls13=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
@@ -58,17 +58,17 @@ ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password,
 exports[`SurgioService transformArtifact format should work 2`] = `
 "shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com, tag=🇺🇸US 1
 shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, tag=🇺🇸US 2
-shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=wss, obfs-host=gateway-carry.icloud.com, obfs-uri=/, tag=🇺🇸US 3
+shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=wss, obfs-host=gateway-carry.icloud.com, obfs-uri=/, tls-verification=true, tag=🇺🇸US 3
 shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com, udp-relay=true, fast-open=true, tag=🇺🇸 US
 http=us.example.com:443, username=username, password=password, over-tls=true, tls-verification=true, tag=HTTPS
 shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, udp-relay=true, tag=ss1
 shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=www.bing.com, tag=ss2
 shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=ws, obfs-host=server, obfs-uri=/, tag=ss3
-vmess=server:443, method=chacha20-ietf-poly1305, password=uuid, tag=vmess
+vmess=server:443, method=chacha20-ietf-poly1305, password=uuid, aead=true, tag=vmess
 http=server:443, username=username, password=password, over-tls=true, tls-verification=true, tag=http 1
 http=server:443, username=username, password=password, tag=http 2
 shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=example.com, tag=ss4
-shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=wss, obfs-host=cloudflare.com, obfs-uri=/ws, tag=ss-wss"
+shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=wss, obfs-host=cloudflare.com, obfs-uri=/ws, tls-verification=true, tag=ss-wss"
 `;
 
 exports[`SurgioService transformArtifact format should work 3`] = `
