@@ -19,6 +19,7 @@
     "@material-ui/lab": "^4.0.0-alpha.50",
     "@nestjs/cli": "^7.1.2",
     "@nestjs/schematics": "^7.0.0",
+    "@nestjs/testing": "^7.3.2",
     "@testing-library/dom": "^7.16.2",
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/react": "^10.4.5",
@@ -60,8 +61,7 @@
     "jest": "^24.9.0",
     "ky": "^0.24.0",
     "ky-universal": "^0.8.1",
-    "lerna": "^3.22.1",
-    "light-my-request": "^4.0.1",
+    "lerna": "^4.0.0",
     "lint-staged": "^10.1.7",
     "lodash-es": "^4.17.15",
     "mobx": "^5.15.4",
@@ -106,8 +106,5 @@
       "commit-msg": "commitlint -c .commitlintrc.json -E HUSKY_GIT_PARAMS",
       "pre-commit": "npm-debug-log-cleaner && lint-staged"
     }
-  },
-  "engines": {
-    "node": ">=12.0.0"
   }
 }

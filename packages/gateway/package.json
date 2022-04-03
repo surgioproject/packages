@@ -54,9 +54,6 @@
     "source-map-support": "^0.5.19",
     "youch": "^2.0.10"
   },
-  "devDependencies": {
-    "@nestjs/testing": "^7.3.2"
-  },
   "peerDependencies": {
     "surgio": "^2.10.1"
   },
