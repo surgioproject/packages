@@ -1,6 +1,6 @@
 {
   "name": "@surgio/eslint-config-surgio",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "ESLint config for Surgio config stores",
   "keywords": [
     "surgio",

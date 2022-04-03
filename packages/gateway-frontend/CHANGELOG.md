@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/surgioproject/packages/compare/@surgio/gateway-frontend@1.4.0...@surgio/gateway-frontend@1.5.0) (2022-04-03)
+
+
+### Features
+
+* new export createLambdaHandler ([dfa5bb2](https://github.com/surgioproject/packages/commit/dfa5bb2b237696dbb1d91f93adf8264533b8b281))
+
+
+
+
+
 # [1.4.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/@surgio/gateway-frontend@1.2.0...@surgio/gateway-frontend@1.4.0) (2021-07-22)
 
 
