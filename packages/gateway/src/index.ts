@@ -1,18 +1,17 @@
 import 'source-map-support/register';
 import { ConfigService } from '@nestjs/config';
-import { createServer, IncomingMessage, OutgoingMessage, Server } from 'http'
-import serverless, { Handler } from 'serverless-http'
+import { createServer, IncomingMessage, OutgoingMessage, Server } from 'http';
+import serverless, { Handler } from 'serverless-http';
 
 import { bootstrap } from './bootstrap';
 
 export const createHttpServer = (): Server => {
-  const prepare = bootstrap()
-    .then(nestApp => {
-      return nestApp.init();
-    });
+  const prepare = bootstrap().then((nestApp) => {
+    return nestApp.init();
+  });
 
   return createServer((req: IncomingMessage, res: OutgoingMessage) => {
-    prepare.then(nestApp => {
+    prepare.then((nestApp) => {
       nestApp.getHttpServer().emit('request', req, res);
     });
   });
@@ -22,7 +21,7 @@ export const startServer = (): Promise<Server> => {
   let port: number;
 
   return bootstrap()
-    .then(app => {
+    .then((app) => {
       const configService = app.get<ConfigService>('ConfigService');
       port = configService.get('port') as number;
 
@@ -32,7 +31,7 @@ export const startServer = (): Promise<Server> => {
       console.log('> Your app is ready at http://127.0.0.1:' + port);
       return httpServer;
     })
-    .catch(err => {
+    .catch((err) => {
       console.error('⚠️ 服务启动失败');
       console.error(err);
       process.exit(1);
@@ -40,7 +39,7 @@ export const startServer = (): Promise<Server> => {
 };
 
 export const createLambdaHandler = () => {
-  let handler: Handler
+  let handler: Handler;
 
   return async (event, context) => {
     if (!handler) {
@@ -52,6 +51,6 @@ export const createLambdaHandler = () => {
 
     return await handler(event, context);
   };
-}
+};
 
 export const bootstrapServer = bootstrap;

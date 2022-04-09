@@ -35,7 +35,9 @@ describe('AuthService', () => {
   it('ignore validation when auth turned off', () => {
     const sandbox = sinon.createSandbox();
 
-    sandbox.stub(surgioService.surgioHelper.config.gateway, 'auth').value(false);
+    sandbox
+      .stub(surgioService.surgioHelper.config.gateway, 'auth')
+      .value(false);
 
     expect(authService.validateAccessToken('false')).toBeTruthy();
 

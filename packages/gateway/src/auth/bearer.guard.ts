@@ -11,7 +11,7 @@ export class BearerAuthGuard extends AuthGuard('bearer') {
   }
 
   public canActivate(
-    context: ExecutionContext,
+    context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {
     const needAuth = this.surgioHelper.config?.gateway?.auth;
 

@@ -24,7 +24,10 @@ export class CookieParserMiddleware implements NestMiddleware {
     }
 
     if (CookieParserMiddleware.secret) {
-      cookieParser(CookieParserMiddleware.secret as string|string[], CookieParserMiddleware.options)(req, res, next);
+      cookieParser(
+        CookieParserMiddleware.secret as string | string[],
+        CookieParserMiddleware.options
+      )(req, res, next);
     } else {
       cookieParser()(req, res, next);
     }

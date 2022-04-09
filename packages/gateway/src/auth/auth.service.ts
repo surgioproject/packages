@@ -9,6 +9,8 @@ export class AuthService {
     const config = this.surgioService.surgioHelper.config;
     const needAuth = config?.gateway?.auth;
 
-    return !needAuth || (needAuth && accessToken === config.gateway?.accessToken);
+    return (
+      !needAuth || (needAuth && accessToken === config.gateway?.accessToken)
+    );
   }
 }

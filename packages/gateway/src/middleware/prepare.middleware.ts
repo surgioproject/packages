@@ -14,9 +14,10 @@ export class PrepareMiddleware implements NestMiddleware {
       const remoteSnippetsConfig = surgioHelper.config.remoteSnippets || [];
 
       if (!surgioHelper.remoteSnippetList) {
-        surgioHelper.remoteSnippetList = await loadRemoteSnippetList(remoteSnippetsConfig);
+        surgioHelper.remoteSnippetList = await loadRemoteSnippetList(
+          remoteSnippetsConfig
+        );
       }
-    })()
-      .then(next);
+    })().then(next);
   }
 }

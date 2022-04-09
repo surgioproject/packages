@@ -13,7 +13,7 @@ export const createLogger = (options: CreateLoggerOptions = {}): Logger => {
   const formats = [
     options.service ? format.label({ label: options.service }) : format.label(),
     format.timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss'
+      format: 'YYYY-MM-DD HH:mm:ss',
     }),
     format.errors({ stack: true }),
     format.splat(),
@@ -24,14 +24,12 @@ export const createLogger = (options: CreateLoggerOptions = {}): Logger => {
 
   return winston.createLogger({
     format: loggerFormat,
-    transports: [
-      transports.console,
-    ],
+    transports: [transports.console],
   });
 };
 
 export const logger = createLogger({
-  service: 'surgio'
+  service: 'surgio',
 });
 
 export interface CreateLoggerOptions extends LoggerOptions {

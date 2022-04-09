@@ -10,7 +10,9 @@ export class BearerStrategy extends PassportStrategy(Strategy) {
     super();
   }
 
-  public async validate(accessToken: string): Promise<{readonly accessToken: string}> {
+  public async validate(
+    accessToken: string
+  ): Promise<{ readonly accessToken: string }> {
     const result = await this.authService.validateAccessToken(accessToken);
     if (!result) {
       throw new UnauthorizedException();

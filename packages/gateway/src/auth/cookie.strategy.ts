@@ -7,9 +7,7 @@ import { AuthService } from './auth.service';
 
 @Injectable()
 export class CookieStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    private readonly authService: AuthService,
-  ) {
+  constructor(private readonly authService: AuthService) {
     super({
       cookieName: '_t',
       signed: true,
@@ -17,7 +15,10 @@ export class CookieStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  public async validate(@Req() req: Request, accessToken: string): Promise<{readonly accessToken: string}> {
+  public async validate(
+    @Req() req: Request,
+    accessToken: string
+  ): Promise<{ readonly accessToken: string }> {
     const result = await this.authService.validateAccessToken(accessToken);
     if (!result) {
       throw new UnauthorizedException();

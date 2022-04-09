@@ -44,15 +44,11 @@ export class AppModule {
     const secret = this.configService.get('secret');
 
     CookieParserMiddleware.configure(secret);
-    consumer
-      .apply(CookieParserMiddleware)
-      .forRoutes('*');
+    consumer.apply(CookieParserMiddleware).forRoutes('*');
 
     consumer
       .apply(PrepareMiddleware)
-      .exclude(
-        { path: 'render', method: RequestMethod.ALL },
-      )
+      .exclude({ path: 'render', method: RequestMethod.ALL })
       .forRoutes(AppController);
   }
 }

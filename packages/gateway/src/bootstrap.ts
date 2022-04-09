@@ -20,7 +20,9 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   return app;
 }
 
-export function applyMiddlwares(app: NestExpressApplication): NestExpressApplication {
+export function applyMiddlwares(
+  app: NestExpressApplication
+): NestExpressApplication {
   app.useGlobalFilters(new AppExceptionsFilter());
   app.use(express.json());
 

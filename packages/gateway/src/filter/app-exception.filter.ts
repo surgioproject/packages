@@ -55,7 +55,7 @@ export class AppExceptionsFilter implements ExceptionFilter {
     }
 
     if (!('accepts' in request)) {
-      const res = (response as unknown) as ServerResponse;
+      const res = response as unknown as ServerResponse;
 
       res.statusCode = responsePayload.statusCode;
       res.end(JSON.stringify(responsePayload));
