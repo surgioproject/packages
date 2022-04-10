@@ -13,7 +13,7 @@ import {
   RemoteSnippet,
 } from 'surgio/build/types';
 import { PackageJson } from 'type-fest';
-import { pkg as corePkgFile } from 'surgio';
+import { pkg as corePkgFile, caches as coreCaches } from 'surgio';
 
 export class SurgioHelper {
   public remoteSnippetList?: ReadonlyArray<RemoteSnippet>;
@@ -84,6 +84,11 @@ export class SurgioHelper {
         undefined,
         false
       );
+      Logger.warn(
+        `要求版本 ${peerVersion}，当前版本 ${corePkgFile.version}`,
+        undefined,
+        false
+      );
       Logger.warn('', undefined, false);
       Logger.warn('  命令：', undefined, false);
       Logger.warn('  npm install surgio@latest', undefined, false);
@@ -104,5 +109,8 @@ export class SurgioHelper {
       Logger.log('已清除文件缓存');
       await fs.remove(tmpDir);
     }
+
+    coreCaches.cleanCaches();
+    Logger.log('已清内存缓存');
   }
 }

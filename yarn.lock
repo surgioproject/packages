@@ -5809,6 +5809,11 @@ clone-response@^1.0.2:
   dependencies:
     mimic-response "^1.0.0"
 
+clone@2.x:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
+  integrity sha1-G39Ln1kfHo+DZwQBYANFoCiHQ18=
+
 clone@^1.0.2:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
@@ -12353,6 +12358,13 @@ nock@^13.0.2:
     lodash.set "^4.3.2"
     propagate "^2.0.0"
 
+node-cache@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/node-cache/-/node-cache-5.1.2.tgz#f264dc2ccad0a780e76253a694e9fd0ed19c398d"
+  integrity sha512-t1QzWwnk4sjLWaQAS8CHgOJ+RAfmHpxFWmc36IWTiWHQfs0w5JDMBS1b1ZxQteo0vVVuWJvIUKHDkkeK7vIGCg==
+  dependencies:
+    clone "2.x"
+
 node-dir@^0.1.17:
   version "0.1.17"
   resolved "https://registry.yarnpkg.com/node-dir/-/node-dir-0.1.17.tgz#5f5665d93351335caabef8f1c554516cf5f1e4e5"
@@ -16746,10 +16758,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-surgio@^2.10.1:
-  version "2.16.0"
-  resolved "https://registry.yarnpkg.com/surgio/-/surgio-2.16.0.tgz#0306eecf368779f20d0b8a616260653430768144"
-  integrity sha512-1XXb4GtLbEZmH8BQGW5J+QYqfBOlFYWwR8LMOvonaZs8Ui2k21C9fbL2b3dM003j1bwRyPqD8+r+1lArybGBqQ==
+surgio@^2.17.0:
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/surgio/-/surgio-2.17.0.tgz#58d7a7ff8a348e21c5e06c7b48991c8d82317432"
+  integrity sha512-ferUvI2SWUuXtLVfT6JhuRSBk3gU52pT59smt303nEnd7Lk4LxQhaCcw/NeTaUkyqQ3YOFxpiI2NU3HiPd8E8g==
   dependencies:
     "@royli/hygen" "^5.0.4"
     "@surgio/eslint-config-surgio" "^1.0.3"
@@ -16780,9 +16792,9 @@ surgio@^2.10.1:
     joi "^17.1.1"
     listr "^0.14.3"
     lodash "^4.17.19"
-    lru-cache "^6.0.0"
     merge-stream "^2.0.0"
     ms "^2.1.3"
+    node-cache "^5.1.2"
     node-dir "^0.1.17"
     nunjucks "^3.2.1"
     ora "^5.1.0"

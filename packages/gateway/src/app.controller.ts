@@ -15,18 +15,18 @@ import { Artifact } from 'surgio/build/generator/artifact';
 import _ from 'lodash';
 import { getUrl } from 'surgio/build/utils';
 import { URL } from 'url';
-import LRU from 'lru-cache';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import NodeCache from 'node-cache';
 
 import { BearerAuthGuard } from './auth/bearer.guard';
 import { SurgioService } from './surgio/surgio.service';
 
 dayjs.extend(duration);
 
-const resCache = new LRU<string, string>({
-  max: 100,
-  maxAge: dayjs.duration({ days: 7 }).asMilliseconds(),
+const resCache = new NodeCache({
+  maxKeys: 100,
+  stdTTL: dayjs.duration({ days: 7 }).asSeconds(),
 });
 
 @Controller()
@@ -48,6 +48,7 @@ export class AppController {
     const filter = query.filter;
     const urlParams = _.omit(query, ['dl', 'format', 'filter', 'access_token']);
     const artifactName: string = params.name;
+    const userAgent = req.headers['user-agent'];
     let artifact: string | undefined | Artifact;
     let isCache = false;
 
@@ -57,12 +58,16 @@ export class AppController {
           ? await this.surgioService.transformArtifact(
               artifactName,
               format,
-              filter
+              filter,
+              userAgent
             )
-          : await this.surgioService.getArtifact(
-              artifactName,
-              new URL(req.url, this.surgioService.config.publicUrl).toString()
-            );
+          : await this.surgioService.getArtifact(artifactName, {
+              downloadUrl: new URL(
+                req.url,
+                this.surgioService.config.publicUrl
+              ).toString(),
+              requestUserAgent: userAgent,
+            });
     } catch (err) {
       if (resCache.has(req.url)) {
         isCache = true;
@@ -87,13 +92,19 @@ export class AppController {
       }
 
       this.logger.warn(
-        `[download-artifact] ${artifactName} "${
-          req.headers['user-agent'] || '-'
-        }"`
+        `[download-artifact] ${artifactName} "${userAgent || '-'}"`
       );
 
-      // @ts-ignore
-      await this.sendPayload(req, res, artifact, urlParams, isCache);
+      await this.sendPayload(
+        req,
+        res,
+        artifact,
+        {
+          ...urlParams,
+          userAgent: userAgent || '',
+        },
+        isCache
+      );
     } else {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     }
@@ -109,6 +120,7 @@ export class AppController {
     const providers: string[] = query.providers
       ? query.providers.split(',').map((item) => item.trim())
       : [];
+    const userAgent = req.headers['user-agent'];
 
     if (!providers.length) {
       throw new HttpException(
@@ -207,13 +219,19 @@ export class AppController {
       }
 
       this.logger.warn(
-        `[download-artifact] ${artifact.artifact.name} "${
-          req.headers['user-agent'] || '-'
-        }"`
+        `[download-artifact] ${artifact.artifact.name} "${userAgent || '-'}"`
       );
 
-      // @ts-ignore
-      await this.sendPayload(req, res, artifact, urlParams, isCache);
+      await this.sendPayload(
+        req,
+        res,
+        artifact,
+        {
+          ...urlParams,
+          userAgent: userAgent || '',
+        },
+        isCache
+      );
     } else {
       await this.sendPayload(req, res, artifact, undefined, isCache);
     }

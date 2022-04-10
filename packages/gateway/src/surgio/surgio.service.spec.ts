@@ -1,14 +1,20 @@
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { join } from 'path';
+import httpClient from 'surgio/build/utils/http-client';
 
 import { SurgioModule } from './surgio.module';
 import { SurgioService } from './surgio.service';
 
 describe('SurgioService', () => {
   let surgioService: SurgioService;
+  let mockedHttpClient;
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
+    mockedHttpClient = jest.spyOn(httpClient, 'get');
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [],
       imports: [
@@ -30,6 +36,18 @@ describe('SurgioService', () => {
 
     expect(artifact).not.toBeUndefined();
     expect(artifact?.render()).toMatchSnapshot();
+  });
+
+  test('getArtifact should supports user-agent', async () => {
+    const artifact = await surgioService.getArtifact('test.conf', {
+      requestUserAgent: 'surgio-test',
+    });
+
+    expect(mockedHttpClient).toHaveBeenLastCalledWith(
+      'http://example.com/clash-sample.yaml',
+      { headers: { 'user-agent': 'surgio-test' }, responseType: 'text' }
+    );
+    expect(artifact).not.toBeUndefined();
   });
 
   test('transformArtifact format should work', async () => {

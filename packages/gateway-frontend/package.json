@@ -10,12 +10,12 @@
     "dev": "craco start",
     "prebuild": "rimraf build",
     "build": "craco build",
-    "test": "run-s test:ci",
+    "test": "yarn test:ci",
     "test:watch": "craco test --watchAll",
     "test:cov": "craco test --coverage --watchAll=false",
     "test:ci": "craco test --watchAll=false",
     "lint": "eslint . --ext .ts,.tsx",
-    "prepare": "run-s build"
+    "prepare": "yarn build"
   },
   "browserslist": {
     "production": [

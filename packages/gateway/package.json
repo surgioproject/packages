@@ -13,14 +13,14 @@
   "homepage": "https://surgio.royli.dev",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "nest build -p tsconfig.build.json",
     "prepare": "run-s build",
     "start": "nest start",
     "start:prod": "node dist/main",
     "dev": "nest start --watch",
     "debug": "nest start --debug --watch",
     "lint": "eslint . --ext .ts",
-    "test": "run-s test:ci",
+    "test": "yarn test:ci",
     "test:unit": "jest",
     "test:e2e": "jest --config __tests__/jest-e2e.json",
     "test:watch": "jest --watch",
@@ -44,6 +44,7 @@
     "http-errors": "^1.7.3",
     "lodash": "^4.17.19",
     "lru-cache": "^6.0.0",
+    "node-cache": "^5.1.2",
     "nunjucks": "^3.2.1",
     "passport": "^0.4.1",
     "passport-cookie": "^1.0.6",
@@ -56,7 +57,7 @@
     "youch": "^2.0.10"
   },
   "peerDependencies": {
-    "surgio": "^2.10.1"
+    "surgio": "^2.17.0"
   },
   "files": [
     "dist"

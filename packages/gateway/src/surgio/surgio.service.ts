@@ -1,5 +1,4 @@
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
-import { generate } from 'surgio/build/generate';
 import { Artifact } from 'surgio/build/generator/artifact';
 import { PossibleProviderType } from 'surgio/build/provider';
 import { CommandConfig } from 'surgio/build/types';
@@ -16,20 +15,26 @@ export class SurgioService {
 
   public async getArtifact(
     artifactName: string,
-    downloadUrl?: string
+    {
+      downloadUrl,
+      requestUserAgent,
+    }: {
+      downloadUrl?: string;
+      requestUserAgent?: string;
+    } = {}
   ): Promise<Artifact | undefined> {
-    const target = this.surgioHelper.artifactList.filter(
+    const target = this.surgioHelper.artifactList.find(
       (item) => item.name === artifactName
     );
 
-    if (!target.length) {
+    if (!target) {
       return undefined;
     }
 
     const artifactInstance = new Artifact(
       this.surgioHelper.config,
       {
-        ...target[0],
+        ...target,
         downloadUrl,
       },
       {
@@ -38,7 +43,9 @@ export class SurgioService {
       }
     );
 
-    return await artifactInstance.init();
+    await artifactInstance.init({ requestUserAgent });
+
+    return artifactInstance;
   }
 
   public async exportProvider(
@@ -88,38 +95,40 @@ export class SurgioService {
       }
     );
 
-    return await artifactInstance.init();
+    await artifactInstance.init({
+      requestUserAgent: options.requestUserAgent,
+    });
+
+    return artifactInstance;
   }
 
   public async transformArtifact(
     artifactName: string,
     format: string,
-    filter?: string
+    filter?: string,
+    requestUserAgent?: string
   ): Promise<Artifact | string | undefined> {
-    const target = this.surgioHelper.artifactList.filter(
+    const target = this.surgioHelper.artifactList.find(
       (item) => item.name === artifactName
     );
 
-    if (!target.length) {
+    if (!target) {
       return undefined;
     }
 
     const artifact = {
-      ...target[0],
+      ...target,
       template: undefined,
-      templateString: this.getTemplateByFormat(
-        format,
-        filter,
-        target[0].provider
-      ),
+      templateString: this.getTemplateByFormat(format, filter, target.provider),
     };
+    const artifactInstance = new Artifact(this.surgioHelper.config, artifact, {
+      remoteSnippetList: this.surgioHelper.remoteSnippetList || [],
+      templateEngine: this.surgioHelper.templateEngine,
+    });
 
-    return await generate(
-      this.surgioHelper.config,
-      artifact,
-      this.surgioHelper.remoteSnippetList || [],
-      this.surgioHelper.templateEngine
-    );
+    await artifactInstance.init({ requestUserAgent });
+
+    return artifactInstance.render();
   }
 
   public listProviders(): ReadonlyArray<PossibleProviderType> {
@@ -174,4 +183,5 @@ export interface ExportProviderOptions {
   readonly downloadUrl?: string;
   readonly filter?: string;
   readonly combineProviders?: ReadonlyArray<string>;
+  readonly requestUserAgent?: string;
 }
