@@ -15,11 +15,15 @@ describe('<ArtifactCard />', () => {
     );
 
     expect(getByTestId('download-button')).toBeInTheDocument();
-    expect(getByTestId('download-button'))
-      .toHaveAttribute('href', 'http://localhost/get-artifact/test.conf?dl=1');
+    expect(getByTestId('download-button')).toHaveAttribute(
+      'href',
+      'http://localhost/get-artifact/test.conf?dl=1'
+    );
     expect(getByTestId('preview-button')).toBeInTheDocument();
-    expect(getByTestId('preview-button'))
-      .toHaveAttribute('href', 'http://localhost/get-artifact/test.conf');
+    expect(getByTestId('preview-button')).toHaveAttribute(
+      'href',
+      'http://localhost/get-artifact/test.conf'
+    );
 
     expect(getAllByTestId('display-provider-item').length).toBe(1);
     expect(getAllByTestId('display-provider-item')[0].textContent).toBe('test');
@@ -39,8 +43,12 @@ describe('<ArtifactCard />', () => {
 
     expect(getAllByTestId('display-provider-item').length).toBe(3);
     expect(getAllByTestId('display-provider-item')[0].textContent).toBe('test');
-    expect(getAllByTestId('display-provider-item')[1].textContent).toBe('test2');
-    expect(getAllByTestId('display-provider-item')[2].textContent).toBe('test3');
+    expect(getAllByTestId('display-provider-item')[1].textContent).toBe(
+      'test2'
+    );
+    expect(getAllByTestId('display-provider-item')[2].textContent).toBe(
+      'test3'
+    );
   });
 
   test('displays categories', () => {
@@ -54,8 +62,12 @@ describe('<ArtifactCard />', () => {
     );
 
     expect(getAllByTestId('display-category-item').length).toBe(2);
-    expect(getAllByTestId('display-category-item')[0].textContent).toBe('test1');
-    expect(getAllByTestId('display-category-item')[1].textContent).toBe('test2');
+    expect(getAllByTestId('display-category-item')[0].textContent).toBe(
+      'test1'
+    );
+    expect(getAllByTestId('display-category-item')[1].textContent).toBe(
+      'test2'
+    );
   });
 
   test('embed artifact', () => {
@@ -75,14 +87,22 @@ describe('<ArtifactCard />', () => {
     const params = new URLSearchParams('?foo=1&bar=2');
     const { getByTestId } = render(
       <SnackbarProvider>
-        <ArtifactCard artifact={artifact} isEmbed={true} artifactParams={params} />
+        <ArtifactCard
+          artifact={artifact}
+          isEmbed={true}
+          artifactParams={params}
+        />
       </SnackbarProvider>
     );
 
-    expect(getByTestId('download-button'))
-      .toHaveAttribute('href', 'http://localhost/get-artifact/test.conf?dl=1&foo=1&bar=2');
-    expect(getByTestId('preview-button'))
-      .toHaveAttribute('href', 'http://localhost/get-artifact/test.conf?foo=1&bar=2');
+    expect(getByTestId('download-button')).toHaveAttribute(
+      'href',
+      'http://localhost/get-artifact/test.conf?dl=1&foo=1&bar=2'
+    );
+    expect(getByTestId('preview-button')).toHaveAttribute(
+      'href',
+      'http://localhost/get-artifact/test.conf?foo=1&bar=2'
+    );
   });
 });
 

@@ -5,7 +5,7 @@ export interface Config {
   publicUrl: string;
   backendVersion: string;
   coreVersion: string;
-  accessToken: string|null;
+  accessToken: string | null;
 }
 
 export class ConfigStore {

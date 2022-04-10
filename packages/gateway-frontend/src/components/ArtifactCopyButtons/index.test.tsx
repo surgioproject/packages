@@ -24,9 +24,7 @@ describe('<ArtifactCopyButtons />', () => {
 
   test('renders simple component', () => {
     const artifact = generateArtifact({
-      categories: [
-        CATEGORIES.SNIPPET,
-      ],
+      categories: [CATEGORIES.SNIPPET],
     });
     const { queryByLabelText, getByTestId } = render(
       <SnackbarProvider>

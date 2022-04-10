@@ -20,19 +20,23 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     listContainer: {},
     listItem: {},
-  }),
+  })
 );
 
 const Page: React.FC = () => {
   const classes = useStyles();
   const { data: providerList, error } = useSWR<ReadonlyArray<Provider>>(
     '/api/providers',
-    defaultFetcher,
+    defaultFetcher
   );
 
   const getProviderListElement = () => {
     if (error) {
-      return <Box display="flex" justifyContent="center">Failed to load</Box>;
+      return (
+        <Box display="flex" justifyContent="center">
+          Failed to load
+        </Box>
+      );
     }
 
     if (!providerList) {
@@ -46,17 +50,19 @@ const Page: React.FC = () => {
     return (
       <div className={classes.listContainer}>
         <Grid container spacing={3}>
-          {
-            providerList.map(provider => {
-              return (
-                <Grid item xs={12} lg={6}
-                      className={classes.listItem}
-                      key={provider.name}>
-                  <ProviderCard provider={provider} />
-                </Grid>
-              );
-            })
-          }
+          {providerList.map((provider) => {
+            return (
+              <Grid
+                item
+                xs={12}
+                lg={6}
+                className={classes.listItem}
+                key={provider.name}
+              >
+                <ProviderCard provider={provider} />
+              </Grid>
+            );
+          })}
         </Grid>
       </div>
     );
@@ -68,7 +74,7 @@ const Page: React.FC = () => {
         <Typography variant="h4">Providers</Typography>
       </Paper>
 
-      { getProviderListElement() }
+      {getProviderListElement()}
     </div>
   );
 };

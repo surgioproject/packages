@@ -6,9 +6,12 @@ import { stores } from '../stores';
 const client = ky.create({
   hooks: {
     beforeRequest: [
-      request => {
+      (request) => {
         if (stores.config.config?.accessToken) {
-          request.headers.set('Authorization', `Bearer ${stores.config.config?.accessToken}`);
+          request.headers.set(
+            'Authorization',
+            `Bearer ${stores.config.config?.accessToken}`
+          );
         }
       },
     ],
@@ -20,7 +23,7 @@ const client = ky.create({
           return;
         }
         return response;
-      }
+      },
     ],
   },
 });

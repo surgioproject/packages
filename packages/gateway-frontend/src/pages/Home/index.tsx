@@ -3,9 +3,8 @@ import React from 'react';
 
 import SubscriptionPanel from '../../components/SubscriptionPanel';
 
-const useStyles = makeStyles(theme => ({
-  panels: {
-  },
+const useStyles = makeStyles((theme) => ({
+  panels: {},
   panel: {},
 }));
 

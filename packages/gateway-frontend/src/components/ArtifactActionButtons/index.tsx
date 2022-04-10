@@ -17,14 +17,18 @@ export interface ArtifactActionButtonsProps {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     ArtifactActionButtons: {},
-    actionButton: {}
-  }),
+    actionButton: {},
+  })
 );
 
 function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
   const classes = useStyles();
   const { config: configStore } = useStores();
-  const previewUrl = getDownloadUrl(artifact.name, true, configStore.config.accessToken);
+  const previewUrl = getDownloadUrl(
+    artifact.name,
+    true,
+    configStore.config.accessToken
+  );
 
   const SurgeButtons: React.FC = () => {
     if (
@@ -33,19 +37,23 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
     ) {
       return (
         <div className={classes.actionButton}>
-          <Button component={Link}
-                  color="secondary"
-                  size="medium"
-                  rel="nofollow"
-                  target="_blank"
-                  href={`surge:///install-config?url=${encodeURIComponent(previewUrl)}`}>
+          <Button
+            component={Link}
+            color="secondary"
+            size="medium"
+            rel="nofollow"
+            target="_blank"
+            href={`surge:///install-config?url=${encodeURIComponent(
+              previewUrl
+            )}`}
+          >
             Add to Surge
           </Button>
         </div>
       );
     }
 
-    return (<></>);
+    return <></>;
   };
 
   const ClashButtons: React.FC = () => {
@@ -55,97 +63,100 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
     ) {
       return (
         <div className={classes.actionButton}>
-          <Button component={Link}
-                  color="secondary"
-                  size="medium"
-                  rel="nofollow"
-                  target="_blank"
-                  href={`clash://install-config?url=${encodeURIComponent(previewUrl)}`}>
+          <Button
+            component={Link}
+            color="secondary"
+            size="medium"
+            rel="nofollow"
+            target="_blank"
+            href={`clash://install-config?url=${encodeURIComponent(
+              previewUrl
+            )}`}
+          >
             Add to ClashX/CFW
           </Button>
         </div>
       );
     }
 
-    return (<></>);
+    return <></>;
   };
 
   const QuantumultXButtons: React.FC = () => {
-    if (
-      artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_SERVER)
-    ) {
+    if (artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_SERVER)) {
       const json: JsonObject = {
-        server_remote: [
-          previewUrl,
-        ],
+        server_remote: [previewUrl],
       };
       return (
         <div className={classes.actionButton}>
-          <Button data-testid="quanx-server-remote"
-                  component={Link}
-                  color="secondary"
-                  size="medium"
-                  rel="nofollow"
-                  target="_blank"
-                  href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(JSON.stringify(json))}`}>
+          <Button
+            data-testid="quanx-server-remote"
+            component={Link}
+            color="secondary"
+            size="medium"
+            rel="nofollow"
+            target="_blank"
+            href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(
+              JSON.stringify(json)
+            )}`}
+          >
             Add to Quantumult X
           </Button>
         </div>
       );
     }
 
-    if (
-      artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_FILTER)
-    ) {
+    if (artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_FILTER)) {
       const json: JsonObject = {
-        filter_remote: [
-          previewUrl,
-        ],
+        filter_remote: [previewUrl],
       };
       return (
         <div className={classes.actionButton}>
-          <Button data-testid="quanx-filter-remote"
-                  component={Link}
-                  color="secondary"
-                  size="medium"
-                  rel="nofollow"
-                  target="_blank"
-                  href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(JSON.stringify(json))}`}>
+          <Button
+            data-testid="quanx-filter-remote"
+            component={Link}
+            color="secondary"
+            size="medium"
+            rel="nofollow"
+            target="_blank"
+            href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(
+              JSON.stringify(json)
+            )}`}
+          >
             Add to Quantumult X
           </Button>
         </div>
       );
     }
 
-    if (
-      artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_REWRITE)
-    ) {
+    if (artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_REWRITE)) {
       const json: JsonObject = {
-        rewrite_remote: [
-          previewUrl,
-        ],
+        rewrite_remote: [previewUrl],
       };
       return (
         <div className={classes.actionButton}>
-          <Button data-testid="quanx-rewrite-remote"
-                  component={Link}
-                  color="secondary"
-                  size="medium"
-                  rel="nofollow"
-                  target="_blank"
-                  href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(JSON.stringify(json))}`}>
+          <Button
+            data-testid="quanx-rewrite-remote"
+            component={Link}
+            color="secondary"
+            size="medium"
+            rel="nofollow"
+            target="_blank"
+            href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(
+              JSON.stringify(json)
+            )}`}
+          >
             Add to Quantumult X
           </Button>
         </div>
       );
     }
 
-    return (<></>);
+    return <></>;
   };
 
   return (
-    <div data-testid="action-buttons"
-         className={classes.ArtifactActionButtons}>
+    <div data-testid="action-buttons" className={classes.ArtifactActionButtons}>
       <SurgeButtons />
       <ClashButtons />
       <QuantumultXButtons />

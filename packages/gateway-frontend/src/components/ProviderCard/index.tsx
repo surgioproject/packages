@@ -14,25 +14,22 @@ import { Provider } from '../../libs/types';
 import { defaultFetcher } from '../../libs/utils';
 import ProviderCopyButtons from '../ProviderCopyButtons';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   ProviderCard: {
     '& .MuiCardActions-root': {
       flexWrap: 'wrap',
     },
   },
   providerType: {
-    'margin': theme.spacing(0, 0, 2),
+    margin: theme.spacing(0, 0, 2),
   },
   urlContainer: {
     'background-color': '#eee',
-    'padding': theme.spacing(2, 3),
+    padding: theme.spacing(2, 3),
     margin: theme.spacing(2, 0, 0),
     '-webkit-overflow-scrolling': 'touch',
     'overflow-x': 'scroll',
-    'font-family': [
-      'fira-code',
-      'monospace',
-    ].join(','),
+    'font-family': ['fira-code', 'monospace'].join(','),
   },
   actionButton: {
     margin: theme.spacing(1),
@@ -50,19 +47,21 @@ function ProviderCard({ provider }: ProviderCardProps) {
 
   const checkSubscription = (providerName: string) => {
     (async () => {
-      const data = await defaultFetcher<any>(`/api/providers/${providerName}/subscription`);
+      const data = await defaultFetcher<any>(
+        `/api/providers/${providerName}/subscription`
+      );
 
       if (data) {
         enqueueSnackbar(
           `🤟 已用流量：${data.used} 剩余流量：${data.left} 有效期至：${data.expire}`,
-          { variant: 'success' });
+          { variant: 'success' }
+        );
       } else {
         enqueueSnackbar('该 Provider 不支持查询', { variant: 'error' });
       }
-    })()
-      .catch(err => {
-        enqueueSnackbar('网络问题', { variant: 'error' });
-      });
+    })().catch((err) => {
+      enqueueSnackbar('网络问题', { variant: 'error' });
+    });
   };
 
   return (
@@ -71,31 +70,31 @@ function ProviderCard({ provider }: ProviderCardProps) {
 
       <CardContent>
         <div className={classes.providerType}>
-          <Chip icon={<DnsIcon fontSize="small" />}
-                label={provider.type} />
+          <Chip icon={<DnsIcon fontSize="small" />} label={provider.type} />
         </div>
 
-        {
-          provider.url ? (
-            <Typography className={classes.urlContainer}
-                        component="pre"
-                        paragraph>
-              { provider.url }
-            </Typography>
-          ) : null
-        }
+        {provider.url ? (
+          <Typography
+            className={classes.urlContainer}
+            component="pre"
+            paragraph
+          >
+            {provider.url}
+          </Typography>
+        ) : null}
       </CardContent>
 
       <CardActions disableSpacing>
-        {
-          provider.supportGetSubscriptionUserInfo ? (
-            <Button className={classes.actionButton}
-                    variant="contained"
-                    color="primary"
-                    onClick={() => checkSubscription(provider.name)}
-            >查询流量</Button>
-          ) : null
-        }
+        {provider.supportGetSubscriptionUserInfo ? (
+          <Button
+            className={classes.actionButton}
+            variant="contained"
+            color="primary"
+            onClick={() => checkSubscription(provider.name)}
+          >
+            查询流量
+          </Button>
+        ) : null}
         <div className={classes.actionButton}>
           <ProviderCopyButtons providerNameList={[provider.name]} />
         </div>

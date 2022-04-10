@@ -21,7 +21,7 @@ test('http client handles 401', async () => {
   fetchMock.get('/api/test', 401);
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  await client.get('/api/test').catch(err => {});
+  await client.get('/api/test').catch((err) => {});
 
   expect(window.location.href).toBe('/auth');
 });

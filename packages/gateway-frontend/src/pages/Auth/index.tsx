@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     formInner: {
       marginBottom: theme.spacing(3),
-    }
-  }),
+    },
+  })
 );
 
 const Page: React.FC = () => {
@@ -37,11 +37,12 @@ const Page: React.FC = () => {
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
 
-    client.post('/api/auth', {
-      json: {
-        accessToken: token,
-      },
-    })
+    client
+      .post('/api/auth', {
+        json: {
+          accessToken: token,
+        },
+      })
       .then(() => {
         stores.config.updateConfig({
           accessToken: token,
@@ -62,15 +63,19 @@ const Page: React.FC = () => {
     <div className={classes.AuthPage}>
       <Container maxWidth="sm">
         <Paper variant="outlined" className={classes.formContainer}>
-          <Typography gutterBottom variant="h4">授权</Typography>
+          <Typography gutterBottom variant="h4">
+            授权
+          </Typography>
           <form onSubmit={onSubmit}>
             <div className={classes.formInner}>
-              <TextField required
-                         value={token}
-                         onChange={onChange}
-                         type="password"
-                         id="accessToken"
-                         label="Access Token" />
+              <TextField
+                required
+                value={token}
+                onChange={onChange}
+                type="password"
+                id="accessToken"
+                label="Access Token"
+              />
             </div>
 
             <Button variant="contained" color="primary" type="submit">

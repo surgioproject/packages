@@ -12,7 +12,7 @@ import uniqWith from 'lodash-es/uniqWith';
 import { Provider } from '../../libs/types';
 import { defaultFetcher } from '../../libs/utils';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   SubscriptionPanel: {
     padding: theme.spacing(2),
   },
@@ -27,11 +27,15 @@ function SubscriptionPanel() {
   const classes = useStyles();
   const { data: providerList, error } = useSWR<ReadonlyArray<Provider>>(
     '/api/providers',
-    defaultFetcher,
+    defaultFetcher
   );
 
   if (error) {
-    return <Box display="flex" justifyContent="center">Failed to load</Box>;
+    return (
+      <Box display="flex" justifyContent="center">
+        Failed to load
+      </Box>
+    );
   }
 
   if (!providerList) {
@@ -39,14 +43,13 @@ function SubscriptionPanel() {
   }
 
   const supportedProviderList = uniqWith(
-    providerList
-      .filter(provider => {
-        if (provider.type === 'blackssl') {
-          return provider.supportGetSubscriptionUserInfo;
-        } else {
-          return provider.supportGetSubscriptionUserInfo && provider.url;
-        }
-      }),
+    providerList.filter((provider) => {
+      if (provider.type === 'blackssl') {
+        return provider.supportGetSubscriptionUserInfo;
+      } else {
+        return provider.supportGetSubscriptionUserInfo && provider.url;
+      }
+    }),
     (provider, other) => {
       if (provider.type === 'blackssl' && other.type === 'blackssl') {
         return provider.username === other.username;
@@ -59,19 +62,17 @@ function SubscriptionPanel() {
 
   return (
     <Paper className={classes.SubscriptionPanel}>
-      <Typography gutterBottom variant="h4">订阅</Typography>
+      <Typography gutterBottom variant="h4">
+        订阅
+      </Typography>
 
       <Grid container spacing={3}>
-        {
-          supportedProviderList.map((provider: Provider) => {
-            return (
-              <SubscriptionPanelItem provider={provider}
-                                     key={provider.name} />
-            );
-          })
-        }
+        {supportedProviderList.map((provider: Provider) => {
+          return (
+            <SubscriptionPanelItem provider={provider} key={provider.name} />
+          );
+        })}
       </Grid>
-
     </Paper>
   );
 }
@@ -80,7 +81,7 @@ function SubscriptionPanelItem({ provider }: SubscriptionPanelItemProps) {
   const classes = useStyles();
   const { data, error } = useSWR<any>(
     `/api/providers/${provider.name}/subscription`,
-    defaultFetcher,
+    defaultFetcher
   );
 
   if (error) {
@@ -88,7 +89,7 @@ function SubscriptionPanelItem({ provider }: SubscriptionPanelItemProps) {
       <Grid item xs={12} sm={6} lg={4} key={provider.name}>
         <div className={classes.SubscriptionPanelItem}>
           <Typography gutterBottom variant="h6">
-            { provider.name }
+            {provider.name}
           </Typography>
           <Typography gutterBottom variant="body2">
             Failed to load
@@ -102,7 +103,7 @@ function SubscriptionPanelItem({ provider }: SubscriptionPanelItemProps) {
     return (
       <Grid item xs={12} sm={6} lg={4} key={provider.name}>
         <Typography gutterBottom variant="h6">
-          { provider.name }
+          {provider.name}
         </Typography>
         <Skeleton />
         <Skeleton />
@@ -111,14 +112,14 @@ function SubscriptionPanelItem({ provider }: SubscriptionPanelItemProps) {
   }
 
   if (data === null) {
-    return (<></>);
+    return <></>;
   }
 
   return (
     <Grid item xs={12} sm={6} lg={4} key={provider.name}>
       <div className={classes.SubscriptionPanelItem}>
         <Typography gutterBottom variant="h6">
-          { provider.name }
+          {provider.name}
         </Typography>
         <div>
           <Typography gutterBottom variant="body2">

@@ -11,7 +11,9 @@ export interface QrCodeButtonProps {
 }
 
 export default function QrCodeButton(props: QrCodeButtonProps) {
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
   const [qrValue, setQrValue] = React.useState<string>('');
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,11 +30,13 @@ export default function QrCodeButton(props: QrCodeButtonProps) {
 
   return (
     <div>
-      <Button aria-describedby={id}
-              variant="contained"
-              size="medium"
-              color="primary"
-              onClick={handleClick}>
+      <Button
+        aria-describedby={id}
+        variant="contained"
+        size="medium"
+        color="primary"
+        onClick={handleClick}
+      >
         <QrCodeIcon />
       </Button>
 
@@ -50,13 +54,11 @@ export default function QrCodeButton(props: QrCodeButtonProps) {
           horizontal: 'center',
         }}
       >
-        {
-          qrValue && (
-            <Box display="flex" justifyContent="center">
-              <QrCode includeMargin value={qrValue} />
-            </Box>
-          )
-        }
+        {qrValue && (
+          <Box display="flex" justifyContent="center">
+            <QrCode includeMargin value={qrValue} />
+          </Box>
+        )}
       </Popover>
     </div>
   );
