@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/surgioproject/packages/compare/@surgio/gateway@1.5.0...@surgio/gateway@1.6.0) (2022-04-10)
+
+
+### Features
+
+*  支持在请求订阅时使用请求端 user-agent ([c703be9](https://github.com/surgioproject/packages/commit/c703be990790cd2eee4416d8bedd21295f00b72f))
+
+
+
+
+
 # [1.5.0](https://github.com/surgioproject/packages/compare/@surgio/gateway@1.4.1...@surgio/gateway@1.5.0) (2022-04-03)
 
 
