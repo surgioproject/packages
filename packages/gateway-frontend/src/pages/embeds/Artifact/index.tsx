@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Page: React.FC = () => {
   const classes = useStyles();
-  const { artifactName } = useParams();
+  const { artifactName } = useParams<{artifactName: string}>();
   const location = useLocation();
   const artifactParams = new URLSearchParams(location.search);
   const { data: artifact, error } = useSWR<ArtifactConfig>(
