@@ -7,14 +7,11 @@
 <h2 align="center">Gateway</h2>
 
 [![NPM version][npm-image]][npm-url]
-[![David deps][david-image]][david-url]
 [![Known Vulnerabilities][snyk-image]][snyk-url]
 [![npm download][download-image]][download-url]
 
 [npm-image]: https://img.shields.io/npm/v/@surgio/gateway.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/@surgio/gateway
-[david-image]: https://david-dm.org/surgioproject/packages/status.svg?path=packages/gateway
-[david-url]: https://david-dm.org/surgioproject/packages?path=packages/gateway
 [snyk-image]: https://snyk.io/test/npm/@surgio/gateway/badge.svg?style=flat-square
 [snyk-url]: https://snyk.io/test/npm/@surgio/gateway
 [download-image]: https://img.shields.io/npm/dm/@surgio/gateway.svg?style=flat-square

@@ -7,14 +7,11 @@
 <h2 align="center">Logger</h2>
 
 [![NPM version][npm-image]][npm-url]
-[![David deps][david-image]][david-url]
 [![Known Vulnerabilities][snyk-image]][snyk-url]
 [![npm download][download-image]][download-url]
 
 [npm-image]: https://img.shields.io/npm/v/@surgio/logger.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/@surgio/logger
-[david-image]: https://david-dm.org/surgioproject/packages/status.svg?path=packages/logger
-[david-url]: https://david-dm.org/surgioproject/packages?path=packages/logger
 [snyk-image]: https://snyk.io/test/npm/@surgio/logger/badge.svg?style=flat-square
 [snyk-url]: https://snyk.io/test/npm/@surgio/logger
 [download-image]: https://img.shields.io/npm/dm/@surgio/logger.svg?style=flat-square
