@@ -38,18 +38,6 @@ describe('SurgioService', () => {
     expect(artifact?.render()).toMatchSnapshot();
   });
 
-  test('getArtifact should supports user-agent', async () => {
-    const artifact = await surgioService.getArtifact('test.conf', {
-      requestUserAgent: 'surgio-test',
-    });
-
-    expect(mockedHttpClient).toHaveBeenLastCalledWith(
-      'http://example.com/clash-sample.yaml',
-      { headers: { 'user-agent': 'surgio-test' }, responseType: 'text' }
-    );
-    expect(artifact).not.toBeUndefined();
-  });
-
   test('transformArtifact format should work', async () => {
     expect(
       await surgioService.transformArtifact('test.conf', 'surge-policy')

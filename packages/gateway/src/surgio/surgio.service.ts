@@ -17,10 +17,8 @@ export class SurgioService {
     artifactName: string,
     {
       downloadUrl,
-      requestUserAgent,
     }: {
       downloadUrl?: string;
-      requestUserAgent?: string;
     } = {}
   ): Promise<Artifact | undefined> {
     const target = this.surgioHelper.artifactList.find(
@@ -43,7 +41,7 @@ export class SurgioService {
       }
     );
 
-    await artifactInstance.init({ requestUserAgent });
+    await artifactInstance.init();
 
     return artifactInstance;
   }
@@ -95,9 +93,7 @@ export class SurgioService {
       }
     );
 
-    await artifactInstance.init({
-      requestUserAgent: options.requestUserAgent,
-    });
+    await artifactInstance.init();
 
     return artifactInstance;
   }
@@ -105,8 +101,7 @@ export class SurgioService {
   public async transformArtifact(
     artifactName: string,
     format: string,
-    filter?: string,
-    requestUserAgent?: string
+    filter?: string
   ): Promise<Artifact | string | undefined> {
     const target = this.surgioHelper.artifactList.find(
       (item) => item.name === artifactName
@@ -126,7 +121,7 @@ export class SurgioService {
       templateEngine: this.surgioHelper.templateEngine,
     });
 
-    await artifactInstance.init({ requestUserAgent });
+    await artifactInstance.init();
 
     return artifactInstance.render();
   }
@@ -183,5 +178,4 @@ export interface ExportProviderOptions {
   readonly downloadUrl?: string;
   readonly filter?: string;
   readonly combineProviders?: ReadonlyArray<string>;
-  readonly requestUserAgent?: string;
 }

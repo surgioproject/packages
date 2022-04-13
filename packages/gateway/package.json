@@ -1,5 +1,6 @@
 {
   "name": "@surgio/gateway",
+  "description": "Surgio API Gateway 面板",
   "private": false,
   "license": "MIT",
   "version": "1.6.0",
@@ -57,7 +58,7 @@
     "youch": "^2.0.10"
   },
   "peerDependencies": {
-    "surgio": "^2.17.0"
+    "surgio": "^2.10.1"
   },
   "files": [
     "dist"

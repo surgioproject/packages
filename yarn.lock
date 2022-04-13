@@ -2915,7 +2915,7 @@
   integrity sha512-+iTbntw2IZPb/anVDbypzfQa+ay64MW0Zo8aJ8gZPWMMK6/OubMVb6lUPMagqjOPnmtauXnFCACVl3O7ogjeqQ==
 
 "@surgio/gateway-frontend@file:packages/gateway-frontend":
-  version "1.5.0"
+  version "1.6.0"
 
 "@surma/rollup-plugin-off-main-thread@^1.1.1":
   version "1.4.2"
@@ -16758,10 +16758,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-surgio@^2.17.0:
-  version "2.17.0"
-  resolved "https://registry.yarnpkg.com/surgio/-/surgio-2.17.0.tgz#58d7a7ff8a348e21c5e06c7b48991c8d82317432"
-  integrity sha512-ferUvI2SWUuXtLVfT6JhuRSBk3gU52pT59smt303nEnd7Lk4LxQhaCcw/NeTaUkyqQ3YOFxpiI2NU3HiPd8E8g==
+surgio@^2.10.1:
+  version "2.18.0"
+  resolved "https://registry.yarnpkg.com/surgio/-/surgio-2.18.0.tgz#9a3a11c179de0d94f2e31ab82750ca30a3a86ade"
+  integrity sha512-0wjqpdBDAZEkmUMRmaeDcPm1UkYEDKF8uYTd9wwYcl0s3kJmzxSaEViBNKaKx+APhDM+ANTVxmfeMnM2UGGqVg==
   dependencies:
     "@royli/hygen" "^5.0.4"
     "@surgio/eslint-config-surgio" "^1.0.3"

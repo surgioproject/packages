@@ -58,15 +58,13 @@ export class AppController {
           ? await this.surgioService.transformArtifact(
               artifactName,
               format,
-              filter,
-              userAgent
+              filter
             )
           : await this.surgioService.getArtifact(artifactName, {
               downloadUrl: new URL(
                 req.url,
                 this.surgioService.config.publicUrl
               ).toString(),
-              requestUserAgent: userAgent,
             });
     } catch (err) {
       if (resCache.has(req.url)) {
