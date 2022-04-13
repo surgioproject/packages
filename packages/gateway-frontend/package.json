@@ -3,6 +3,7 @@
   "description": "Surgio API Gateway Frontend",
   "version": "1.6.1",
   "main": "index.js",
+  "types": "index.d.ts",
   "license": "MIT",
   "private": false,
   "repository": "https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend",

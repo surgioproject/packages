@@ -11,8 +11,10 @@ import { SurgioModule } from './surgio/surgio.module';
 import { SurgioService } from './surgio/surgio.service';
 import { AuthModule } from './auth/auth.module';
 import configuration from './config/configuration';
+import getPackage from '@surgio/gateway-frontend';
 
 const FE_MODULE = require.resolve('@surgio/gateway-frontend');
+const frontendPackage = getPackage();
 
 @Module({
   imports: [
@@ -21,6 +23,11 @@ const FE_MODULE = require.resolve('@surgio/gateway-frontend');
       serveStaticOptions: {
         etag: true,
         maxAge: '31d',
+        setHeaders: (res, path) => {
+          if (path.endsWith('.js')) {
+            res.setHeader('x-frontend-version', frontendPackage.version);
+          }
+        },
       },
     }),
     ConfigModule.forRoot({
