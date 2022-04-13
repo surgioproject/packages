@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.2](https://github.com/surgioproject/packages/compare/@surgio/gateway@1.6.1...@surgio/gateway@1.6.2) (2022-04-13)
+
+
+### Bug Fixes
+
+* make sure gateway depends on frontend package ([3059a44](https://github.com/surgioproject/packages/commit/3059a44627a690ac42a0167a79571d7a8da66fef))
+
+
+
+
+
 ## [1.6.1](https://github.com/surgioproject/packages/compare/@surgio/gateway@1.6.0...@surgio/gateway@1.6.1) (2022-04-13)
 
 
