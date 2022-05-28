@@ -1,7 +1,7 @@
 {
   "name": "@surgio/gateway-frontend",
   "description": "Surgio API Gateway Frontend",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
