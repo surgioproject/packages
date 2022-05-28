@@ -76,8 +76,14 @@ export class SurgioHelper {
   private async checkCoreVersion(): Promise<void> {
     const gatewayPkgFile = require('../../package.json');
     const peerVersion = gatewayPkgFile.peerDependencies.surgio;
+    const corePkgVersion = corePkgFile.version as string;
 
-    if (!semver.satisfies(corePkgFile.version as string, peerVersion)) {
+    // Pre-release doesn't need to check
+    if (corePkgVersion.includes('-')) {
+      return;
+    }
+
+    if (!semver.satisfies(corePkgVersion, peerVersion)) {
       Logger.warn('', undefined, false);
       Logger.warn(
         'Surgio 版本过低，请运行下面命令升级后重新运行！',
@@ -110,7 +116,7 @@ export class SurgioHelper {
       await fs.remove(tmpDir);
     }
 
-    coreCaches.cleanCaches();
-    Logger.log('已清内存缓存');
+    await coreCaches.cleanCaches();
+    Logger.log('已清除 内存/Redis 缓存');
   }
 }
