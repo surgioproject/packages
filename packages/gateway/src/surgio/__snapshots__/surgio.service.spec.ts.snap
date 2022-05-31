@@ -37,7 +37,7 @@ proxies:
     mode: tls
     host: gateway-carry.icloud.com
 
-..."
+"
 `;
 
 exports[`SurgioService transformArtifact format should work 1`] = `
@@ -224,5 +224,5 @@ proxies:
     mux: false
     headers: {}
 
-..."
+"
 `;

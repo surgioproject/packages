@@ -149,7 +149,7 @@ export class SurgioService {
           '---',
           'proxies:',
           `{{ getClashNodes(nodeList${filter ? `, ${filter}` : ''}) | yaml }}`,
-          '...',
+          '',
         ].join('\n');
 
       case 'ss':
