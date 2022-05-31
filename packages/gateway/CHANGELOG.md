@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.4](https://github.com/surgioproject/packages/compare/@surgio/gateway@1.6.3...@surgio/gateway@1.6.4) (2022-05-31)
+
+
+### Bug Fixes
+
+* wrong format ([f8e083f](https://github.com/surgioproject/packages/commit/f8e083fb697319923e37e5cd048287d5c12cf964))
+
+
+
+
+
 ## [1.6.3](https://github.com/surgioproject/packages/compare/@surgio/gateway@1.6.2...@surgio/gateway@1.6.3) (2022-05-28)
 
 
