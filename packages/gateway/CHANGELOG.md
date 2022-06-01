@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.5](https://github.com/surgioproject/packages/compare/@surgio/gateway@1.6.4...@surgio/gateway@1.6.5) (2022-06-01)
+
+
+### Bug Fixes
+
+* clash-provider template ([80ae5ca](https://github.com/surgioproject/packages/commit/80ae5ca2ca748cae3eb7de0e06ded10bd27eb6f7)), closes [surgioproject/surgio#193](https://github.com/surgioproject/surgio/issues/193)
+
+
+
+
+
 ## [1.6.4](https://github.com/surgioproject/packages/compare/@surgio/gateway@1.6.3...@surgio/gateway@1.6.4) (2022-05-31)
 
 
