@@ -25,17 +25,17 @@ exports[`SurgioService transformArtifact filter should work 2`] = `"shadowsocks=
 exports[`SurgioService transformArtifact filter should work 3`] = `
 "---
 proxies:
-- type: ss
-  cipher: chacha20-ietf-poly1305
-  name: 🇺🇸 US
-  password: password
-  port: \\"443\\"
-  server: us.example.com
-  udp: true
-  plugin: obfs
-  plugin-opts:
-    mode: tls
-    host: gateway-carry.icloud.com
+  - type: ss
+    cipher: chacha20-ietf-poly1305
+    name: 🇺🇸 US
+    password: password
+    port: \\"443\\"
+    server: us.example.com
+    udp: true
+    plugin: obfs
+    plugin-opts:
+      mode: tls
+      host: gateway-carry.icloud.com
 
 "
 `;
@@ -74,155 +74,155 @@ shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=w
 exports[`SurgioService transformArtifact format should work 3`] = `
 "---
 proxies:
-- type: ss
-  cipher: chacha20-ietf-poly1305
-  name: 🇺🇸US 1
-  password: password
-  port: \\"443\\"
-  server: us.example.com
-  udp: false
-  plugin: obfs
-  plugin-opts:
-    mode: tls
-    host: gateway-carry.icloud.com
-- type: ss
-  cipher: chacha20-ietf-poly1305
-  name: 🇺🇸US 2
-  password: password
-  port: \\"443\\"
-  server: us.example.com
-  udp: false
-- type: ss
-  cipher: chacha20-ietf-poly1305
-  name: 🇺🇸US 3
-  password: password
-  port: \\"443\\"
-  server: us.example.com
-  udp: false
-  plugin: v2ray-plugin
-  plugin-opts:
-    mode: websocket
-    tls: true
-    host: gateway-carry.icloud.com
-    path: /
-    mux: false
-    headers: {}
-- type: ss
-  cipher: chacha20-ietf-poly1305
-  name: 🇺🇸 US
-  password: password
-  port: \\"443\\"
-  server: us.example.com
-  udp: true
-  plugin: obfs
-  plugin-opts:
-    mode: tls
-    host: gateway-carry.icloud.com
-- type: snell
-  name: Snell
-  server: us.example.com
-  port: \\"443\\"
-  psk: password
-  obfs-opts:
-    mode: tls
-- type: http
-  name: HTTPS
-  server: us.example.com
-  port: \\"443\\"
-  username: username
-  password: password
-  tls: true
-  skip-cert-verify: false
-- type: ss
-  cipher: chacha20-ietf-poly1305
-  name: ss1
-  password: password
-  port: 443
-  server: server
-  udp: true
-- type: ss
-  cipher: chacha20-ietf-poly1305
-  name: ss2
-  password: password
-  port: 443
-  server: server
-  udp: false
-  plugin: obfs
-  plugin-opts:
-    mode: tls
-    host: www.bing.com
-- type: ss
-  cipher: chacha20-ietf-poly1305
-  name: ss3
-  password: password
-  port: 443
-  server: server
-  udp: false
-  plugin: v2ray-plugin
-  plugin-opts:
-    mode: websocket
-    tls: false
-    host: server
-    path: /
-    mux: false
-    headers: {}
-- type: vmess
-  cipher: auto
-  name: vmess
-  server: server
-  port: 443
-  udp: false
-  uuid: uuid
-  alterId: \\"32\\"
-  tls: false
-- type: http
-  name: http 1
-  server: server
-  port: 443
-  username: username
-  password: password
-  tls: true
-  skip-cert-verify: false
-- type: http
-  name: http 2
-  server: server
-  port: 443
-  username: username
-  password: password
-- type: snell
-  name: snell
-  server: server
-  port: 44046
-  psk: yourpsk
-  obfs-opts:
-    mode: http
-- type: ss
-  cipher: chacha20-ietf-poly1305
-  name: ss4
-  password: password
-  port: 443
-  server: server
-  udp: false
-  plugin: obfs
-  plugin-opts:
-    mode: tls
-    host: example.com
-- type: ss
-  cipher: chacha20-ietf-poly1305
-  name: ss-wss
-  password: password
-  port: 443
-  server: server
-  udp: false
-  plugin: v2ray-plugin
-  plugin-opts:
-    mode: websocket
+  - type: ss
+    cipher: chacha20-ietf-poly1305
+    name: 🇺🇸US 1
+    password: password
+    port: \\"443\\"
+    server: us.example.com
+    udp: false
+    plugin: obfs
+    plugin-opts:
+      mode: tls
+      host: gateway-carry.icloud.com
+  - type: ss
+    cipher: chacha20-ietf-poly1305
+    name: 🇺🇸US 2
+    password: password
+    port: \\"443\\"
+    server: us.example.com
+    udp: false
+  - type: ss
+    cipher: chacha20-ietf-poly1305
+    name: 🇺🇸US 3
+    password: password
+    port: \\"443\\"
+    server: us.example.com
+    udp: false
+    plugin: v2ray-plugin
+    plugin-opts:
+      mode: websocket
+      tls: true
+      host: gateway-carry.icloud.com
+      path: /
+      mux: false
+      headers: {}
+  - type: ss
+    cipher: chacha20-ietf-poly1305
+    name: 🇺🇸 US
+    password: password
+    port: \\"443\\"
+    server: us.example.com
+    udp: true
+    plugin: obfs
+    plugin-opts:
+      mode: tls
+      host: gateway-carry.icloud.com
+  - type: snell
+    name: Snell
+    server: us.example.com
+    port: \\"443\\"
+    psk: password
+    obfs-opts:
+      mode: tls
+  - type: http
+    name: HTTPS
+    server: us.example.com
+    port: \\"443\\"
+    username: username
+    password: password
     tls: true
     skip-cert-verify: false
-    host: cloudflare.com
-    path: /ws
-    mux: false
-    headers: {}
+  - type: ss
+    cipher: chacha20-ietf-poly1305
+    name: ss1
+    password: password
+    port: 443
+    server: server
+    udp: true
+  - type: ss
+    cipher: chacha20-ietf-poly1305
+    name: ss2
+    password: password
+    port: 443
+    server: server
+    udp: false
+    plugin: obfs
+    plugin-opts:
+      mode: tls
+      host: www.bing.com
+  - type: ss
+    cipher: chacha20-ietf-poly1305
+    name: ss3
+    password: password
+    port: 443
+    server: server
+    udp: false
+    plugin: v2ray-plugin
+    plugin-opts:
+      mode: websocket
+      tls: false
+      host: server
+      path: /
+      mux: false
+      headers: {}
+  - type: vmess
+    cipher: auto
+    name: vmess
+    server: server
+    port: 443
+    udp: false
+    uuid: uuid
+    alterId: \\"32\\"
+    tls: false
+  - type: http
+    name: http 1
+    server: server
+    port: 443
+    username: username
+    password: password
+    tls: true
+    skip-cert-verify: false
+  - type: http
+    name: http 2
+    server: server
+    port: 443
+    username: username
+    password: password
+  - type: snell
+    name: snell
+    server: server
+    port: 44046
+    psk: yourpsk
+    obfs-opts:
+      mode: http
+  - type: ss
+    cipher: chacha20-ietf-poly1305
+    name: ss4
+    password: password
+    port: 443
+    server: server
+    udp: false
+    plugin: obfs
+    plugin-opts:
+      mode: tls
+      host: example.com
+  - type: ss
+    cipher: chacha20-ietf-poly1305
+    name: ss-wss
+    password: password
+    port: 443
+    server: server
+    udp: false
+    plugin: v2ray-plugin
+    plugin-opts:
+      mode: websocket
+      tls: true
+      skip-cert-verify: false
+      host: cloudflare.com
+      path: /ws
+      mux: false
+      headers: {}
 
 "
 `;

@@ -147,8 +147,9 @@ export class SurgioService {
       case 'clash-provider':
         return [
           '---',
-          'proxies:',
-          `{{ getClashNodes(nodeList${filter ? `, ${filter}` : ''}) | yaml }}`,
+          `{{ {proxies: getClashNodes(nodeList${
+            filter ? `, ${filter}` : ''
+          })} | yaml }}`,
           '',
         ].join('\n');
 
