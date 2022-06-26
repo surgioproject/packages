@@ -21,7 +21,7 @@
     "dev": "nest start --watch",
     "debug": "nest start --debug --watch",
     "lint": "eslint . --ext .ts",
-    "test": "yarn test:ci",
+    "test": "run-s test:ci",
     "test:unit": "jest",
     "test:e2e": "jest --config __tests__/jest-e2e.json",
     "test:watch": "jest --watch",
@@ -60,7 +60,8 @@
   "devDependencies": {
     "@nestjs/cli": "^7.1.2",
     "@nestjs/schematics": "^7.0.0",
-    "@nestjs/testing": "^7.3.2"
+    "@nestjs/testing": "^7.3.2",
+    "tsconfig-paths": "^3.9.0"
   },
   "peerDependencies": {
     "surgio": "^2.10.1"

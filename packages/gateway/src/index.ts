@@ -38,7 +38,12 @@ export const startServer = (): Promise<Server> => {
     });
 };
 
-export const createLambdaHandler = () => {
+export const createLambdaHandler: () => (
+  event,
+  context
+) => Promise<
+  AWSLambda.APIGatewayProxyResult | AWSLambda.APIGatewayProxyStructuredResultV2
+> = () => {
   let handler: Handler;
 
   return async (event, context) => {
