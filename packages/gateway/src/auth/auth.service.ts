@@ -13,4 +13,13 @@ export class AuthService {
       !needAuth || (needAuth && accessToken === config.gateway?.accessToken)
     );
   }
+
+  public validateViewerToken(accessToken: string): boolean {
+    const config = this.surgioService.surgioHelper.config;
+    const needAuth = config?.gateway?.auth;
+
+    return (
+      !needAuth || (needAuth && accessToken === config.gateway?.viewerToken)
+    );
+  }
 }

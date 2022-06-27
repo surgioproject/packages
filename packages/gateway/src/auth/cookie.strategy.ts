@@ -19,7 +19,7 @@ export class CookieStrategy extends PassportStrategy(Strategy) {
     @Req() req: Request,
     accessToken: string
   ): Promise<{ readonly accessToken: string }> {
-    const result = await this.authService.validateAccessToken(accessToken);
+    const result = this.authService.validateAccessToken(accessToken);
     if (!result) {
       throw new UnauthorizedException();
     }

@@ -10,6 +10,7 @@ import { extractCookies } from '../helper';
 describe('ApiController (e2e)', () => {
   let app: NestExpressApplication;
   let token;
+  let viewerToken;
   let tokenCookie;
   let surgioService: SurgioService;
 
@@ -19,6 +20,7 @@ describe('ApiController (e2e)', () => {
 
     surgioService = app.get<SurgioService>('SurgioService');
     token = surgioService.config.gateway?.accessToken;
+    viewerToken = surgioService.config.gateway?.viewerToken;
 
     await app.init();
 
@@ -63,6 +65,11 @@ describe('ApiController (e2e)', () => {
 
     await supertest(app.getHttpServer())
       .get('/api/auth/validate-token')
+      .set('Authorization', `Bearer ${viewerToken}`)
+      .expect(401);
+
+    await supertest(app.getHttpServer())
+      .get('/api/auth/validate-token')
       .set('Authorization', `Bearer wrong`)
       .expect(401);
   });
@@ -83,6 +90,11 @@ describe('ApiController (e2e)', () => {
       .expect(200);
 
     expect(res.text).toMatchSnapshot();
+
+    await supertest(app.getHttpServer())
+      .get('/api/artifacts')
+      .set('Authorization', `Bearer ${viewerToken}`)
+      .expect(401);
   });
 
   test('/api/providers (GET)', async () => {

@@ -18,8 +18,8 @@ import { URL } from 'url';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import NodeCache from 'node-cache';
+import { AuthGuard } from '@nestjs/passport';
 
-import { BearerAuthGuard } from './auth/bearer.guard';
 import { SurgioService } from './surgio/surgio.service';
 
 dayjs.extend(duration);
@@ -35,7 +35,7 @@ export class AppController {
 
   constructor(private readonly surgioService: SurgioService) {}
 
-  @UseGuards(BearerAuthGuard)
+  @UseGuards(AuthGuard('viewerToken'))
   @Get('/get-artifact/:name')
   public async getArtifact(
     @Res() res: Response,
@@ -108,7 +108,7 @@ export class AppController {
     }
   }
 
-  @UseGuards(BearerAuthGuard)
+  @UseGuards(AuthGuard('viewerToken'))
   @Get('/export-providers')
   public async exportProvider(
     @Req() req: Request,
@@ -235,7 +235,7 @@ export class AppController {
     }
   }
 
-  @UseGuards(BearerAuthGuard)
+  @UseGuards(AuthGuard('viewerToken'))
   @Get('/render')
   public async renderTemplate(
     @Req() req: Request,

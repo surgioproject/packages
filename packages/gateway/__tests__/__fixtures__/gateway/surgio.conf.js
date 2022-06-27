@@ -43,6 +43,7 @@ module.exports = {
   },
   gateway: {
     accessToken: 'abcd',
+    viewerToken: 'efgh',
     auth: true,
     useCacheOnError: true,
   },
