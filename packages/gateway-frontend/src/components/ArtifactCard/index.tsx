@@ -93,16 +93,18 @@ function ArtifactCard({
   const classes = useStyles();
   const { config: configStore } = useStores();
   const providers = [artifact.provider].concat(artifact.combineProviders || []);
+  const downloadToken =
+    configStore.config.viewerToken || configStore.config.accessToken;
   const downloadUrl = getDownloadUrl(
     artifact.name,
     false,
-    configStore.config.accessToken,
+    downloadToken,
     artifactParams
   );
   const previewUrl = getDownloadUrl(
     artifact.name,
     true,
-    configStore.config.accessToken,
+    downloadToken,
     artifactParams
   );
   const [expanded, setExpanded] = React.useState(false);
@@ -265,7 +267,7 @@ function ArtifactCard({
                       data-testid="copy-button"
                       data-clipboard-text={getEmbedCode(
                         artifact.name,
-                        configStore.config.accessToken
+                        downloadToken
                       )}
                       onSuccess={onCopySuccess}
                       onError={onCopyError}
@@ -276,10 +278,7 @@ function ArtifactCard({
                 </Grid>
                 <Grid item style={{ flex: 1, width: 0, marginLeft: 10 }}>
                   <Typography className={classes.urlContainer} component="pre">
-                    {getEmbedCode(
-                      artifact.name,
-                      configStore.config.accessToken
-                    )}
+                    {getEmbedCode(artifact.name, downloadToken)}
                   </Typography>
                 </Grid>
               </Grid>
@@ -297,10 +296,7 @@ function ArtifactCard({
                   <Link
                     target="_blank"
                     rel="nofollow"
-                    href={getEmbedUrl(
-                      artifact.name,
-                      configStore.config.accessToken
-                    )}
+                    href={getEmbedUrl(artifact.name, downloadToken)}
                   >
                     <IconButton aria-label="share">
                       <ShareIcon />

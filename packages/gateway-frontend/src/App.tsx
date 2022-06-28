@@ -133,14 +133,16 @@ const App = observer((props: ResponsiveDrawerProps) => {
         accessToken: search.get('access_token'),
       });
 
-      return defaultFetcher<{ accessToken?: string }>(
-        '/api/auth/validate-token'
-      );
+      return defaultFetcher<{
+        accessToken?: string;
+        viewerToken?: string;
+      }>('/api/auth/validate-token');
     }
 
-    return defaultFetcher<{ accessToken?: string }>(
-      '/api/auth/validate-cookie'
-    );
+    return defaultFetcher<{
+      accessToken?: string;
+      viewerToken?: string;
+    }>('/api/auth/validate-cookie');
   }, [location.search, stores.config]);
 
   const cleanCache = () => {
@@ -159,6 +161,11 @@ const App = observer((props: ResponsiveDrawerProps) => {
         if (user.accessToken) {
           stores.config.updateConfig({
             accessToken: user.accessToken,
+          });
+        }
+        if (user.viewerToken) {
+          stores.config.updateConfig({
+            viewerToken: user.viewerToken,
           });
         }
 

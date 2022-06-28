@@ -63,7 +63,11 @@ export class ApiController {
   public async validateToken(@Req() req: Request): Promise<any> {
     return {
       status: 'ok',
-      data: req.user,
+      data: {
+        ...req.user,
+        viewerToken:
+          this.surgioService.surgioHelper.config?.gateway?.viewerToken,
+      },
     };
   }
 
@@ -72,7 +76,11 @@ export class ApiController {
   public async validateCookie(@Req() req: Request): Promise<any> {
     return {
       status: 'ok',
-      data: req.user,
+      data: {
+        ...req.user,
+        viewerToken:
+          this.surgioService.surgioHelper.config?.gateway?.viewerToken,
+      },
     };
   }
 

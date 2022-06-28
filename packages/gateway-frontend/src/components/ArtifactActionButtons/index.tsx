@@ -24,11 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
 function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
   const classes = useStyles();
   const { config: configStore } = useStores();
-  const previewUrl = getDownloadUrl(
-    artifact.name,
-    true,
-    configStore.config.accessToken
-  );
+  const downloadToken =
+    configStore.config.viewerToken || configStore.config.accessToken;
+  const previewUrl = getDownloadUrl(artifact.name, true, downloadToken);
 
   const SurgeButtons: React.FC = () => {
     if (

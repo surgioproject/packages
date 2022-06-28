@@ -44,7 +44,6 @@
     "fs-extra": "^9.1.0",
     "http-errors": "^1.7.3",
     "lodash": "^4.17.19",
-    "lru-cache": "^6.0.0",
     "node-cache": "^5.1.2",
     "nunjucks": "^3.2.1",
     "passport": "^0.4.1",

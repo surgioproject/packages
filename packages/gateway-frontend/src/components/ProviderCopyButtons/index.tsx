@@ -42,38 +42,15 @@ function ProviderCopyButtons({ providerNameList }: ProviderCopyButtonsProps) {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const { enqueueSnackbar } = useSnackbar();
   const providers = providerNameList.join(',');
+  const downloadToken =
+    configStore.config.viewerToken || configStore.config.accessToken;
   const urls: string[] = [
-    getExportProviderUrl(
-      providers,
-      'surge-policy',
-      true,
-      configStore.config.accessToken
-    ),
-    getExportProviderUrl(
-      providers,
-      'clash-provider',
-      true,
-      configStore.config.accessToken
-    ),
-    getExportProviderUrl(
-      providers,
-      'qx-server',
-      true,
-      configStore.config.accessToken
-    ),
-    getExportProviderUrl(providers, 'ss', true, configStore.config.accessToken),
-    getExportProviderUrl(
-      providers,
-      'ssr',
-      true,
-      configStore.config.accessToken
-    ),
-    getExportProviderUrl(
-      providers,
-      'v2ray',
-      true,
-      configStore.config.accessToken
-    ),
+    getExportProviderUrl(providers, 'surge-policy', true, downloadToken),
+    getExportProviderUrl(providers, 'clash-provider', true, downloadToken),
+    getExportProviderUrl(providers, 'qx-server', true, downloadToken),
+    getExportProviderUrl(providers, 'ss', true, downloadToken),
+    getExportProviderUrl(providers, 'ssr', true, downloadToken),
+    getExportProviderUrl(providers, 'v2ray', true, downloadToken),
   ];
 
   const onCopySuccess = () => {
