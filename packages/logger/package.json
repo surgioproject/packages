@@ -10,7 +10,6 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc -p tsconfig.json",
-    "prepare": "run-s build",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
