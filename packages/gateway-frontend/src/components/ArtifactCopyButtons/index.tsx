@@ -46,6 +46,7 @@ function ArtifactCopyButtons({ artifact }: ArtifactCopyButtonsProps) {
   const { enqueueSnackbar } = useSnackbar();
   const downloadToken =
     configStore.config.viewerToken || configStore.config.accessToken;
+
   const urls: string[] = [
     getDownloadUrl(artifact.name, true, downloadToken),
     getDownloadUrl(`${artifact.name}?format=surge-policy`, true, downloadToken),

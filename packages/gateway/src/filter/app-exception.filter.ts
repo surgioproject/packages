@@ -34,11 +34,15 @@ export class AppExceptionsFilter implements ExceptionFilter {
 
       if (typeof exceptionResponse === 'string') {
         responsePayload = {
+          status: 'error',
           statusCode: status,
           error: exceptionResponse,
         };
       } else {
-        responsePayload = exceptionResponse;
+        responsePayload = {
+          status: 'error',
+          ...exceptionResponse,
+        };
       }
     } else {
       const status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -49,6 +53,7 @@ export class AppExceptionsFilter implements ExceptionFilter {
       this.logger.error(exception.stack || exception);
 
       responsePayload = {
+        status: 'error',
         statusCode: status,
         error: exception.message || 'Error',
       };

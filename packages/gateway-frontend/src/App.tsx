@@ -134,12 +134,14 @@ const App = observer((props: ResponsiveDrawerProps) => {
       });
 
       return defaultFetcher<{
+        roles: string[];
         accessToken?: string;
         viewerToken?: string;
       }>('/api/auth/validate-token');
     }
 
     return defaultFetcher<{
+      roles: string[];
       accessToken?: string;
       viewerToken?: string;
     }>('/api/auth/validate-cookie');
@@ -151,7 +153,7 @@ const App = observer((props: ResponsiveDrawerProps) => {
     });
   };
 
-  const updateConfig = () => {
+  const fetchConfig = () => {
     return defaultFetcher<Partial<Config>>('/api/config');
   };
 
@@ -163,17 +165,18 @@ const App = observer((props: ResponsiveDrawerProps) => {
             accessToken: user.accessToken,
           });
         }
+
         if (user.viewerToken) {
           stores.config.updateConfig({
             viewerToken: user.viewerToken,
           });
         }
 
-        return updateConfig();
+        return fetchConfig();
       })
-      .catch((err) => {
+      .catch(() => {
         // 授权失败，直接获取配置信息
-        return updateConfig();
+        return fetchConfig();
       })
       .then((config) => {
         stores.config.updateConfig(config);

@@ -58,15 +58,25 @@ describe('ApiController (e2e)', () => {
   });
 
   test('/api/auth/validate-token (GET)', async () => {
-    await supertest(app.getHttpServer())
+    const res = await supertest(app.getHttpServer())
       .get('/api/auth/validate-token')
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    await supertest(app.getHttpServer())
+    expect(res.body.data).toEqual({
+      roles: ['admin', 'viewer'],
+      viewerToken: 'efgh',
+    });
+
+    const viewerRes = await supertest(app.getHttpServer())
       .get('/api/auth/validate-token')
       .set('Authorization', `Bearer ${viewerToken}`)
-      .expect(401);
+      .expect(200);
+
+    expect(viewerRes.body.data).toEqual({
+      roles: ['viewer'],
+      viewerToken: 'efgh',
+    });
 
     await supertest(app.getHttpServer())
       .get('/api/auth/validate-token')
@@ -94,7 +104,7 @@ describe('ApiController (e2e)', () => {
     await supertest(app.getHttpServer())
       .get('/api/artifacts')
       .set('Authorization', `Bearer ${viewerToken}`)
-      .expect(401);
+      .expect(403);
   });
 
   test('/api/providers (GET)', async () => {

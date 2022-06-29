@@ -12,25 +12,22 @@ import {
   CommandConfig,
   RemoteSnippet,
 } from 'surgio/build/types';
-import { PackageJson } from 'type-fest';
 import { pkg as corePkgFile, caches as coreCaches } from 'surgio';
+import { createHash } from 'crypto';
+
+export const KEY = 'SURGIO_HELPER';
 
 export class SurgioHelper {
   public remoteSnippetList?: ReadonlyArray<RemoteSnippet>;
   public artifactList: ReadonlyArray<ArtifactConfig>;
   public providerMap: Map<string, PossibleProviderType> = new Map();
   public readonly templateEngine: Environment;
-
-  private readonly pkgFile?: PackageJson;
+  public readonly configHash: string;
 
   constructor(public cwd: string, public readonly config: CommandConfig) {
-    const pkgFile = join(cwd, 'package.json');
-
     this.artifactList = config.artifacts;
     this.templateEngine = getEngine(config.templateDir);
-    if (fs.existsSync(pkgFile)) {
-      this.pkgFile = require(pkgFile);
-    }
+    this.configHash = this.getConfigSHA1Hash();
   }
 
   public async init(): Promise<this> {
@@ -101,6 +98,10 @@ export class SurgioHelper {
       Logger.warn('', undefined, false);
       throw new Error('Surgio 版本过低');
     }
+  }
+
+  private getConfigSHA1Hash(): string {
+    return createHash('sha1').update(JSON.stringify(this.config)).digest('hex');
   }
 
   public async cleanCache(): Promise<void> {

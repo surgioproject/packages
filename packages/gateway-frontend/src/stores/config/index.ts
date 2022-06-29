@@ -16,8 +16,8 @@ export class ConfigStore {
     publicUrl: '',
     backendVersion: '',
     coreVersion: '',
-    accessToken: '',
-    viewerToken: '',
+    accessToken: null,
+    viewerToken: null,
   };
 
   @action

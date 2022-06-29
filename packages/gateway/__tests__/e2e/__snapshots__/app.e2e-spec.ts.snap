@@ -27,7 +27,7 @@ Snell = snell, us.example.com, 443, psk=password, obfs=tls
 HTTPS = https, us.example.com, 443, username, password"
 `;
 
-exports[`AppController (e2e) /export-providers (GET) multiple providers 404 1`] = `"{\\"statusCode\\":404,\\"error\\":\\"provider notfound 不存在\\"}"`;
+exports[`AppController (e2e) /export-providers (GET) multiple providers 404 1`] = `"{\\"status\\":\\"error\\",\\"statusCode\\":404,\\"error\\":\\"provider notfound 不存在\\"}"`;
 
 exports[`AppController (e2e) /export-providers (GET) private filter 1`] = `
 "ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
