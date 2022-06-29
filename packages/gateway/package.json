@@ -69,7 +69,7 @@
     "tsconfig-paths": "^3.9.0"
   },
   "peerDependencies": {
-    "surgio": "^2.10.1"
+    "surgio": "^2.20.0"
   },
   "files": [
     "dist"
