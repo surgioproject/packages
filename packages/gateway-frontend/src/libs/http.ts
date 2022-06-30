@@ -10,7 +10,7 @@ const client = ky.create({
         if (stores.config.config?.accessToken) {
           request.headers.set(
             'Authorization',
-            `Bearer ${stores.config.config?.accessToken}`
+            `Bearer ${stores.config.config.accessToken}`
           );
         }
       },

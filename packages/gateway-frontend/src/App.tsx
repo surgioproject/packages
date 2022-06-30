@@ -133,14 +133,18 @@ const App = observer((props: ResponsiveDrawerProps) => {
         accessToken: search.get('access_token'),
       });
 
-      return defaultFetcher<{ accessToken?: string }>(
-        '/api/auth/validate-token'
-      );
+      return defaultFetcher<{
+        roles: string[];
+        accessToken?: string;
+        viewerToken?: string;
+      }>('/api/auth/validate-token');
     }
 
-    return defaultFetcher<{ accessToken?: string }>(
-      '/api/auth/validate-cookie'
-    );
+    return defaultFetcher<{
+      roles: string[];
+      accessToken?: string;
+      viewerToken?: string;
+    }>('/api/auth/validate-cookie');
   }, [location.search, stores.config]);
 
   const cleanCache = () => {
@@ -149,7 +153,7 @@ const App = observer((props: ResponsiveDrawerProps) => {
     });
   };
 
-  const updateConfig = () => {
+  const fetchConfig = () => {
     return defaultFetcher<Partial<Config>>('/api/config');
   };
 
@@ -162,11 +166,17 @@ const App = observer((props: ResponsiveDrawerProps) => {
           });
         }
 
-        return updateConfig();
+        if (user.viewerToken) {
+          stores.config.updateConfig({
+            viewerToken: user.viewerToken,
+          });
+        }
+
+        return fetchConfig();
       })
-      .catch((err) => {
+      .catch(() => {
         // 授权失败，直接获取配置信息
-        return updateConfig();
+        return fetchConfig();
       })
       .then((config) => {
         stores.config.updateConfig(config);

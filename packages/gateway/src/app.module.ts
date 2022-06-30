@@ -42,13 +42,16 @@ const frontendPackage = getPackage();
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [SurgioService],
 })
 export class AppModule {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private surgioService: SurgioService
+  ) {}
 
   configure(consumer: MiddlewareConsumer): void {
-    const secret = this.configService.get('secret');
+    const envSecret = this.configService.get<string | undefined>('secret');
+    const secret = envSecret || this.surgioService.surgioHelper.configHash;
 
     CookieParserMiddleware.configure(secret);
     consumer.apply(CookieParserMiddleware).forRoutes('*');

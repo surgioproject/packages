@@ -44,38 +44,21 @@ function ArtifactCopyButtons({ artifact }: ArtifactCopyButtonsProps) {
   const anchorRef = React.useRef<HTMLDivElement>(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const { enqueueSnackbar } = useSnackbar();
+  const downloadToken =
+    configStore.config.viewerToken || configStore.config.accessToken;
+
   const urls: string[] = [
-    getDownloadUrl(artifact.name, true, configStore.config.accessToken),
-    getDownloadUrl(
-      `${artifact.name}?format=surge-policy`,
-      true,
-      configStore.config.accessToken
-    ),
+    getDownloadUrl(artifact.name, true, downloadToken),
+    getDownloadUrl(`${artifact.name}?format=surge-policy`, true, downloadToken),
     getDownloadUrl(
       `${artifact.name}?format=clash-provider`,
       true,
-      configStore.config.accessToken
+      downloadToken
     ),
-    getDownloadUrl(
-      `${artifact.name}?format=qx-server`,
-      true,
-      configStore.config.accessToken
-    ),
-    getDownloadUrl(
-      `${artifact.name}?format=ss`,
-      true,
-      configStore.config.accessToken
-    ),
-    getDownloadUrl(
-      `${artifact.name}?format=ssr`,
-      true,
-      configStore.config.accessToken
-    ),
-    getDownloadUrl(
-      `${artifact.name}?format=v2ray`,
-      true,
-      configStore.config.accessToken
-    ),
+    getDownloadUrl(`${artifact.name}?format=qx-server`, true, downloadToken),
+    getDownloadUrl(`${artifact.name}?format=ss`, true, downloadToken),
+    getDownloadUrl(`${artifact.name}?format=ssr`, true, downloadToken),
+    getDownloadUrl(`${artifact.name}?format=v2ray`, true, downloadToken),
   ];
 
   const onCopySuccess = () => {

@@ -6,6 +6,7 @@ export interface Config {
   backendVersion: string;
   coreVersion: string;
   accessToken: string | null;
+  viewerToken: string | null;
 }
 
 export class ConfigStore {
@@ -15,7 +16,8 @@ export class ConfigStore {
     publicUrl: '',
     backendVersion: '',
     coreVersion: '',
-    accessToken: '',
+    accessToken: null,
+    viewerToken: null,
   };
 
   @action

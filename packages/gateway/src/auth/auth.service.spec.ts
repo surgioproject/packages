@@ -32,6 +32,11 @@ describe('AuthService', () => {
     expect(authService.validateAccessToken('false')).toBeFalsy();
   });
 
+  it('validates viewer token', () => {
+    expect(authService.validateViewerToken('efgh')).toBeTruthy();
+    expect(authService.validateViewerToken('false')).toBeFalsy();
+  });
+
   it('ignore validation when auth turned off', () => {
     const sandbox = sinon.createSandbox();
 

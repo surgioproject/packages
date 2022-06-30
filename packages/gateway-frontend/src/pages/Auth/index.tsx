@@ -10,7 +10,6 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 
 import client from '../../libs/http';
-import { useStores } from '../../stores';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,7 +31,6 @@ const Page: React.FC = () => {
   const [token, setToken] = React.useState('');
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
-  const stores = useStores();
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -44,9 +42,6 @@ const Page: React.FC = () => {
         },
       })
       .then(() => {
-        stores.config.updateConfig({
-          accessToken: token,
-        });
         history.replace('/');
       })
       .catch(() => {

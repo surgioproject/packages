@@ -7,94 +7,23 @@ import {
   Post,
   Res,
   UseGuards,
-  Req,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import _ from 'lodash';
 import { formatSubscriptionUserInfo } from 'surgio/build/utils/subscription';
-import { pkg as corePkgFile } from 'surgio';
 
-import { BearerAuthGuard } from '../auth/bearer.guard';
-import { CookieAuthGuard } from '../auth/cookie.guard';
+import { APIAuthGuard } from '../auth/api-auth.guard';
+import { Roles } from '../auth/roles.decorator';
+import { Role } from '../constants/role';
 import { SurgioService } from '../surgio/surgio.service';
 
 @Controller('api')
+@UseGuards(APIAuthGuard)
 export class ApiController {
-  constructor(
-    private readonly surgioService: SurgioService,
-    private readonly configService: ConfigService
-  ) {}
+  constructor(private readonly surgioService: SurgioService) {}
 
-  @Post('/auth')
-  public async login(@Req() req: Request, @Res() res: Response): Promise<void> {
-    const accessToken = req.body.accessToken;
-
-    if (
-      accessToken ===
-      this.surgioService.surgioHelper.config?.gateway?.accessToken
-    ) {
-      res.cookie('_t', accessToken, {
-        maxAge:
-          (this.surgioService.surgioHelper.config?.gateway?.cookieMaxAge ??
-            (this.configService.get('defaultCookieMaxAge') as number)) * 1e3,
-        httpOnly: true,
-        signed: true,
-        path: '/',
-      });
-      res.cookie('_t', accessToken, {
-        maxAge:
-          (this.surgioService.surgioHelper.config?.gateway?.cookieMaxAge ??
-            (this.configService.get('defaultCookieMaxAge') as number)) * 1e3,
-        httpOnly: true,
-        signed: true,
-        path: '/api',
-      });
-      res.send({
-        status: 'ok',
-      });
-    } else {
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
-    }
-  }
-
-  @UseGuards(BearerAuthGuard)
-  @Get('/auth/validate-token')
-  public async validateToken(@Req() req: Request): Promise<any> {
-    return {
-      status: 'ok',
-      data: req.user,
-    };
-  }
-
-  @UseGuards(CookieAuthGuard)
-  @Get('/auth/validate-cookie')
-  public async validateCookie(@Req() req: Request): Promise<any> {
-    return {
-      status: 'ok',
-      data: req.user,
-    };
-  }
-
-  @Get('/config')
-  public async config(@Req() req: Request): Promise<any> {
-    return {
-      status: 'ok',
-      data: {
-        ..._.pick(this.surgioService.surgioHelper.config, [
-          'urlBase',
-          'publicUrl',
-        ]),
-        backendVersion: require('../../package.json').version,
-        coreVersion: corePkgFile.version as string,
-        needAuth:
-          this.surgioService.surgioHelper.config?.gateway?.auth ?? false,
-      },
-    };
-  }
-
-  @UseGuards(BearerAuthGuard)
   @Post('/clean-cache')
+  @Roles(Role.ADMIN)
   public async cleanCache(): Promise<any> {
     await this.surgioService.surgioHelper.cleanCache();
 
@@ -103,8 +32,8 @@ export class ApiController {
     };
   }
 
-  @UseGuards(BearerAuthGuard)
   @Get('/artifacts')
+  @Roles(Role.ADMIN)
   public async listArtifacts(): Promise<any> {
     const artifactList = this.surgioService.surgioHelper.artifactList;
 
@@ -114,8 +43,8 @@ export class ApiController {
     };
   }
 
-  @UseGuards(BearerAuthGuard)
   @Get('/artifacts/:name')
+  @Roles(Role.VIEWER)
   public async getArtifact(
     @Res() res: Response,
     @Param() params
@@ -134,8 +63,8 @@ export class ApiController {
     }
   }
 
-  @UseGuards(BearerAuthGuard)
   @Get('/providers')
+  @Roles(Role.ADMIN)
   public async listProviders(): Promise<any> {
     const providerList = this.surgioService.listProviders();
 
@@ -152,8 +81,8 @@ export class ApiController {
     };
   }
 
-  @UseGuards(BearerAuthGuard)
   @Get('/providers/:name/subscription')
+  @Roles(Role.ADMIN)
   public async getProviderSubscription(@Param() params): Promise<any> {
     const provider = this.surgioService.surgioHelper.providerMap.get(
       params.name
@@ -173,10 +102,5 @@ export class ApiController {
       status: 'ok',
       data: res ? formatSubscriptionUserInfo(res) : null,
     };
-  }
-
-  @Get('*')
-  public async apiNotFound(): Promise<void> {
-    throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
   }
 }

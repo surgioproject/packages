@@ -13,7 +13,7 @@ const projects = {
 (async () => {
   const buildTarget = join(projects['@surgio/gateway'], './node_modules/@surgio/gateway-frontend/build');
 
-  const buildProc = execa('yarn', ['run', 'build'], {
+  const buildProc = execa('pnpm', ['run', 'build'], {
     cwd: project,
   });
 

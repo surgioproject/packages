@@ -1,7 +1,10 @@
-import { Strategy } from 'passport-http-bearer';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { Strategy } from 'passport-http-bearer';
+import _ from 'lodash';
 
+import { Role } from '../constants/role';
+import { UserContext } from '../types/app';
 import { AuthService } from './auth.service';
 
 @Injectable()
@@ -10,13 +13,23 @@ export class BearerStrategy extends PassportStrategy(Strategy) {
     super();
   }
 
-  public async validate(
-    accessToken: string
-  ): Promise<{ readonly accessToken: string }> {
-    const result = await this.authService.validateAccessToken(accessToken);
-    if (!result) {
+  public async validate(accessToken: string): Promise<UserContext> {
+    const isAccessToken = this.authService.validateAccessToken(accessToken);
+    const isViewerToken = this.authService.validateViewerToken(accessToken);
+    const roles: UserContext['roles'] = [];
+
+    if (!isAccessToken && !isViewerToken) {
       throw new UnauthorizedException();
     }
-    return { accessToken };
+
+    if (isViewerToken) {
+      roles.push(Role.VIEWER);
+    }
+
+    if (isAccessToken) {
+      roles.push(Role.ADMIN, Role.VIEWER);
+    }
+
+    return { accessToken, roles: _.uniq(roles) };
   }
 }

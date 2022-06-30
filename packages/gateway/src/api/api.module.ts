@@ -1,10 +1,24 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { NextFunction, Request, Response } from 'express';
 
 import { ApiController } from './api.controller';
-import { SurgioService } from '../surgio/surgio.service';
+import { AuthAPIModule } from './auth/auth.module';
+import { ConfigAPIModule } from './config/config.module';
 
 @Module({
   controllers: [ApiController],
-  providers: [SurgioService],
+  imports: [AuthAPIModule, ConfigAPIModule],
 })
-export class ApiModule {}
+export class ApiModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply((req: Request, res: Response, next: NextFunction) => {
+        res.header(
+          'cache-control',
+          'private, no-cache, no-store, must-revalidate'
+        );
+        next();
+      })
+      .forRoutes('api/*');
+  }
+}

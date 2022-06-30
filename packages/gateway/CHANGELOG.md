@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0-alpha.0](https://github.com/surgioproject/packages/compare/@surgio/gateway@1.6.5...@surgio/gateway@1.7.0-alpha.0) (2022-06-29)
+
+
+### Features
+
+* change the way to verify authentication ([1e3ed34](https://github.com/surgioproject/packages/commit/1e3ed348ea04ea53a6ce1a3f36e77cf1975748b1))
+* support viewerToken ([f880ea2](https://github.com/surgioproject/packages/commit/f880ea2ab573d83cfc27986191295be1a32d60bb))
+* use viewerToken in frontend ([206a368](https://github.com/surgioproject/packages/commit/206a368123da41675f7b844859bdb71a861e40b8))
+
+
+
+
+
 ## [1.6.5](https://github.com/surgioproject/packages/compare/@surgio/gateway@1.6.4...@surgio/gateway@1.6.5) (2022-06-01)
 
 
