@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/surgioproject/packages/compare/@surgio/logger@1.2.0-alpha.0...@surgio/logger@1.2.0) (2022-06-30)
+
+**Note:** Version bump only for package @surgio/logger
+
+
+
+
+
 # [1.2.0-alpha.0](https://github.com/surgioproject/packages/compare/@surgio/logger@1.1.4...@surgio/logger@1.2.0-alpha.0) (2022-06-29)
 
 **Note:** Version bump only for package @surgio/logger
