@@ -131,6 +131,33 @@ describe('<ArtifactActionButtons />', () => {
       'Add to Loon'
     );
   });
+
+  test('renders surfboard button for artifact that has surfboard in its name', () => {
+    const artifact = generateArtifact({
+      name: 'surfboard.conf',
+    });
+    const { getByTestId } = render(
+      <ArtifactActionButtons artifact={artifact} />
+    );
+
+    expect(getByTestId('action-buttons')?.querySelector('a')?.textContent).toBe(
+      'Add to Surfboard'
+    );
+  });
+
+  test('renders surfboard button for artifact that has surfboard category', () => {
+    const artifact = generateArtifact({
+      name: 'test.conf',
+      categories: ['Surfboard'],
+    });
+    const { getByTestId } = render(
+      <ArtifactActionButtons artifact={artifact} />
+    );
+
+    expect(getByTestId('action-buttons')?.querySelector('a')?.textContent).toBe(
+      'Add to Surfboard'
+    );
+  });
 });
 
 function generateArtifact(partial?: Partial<ArtifactConfig>): ArtifactConfig {
