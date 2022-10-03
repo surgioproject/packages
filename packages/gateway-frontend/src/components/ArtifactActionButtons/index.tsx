@@ -153,11 +153,63 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
     return <></>;
   };
 
+  const LoonButtons: React.FC = () => {
+    if (
+      artifact.name.toLowerCase().includes('loon') ||
+      artifact?.categories?.includes(CATEGORIES.LOON)
+    ) {
+      return (
+        <div className={classes.actionButton}>
+          <Button
+            component={Link}
+            color="secondary"
+            size="medium"
+            rel="nofollow"
+            target="_blank"
+            href={`loon://import?sub=${encodeURIComponent(previewUrl)}`}
+          >
+            Add to Loon
+          </Button>
+        </div>
+      );
+    }
+
+    return <></>;
+  };
+
+  const SurfboardButtons: React.FC = () => {
+    if (
+      artifact.name.toLowerCase().includes('surfboard') ||
+      artifact?.categories?.includes('Surfboard')
+    ) {
+      return (
+        <div className={classes.actionButton}>
+          <Button
+            component={Link}
+            color="secondary"
+            size="medium"
+            rel="nofollow"
+            target="_blank"
+            href={`surfboard:///install-config?url=${encodeURIComponent(
+              previewUrl
+            )}`}
+          >
+            Add to Surfboard
+          </Button>
+        </div>
+      );
+    }
+
+    return <></>;
+  };
+
   return (
     <div data-testid="action-buttons" className={classes.ArtifactActionButtons}>
       <SurgeButtons />
       <ClashButtons />
       <QuantumultXButtons />
+      <LoonButtons />
+      <SurfboardButtons />
     </div>
   );
 }
