@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/surgioproject/packages/compare/@surgio/gateway-frontend@1.7.0...@surgio/gateway-frontend@1.8.0) (2022-10-04)
+
+
+### Features
+
+* support Add to Loon ([d2c8320](https://github.com/surgioproject/packages/commit/d2c8320b1e15b5b9a82c6404dec072cf631109f8))
+* support Add to Surfboard ([1ede663](https://github.com/surgioproject/packages/commit/1ede663c14aeb258127293551a9f59418237665c))
+
+
+
+
+
 # [1.7.0](https://github.com/surgioproject/packages/compare/@surgio/gateway-frontend@1.7.0-alpha.0...@surgio/gateway-frontend@1.7.0) (2022-06-30)
 
 **Note:** Version bump only for package @surgio/gateway-frontend
