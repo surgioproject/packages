@@ -1,6 +1,6 @@
 {
   "name": "@surgio/logger",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Logger helper for Surgio projects",
   "author": "Yihang Li <me@royli.dev>",
   "homepage": "https://surgio.js.org",
