@@ -172,7 +172,6 @@ importers:
       '@types/react-test-renderer': ^17.0.2
       abort-controller: ^3.0.0
       clsx: ^1.0.4
-      craco-workbox: ^0.2.0
       fetch-mock: ^9.4.0
       http-proxy-middleware: ^1.0.4
       ky: ^0.24.0
@@ -211,7 +210,6 @@ importers:
       '@types/react-test-renderer': 17.0.2
       abort-controller: 3.0.0
       clsx: 1.1.1
-      craco-workbox: 0.2.0
       fetch-mock: 9.11.0_node-fetch@2.6.7
       http-proxy-middleware: 1.3.1
       ky: 0.24.0
@@ -7398,8 +7396,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      is-text-path: 1.0.1
       JSONStream: 1.3.5
+      is-text-path: 1.0.1
       lodash: 4.17.21
       meow: 8.1.2
       split2: 3.2.2
@@ -7567,10 +7565,6 @@ packages:
       parse-json: 5.2.0
       path-type: 4.0.0
       yaml: 1.10.2
-    dev: true
-
-  /craco-workbox/0.2.0:
-    resolution: {integrity: sha512-5UFq99GrBs+cvyxxHSlCPmEduUwCRLsmAmmaW6qLhpXeKwxzk1UguVYXbYZNILcjUTdOM1yuu0VLvi3a1mop/A==}
     dev: true
 
   /create-ecdh/4.0.4:
@@ -16298,6 +16292,12 @@ packages:
   /react-dev-utils/11.0.4_a7xmpkungfd35is2c4kqy55h3i:
     resolution: {integrity: sha512-dx0LvIGHcOPtKbeiSUM4jqpBl3TcY7CDjZdfOIcKeznE7BWr9dg0iPG90G5yfVQ+p/rGNMXdbfStvzQZEVEi4A==}
     engines: {node: '>=10'}
+    peerDependencies:
+      typescript: '>=2.7'
+      webpack: '>=4'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     dependencies:
       '@babel/code-frame': 7.10.4
       address: 1.1.2
@@ -16323,12 +16323,11 @@ packages:
       shell-quote: 1.7.2
       strip-ansi: 6.0.0
       text-table: 0.2.0
+      webpack: 4.44.2
     transitivePeerDependencies:
       - eslint
       - supports-color
-      - typescript
       - vue-template-compiler
-      - webpack
     dev: true
 
   /react-dom/17.0.2_react@17.0.2:
@@ -20400,5 +20399,5 @@ packages:
   file:packages/gateway-frontend:
     resolution: {directory: packages/gateway-frontend, type: directory}
     name: '@surgio/gateway-frontend'
-    version: 1.7.0-alpha.0
+    version: 1.8.0
     dev: false
