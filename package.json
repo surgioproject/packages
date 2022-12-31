@@ -49,7 +49,7 @@
   "bugs": {
     "url": "https://github.com/surgioproject/packages/issues"
   },
-  "homepage": "https://surgio.royli.dev",
+  "homepage": "https://surgio.js.org",
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -c .commitlintrc.json -E HUSKY_GIT_PARAMS",

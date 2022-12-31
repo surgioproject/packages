@@ -7,7 +7,7 @@
     "eslint"
   ],
   "author": "Roy Li <me@dada.li>",
-  "homepage": "https://surgio.royli.dev",
+  "homepage": "https://surgio.js.org",
   "license": "MIT",
   "main": "index.js",
   "repository": {

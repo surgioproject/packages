@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://surgio.royli.dev/" target="_blank">
+    <a href="https://surgio.js.org/" target="_blank">
         <img width="180" src="https://raw.githubusercontent.com/geekdada/surgio/master/docs/.vuepress/public/surgio-icon.png" alt="logo">
     </a>
 </p>
@@ -19,7 +19,7 @@
 
 ## 文档
 
-查看完整使用文档，前往 [surgio.royli.dev](https://surgio.royli.dev)。
+查看完整使用文档，前往 [surgio.js.org](https://surgio.js.org)。
 
 ## 交流
 

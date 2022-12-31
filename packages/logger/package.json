@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "description": "Logger helper for Surgio projects",
   "author": "Yihang Li <me@royli.dev>",
-  "homepage": "https://surgio.royli.dev",
+  "homepage": "https://surgio.js.org",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

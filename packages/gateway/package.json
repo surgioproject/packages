@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/surgioproject/packages/issues"
   },
-  "homepage": "https://surgio.royli.dev",
+  "homepage": "https://surgio.js.org",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build -p tsconfig.build.json",
