@@ -1,15 +1,15 @@
-import Box from '@material-ui/core/Box';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import React from 'react';
-import useSWR from 'swr';
+import Box from '@material-ui/core/Box'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Paper from '@material-ui/core/Paper'
+import Grid from '@material-ui/core/Grid'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import React from 'react'
+import useSWR from 'swr'
 
-import ProviderCard from '../../components/ProviderCard';
-import { Provider } from '../../libs/types';
-import { defaultFetcher } from '../../libs/utils';
+import ProviderCard from '../../components/ProviderCard'
+import { Provider } from '../../libs/types'
+import { defaultFetcher } from '../../libs/utils'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,14 +21,14 @@ const useStyles = makeStyles((theme: Theme) =>
     listContainer: {},
     listItem: {},
   })
-);
+)
 
 const Page: React.FC = () => {
-  const classes = useStyles();
+  const classes = useStyles()
   const { data: providerList, error } = useSWR<ReadonlyArray<Provider>>(
     '/api/providers',
     defaultFetcher
-  );
+  )
 
   const getProviderListElement = () => {
     if (error) {
@@ -36,7 +36,7 @@ const Page: React.FC = () => {
         <Box display="flex" justifyContent="center">
           Failed to load
         </Box>
-      );
+      )
     }
 
     if (!providerList) {
@@ -44,7 +44,7 @@ const Page: React.FC = () => {
         <Box display="flex" justifyContent="center">
           <CircularProgress />;
         </Box>
-      );
+      )
     }
 
     return (
@@ -61,12 +61,12 @@ const Page: React.FC = () => {
               >
                 <ProviderCard provider={provider} />
               </Grid>
-            );
+            )
           })}
         </Grid>
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div className={classes.ProviderListPage}>
@@ -76,7 +76,7 @@ const Page: React.FC = () => {
 
       {getProviderListElement()}
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

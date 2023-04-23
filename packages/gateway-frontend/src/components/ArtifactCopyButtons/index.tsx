@@ -1,27 +1,27 @@
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grow';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
-import { makeStyles } from '@material-ui/core/styles';
-import { observer } from 'mobx-react';
-import { useSnackbar } from 'notistack';
-import React, { forwardRef } from 'react';
-import Clipboard from 'react-clipboard.js';
-import { ArtifactConfig } from 'surgio/build/types';
-import { CATEGORIES } from 'surgio/build/utils/constant';
+import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
+import ButtonGroup from '@material-ui/core/ButtonGroup'
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Grow from '@material-ui/core/Grow'
+import Paper from '@material-ui/core/Paper'
+import Popper from '@material-ui/core/Popper'
+import MenuItem from '@material-ui/core/MenuItem'
+import MenuList from '@material-ui/core/MenuList'
+import { makeStyles } from '@material-ui/core/styles'
+import { observer } from 'mobx-react'
+import { useSnackbar } from 'notistack'
+import React, { forwardRef } from 'react'
+import Clipboard from 'react-clipboard.js'
+import { ArtifactConfig } from 'surgio/build/types'
+import { CATEGORIES } from 'surgio/build/utils/constant'
 
-import { getDownloadUrl } from '../../libs/utils';
-import { useStores } from '../../stores';
+import { getDownloadUrl } from '../../libs/utils'
+import { useStores } from '../../stores'
 
 const useStyles = makeStyles((theme) => ({
   ArtifactCopyButtons: {},
-}));
+}))
 
 const options = [
   '复制地址',
@@ -31,21 +31,21 @@ const options = [
   '复制 SS 订阅',
   '复制 SSR 订阅',
   '复制 V2Ray 订阅',
-];
+]
 
 export interface ArtifactCopyButtonsProps {
-  artifact: ArtifactConfig;
+  artifact: ArtifactConfig
 }
 
 function ArtifactCopyButtons({ artifact }: ArtifactCopyButtonsProps) {
-  const classes = useStyles();
-  const { config: configStore } = useStores();
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef<HTMLDivElement>(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const { enqueueSnackbar } = useSnackbar();
+  const classes = useStyles()
+  const { config: configStore } = useStores()
+  const [open, setOpen] = React.useState(false)
+  const anchorRef = React.useRef<HTMLDivElement>(null)
+  const [selectedIndex, setSelectedIndex] = React.useState(0)
+  const { enqueueSnackbar } = useSnackbar()
   const downloadToken =
-    configStore.config.viewerToken || configStore.config.accessToken;
+    configStore.config.viewerToken || configStore.config.accessToken
 
   const urls: string[] = [
     getDownloadUrl(artifact.name, true, downloadToken),
@@ -59,38 +59,38 @@ function ArtifactCopyButtons({ artifact }: ArtifactCopyButtonsProps) {
     getDownloadUrl(`${artifact.name}?format=ss`, true, downloadToken),
     getDownloadUrl(`${artifact.name}?format=ssr`, true, downloadToken),
     getDownloadUrl(`${artifact.name}?format=v2ray`, true, downloadToken),
-  ];
+  ]
 
   const onCopySuccess = () => {
-    enqueueSnackbar('复制成功', { variant: 'success' });
-  };
+    enqueueSnackbar('复制成功', { variant: 'success' })
+  }
 
   const onCopyError = () => {
-    enqueueSnackbar('复制失败', { variant: 'error' });
-  };
+    enqueueSnackbar('复制失败', { variant: 'error' })
+  }
 
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
     index: number
   ) => {
-    setSelectedIndex(index);
-    setOpen(false);
-  };
+    setSelectedIndex(index)
+    setOpen(false)
+  }
 
   const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
+    setOpen((prevOpen) => !prevOpen)
+  }
 
   const handleClose = (event: React.MouseEvent<Document, MouseEvent>) => {
     if (
       anchorRef.current &&
       anchorRef.current.contains(event.target as HTMLElement)
     ) {
-      return;
+      return
     }
 
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   return (
     <Grid item xs={12} className={classes.ArtifactCopyButtons}>
@@ -159,11 +159,11 @@ function ArtifactCopyButtons({ artifact }: ArtifactCopyButtonsProps) {
         )}
       </Popper>
     </Grid>
-  );
+  )
 }
 
 interface CopyButtonProps {
-  children: React.ReactNode[];
+  children: React.ReactNode[]
 }
 
 const CopyButton = forwardRef<any, CopyButtonProps>(function CopyButton(
@@ -180,7 +180,7 @@ const CopyButton = forwardRef<any, CopyButtonProps>(function CopyButton(
     >
       {props.children}
     </Button>
-  );
-});
+  )
+})
 
-export default observer(ArtifactCopyButtons);
+export default observer(ArtifactCopyButtons)

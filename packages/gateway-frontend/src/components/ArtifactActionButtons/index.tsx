@@ -1,17 +1,17 @@
-import { observer } from 'mobx-react';
-import React from 'react';
-import { ArtifactConfig } from 'surgio/build/types';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Link from '@material-ui/core/Link';
-import Button from '@material-ui/core/Button';
-import { CATEGORIES } from 'surgio/build/utils/constant';
-import { JsonObject } from 'type-fest';
+import { observer } from 'mobx-react'
+import React from 'react'
+import { ArtifactConfig } from 'surgio/build/types'
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import Link from '@material-ui/core/Link'
+import Button from '@material-ui/core/Button'
+import { CATEGORIES } from 'surgio/build/utils/constant'
+import { JsonObject } from 'type-fest'
 
-import { getDownloadUrl } from '../../libs/utils';
-import { useStores } from '../../stores';
+import { getDownloadUrl } from '../../libs/utils'
+import { useStores } from '../../stores'
 
 export interface ArtifactActionButtonsProps {
-  artifact: ArtifactConfig;
+  artifact: ArtifactConfig
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,14 +19,14 @@ const useStyles = makeStyles((theme: Theme) =>
     ArtifactActionButtons: {},
     actionButton: {},
   })
-);
+)
 
 function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
-  const classes = useStyles();
-  const { config: configStore } = useStores();
+  const classes = useStyles()
+  const { config: configStore } = useStores()
   const downloadToken =
-    configStore.config.viewerToken || configStore.config.accessToken;
-  const previewUrl = getDownloadUrl(artifact.name, true, downloadToken);
+    configStore.config.viewerToken || configStore.config.accessToken
+  const previewUrl = getDownloadUrl(artifact.name, true, downloadToken)
 
   const SurgeButtons: React.FC = () => {
     if (
@@ -48,11 +48,11 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
             Add to Surge
           </Button>
         </div>
-      );
+      )
     }
 
-    return <></>;
-  };
+    return <></>
+  }
 
   const ClashButtons: React.FC = () => {
     if (
@@ -74,17 +74,17 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
             Add to ClashX/CFW
           </Button>
         </div>
-      );
+      )
     }
 
-    return <></>;
-  };
+    return <></>
+  }
 
   const QuantumultXButtons: React.FC = () => {
     if (artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_SERVER)) {
       const json: JsonObject = {
         server_remote: [previewUrl],
-      };
+      }
       return (
         <div className={classes.actionButton}>
           <Button
@@ -101,13 +101,13 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
             Add to Quantumult X
           </Button>
         </div>
-      );
+      )
     }
 
     if (artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_FILTER)) {
       const json: JsonObject = {
         filter_remote: [previewUrl],
-      };
+      }
       return (
         <div className={classes.actionButton}>
           <Button
@@ -124,13 +124,13 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
             Add to Quantumult X
           </Button>
         </div>
-      );
+      )
     }
 
     if (artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_REWRITE)) {
       const json: JsonObject = {
         rewrite_remote: [previewUrl],
-      };
+      }
       return (
         <div className={classes.actionButton}>
           <Button
@@ -147,11 +147,11 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
             Add to Quantumult X
           </Button>
         </div>
-      );
+      )
     }
 
-    return <></>;
-  };
+    return <></>
+  }
 
   const LoonButtons: React.FC = () => {
     if (
@@ -171,11 +171,11 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
             Add to Loon
           </Button>
         </div>
-      );
+      )
     }
 
-    return <></>;
-  };
+    return <></>
+  }
 
   const SurfboardButtons: React.FC = () => {
     if (
@@ -197,11 +197,11 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
             Add to Surfboard
           </Button>
         </div>
-      );
+      )
     }
 
-    return <></>;
-  };
+    return <></>
+  }
 
   return (
     <div data-testid="action-buttons" className={classes.ArtifactActionButtons}>
@@ -211,7 +211,7 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
       <LoonButtons />
       <SurfboardButtons />
     </div>
-  );
+  )
 }
 
-export default observer(ArtifactActionButtons);
+export default observer(ArtifactActionButtons)

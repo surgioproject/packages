@@ -1,7 +1,7 @@
-import { NormalizedOptions } from 'ky';
-import ky from 'ky-universal';
+import { NormalizedOptions } from 'ky'
+import ky from 'ky-universal'
 
-import { stores } from '../stores';
+import { stores } from '../stores'
 
 const client = ky.create({
   hooks: {
@@ -11,7 +11,7 @@ const client = ky.create({
           request.headers.set(
             'Authorization',
             `Bearer ${stores.config.config.accessToken}`
-          );
+          )
         }
       },
     ],
@@ -19,13 +19,13 @@ const client = ky.create({
       // Or retry with a fresh token on a 403 error
       (request: Request, options: NormalizedOptions, response: Response) => {
         if (response.status === 401 && window.location.pathname !== '/auth') {
-          window.location.href = '/auth';
-          return;
+          window.location.href = '/auth'
+          return
         }
-        return response;
+        return response
       },
     ],
   },
-});
+})
 
-export default client;
+export default client

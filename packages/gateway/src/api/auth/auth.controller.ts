@@ -7,14 +7,14 @@ import {
   Res,
   UseGuards,
   Req,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Response } from 'express';
-import _ from 'lodash';
+} from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { Response } from 'express'
+import _ from 'lodash'
 
-import { APIAuthGuard } from '../../auth/api-auth.guard';
-import { SurgioService } from '../../surgio/surgio.service';
-import { EnrichedRequest } from '../../types/app';
+import { APIAuthGuard } from '../../auth/api-auth.guard'
+import { SurgioService } from '../../surgio/surgio.service'
+import { EnrichedRequest } from '../../types/app'
 
 @Controller('api/auth')
 export class AuthController {
@@ -28,7 +28,7 @@ export class AuthController {
     @Req() req: EnrichedRequest,
     @Res() res: Response
   ): Promise<void> {
-    const accessToken = req.body.accessToken;
+    const accessToken = req.body.accessToken
 
     if (
       accessToken ===
@@ -41,7 +41,7 @@ export class AuthController {
         httpOnly: true,
         signed: true,
         path: '/',
-      });
+      })
       res.cookie('_t', accessToken, {
         maxAge:
           (this.surgioService.surgioHelper.config?.gateway?.cookieMaxAge ??
@@ -49,12 +49,12 @@ export class AuthController {
         httpOnly: true,
         signed: true,
         path: '/api',
-      });
+      })
       res.status(200).send({
         status: 'ok',
-      });
+      })
     } else {
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED)
     }
   }
 
@@ -64,19 +64,19 @@ export class AuthController {
     const data = {
       ...req.user,
       viewerToken: this.surgioService.surgioHelper.config?.gateway?.viewerToken,
-    };
+    }
 
     if (data.viewerToken) {
       return {
         status: 'ok',
         data: _.omit(data, ['accessToken']),
-      };
+      }
     }
 
     return {
       status: 'ok',
       data,
-    };
+    }
   }
 
   @UseGuards(APIAuthGuard)
@@ -85,18 +85,18 @@ export class AuthController {
     const data = {
       ...req.user,
       viewerToken: this.surgioService.surgioHelper.config?.gateway?.viewerToken,
-    };
+    }
 
     if (data.viewerToken) {
       return {
         status: 'ok',
         data: _.omit(data, ['accessToken']),
-      };
+      }
     }
 
     return {
       status: 'ok',
       data,
-    };
+    }
   }
 }

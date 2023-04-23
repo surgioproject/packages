@@ -1,15 +1,15 @@
-import { observer } from 'mobx-react';
-import React, { FormEvent } from 'react';
-import { useHistory } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { useSnackbar } from 'notistack';
+import { observer } from 'mobx-react'
+import React, { FormEvent } from 'react'
+import { useHistory } from 'react-router-dom'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import Container from '@material-ui/core/Container'
+import TextField from '@material-ui/core/TextField'
+import Paper from '@material-ui/core/Paper'
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { useSnackbar } from 'notistack'
 
-import client from '../../libs/http';
+import client from '../../libs/http'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,16 +24,16 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(3),
     },
   })
-);
+)
 
 const Page: React.FC = () => {
-  const classes = useStyles();
-  const [token, setToken] = React.useState('');
-  const { enqueueSnackbar } = useSnackbar();
-  const history = useHistory();
+  const classes = useStyles()
+  const [token, setToken] = React.useState('')
+  const { enqueueSnackbar } = useSnackbar()
+  const history = useHistory()
 
   const onSubmit = (event: FormEvent) => {
-    event.preventDefault();
+    event.preventDefault()
 
     client
       .post('/api/auth', {
@@ -42,17 +42,17 @@ const Page: React.FC = () => {
         },
       })
       .then(() => {
-        history.replace('/');
+        history.replace('/')
       })
       .catch(() => {
-        enqueueSnackbar('授权失败', { variant: 'error' });
-        setToken('');
-      });
-  };
+        enqueueSnackbar('授权失败', { variant: 'error' })
+        setToken('')
+      })
+  }
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setToken(event.target.value.trim());
-  };
+    setToken(event.target.value.trim())
+  }
 
   return (
     <div className={classes.AuthPage}>
@@ -80,7 +80,7 @@ const Page: React.FC = () => {
         </Paper>
       </Container>
     </div>
-  );
-};
+  )
+}
 
-export default observer(Page);
+export default observer(Page)

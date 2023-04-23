@@ -1,18 +1,18 @@
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import DnsIcon from '@material-ui/icons/Dns';
-import Chip from '@material-ui/core/Chip';
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import { useSnackbar } from 'notistack';
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardContent from '@material-ui/core/CardContent'
+import CardActions from '@material-ui/core/CardActions'
+import DnsIcon from '@material-ui/icons/Dns'
+import Chip from '@material-ui/core/Chip'
+import React from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import Card from '@material-ui/core/Card'
+import { useSnackbar } from 'notistack'
 
-import { Provider } from '../../libs/types';
-import { defaultFetcher } from '../../libs/utils';
-import ProviderCopyButtons from '../ProviderCopyButtons';
+import { Provider } from '../../libs/types'
+import { defaultFetcher } from '../../libs/utils'
+import ProviderCopyButtons from '../ProviderCopyButtons'
 
 const useStyles = makeStyles((theme) => ({
   ProviderCard: {
@@ -35,34 +35,34 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     textDecoration: 'none',
   },
-}));
+}))
 
 export interface ProviderCardProps {
-  provider: Provider;
+  provider: Provider
 }
 
 function ProviderCard({ provider }: ProviderCardProps) {
-  const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
+  const classes = useStyles()
+  const { enqueueSnackbar } = useSnackbar()
 
   const checkSubscription = (providerName: string) => {
-    (async () => {
+    ;(async () => {
       const data = await defaultFetcher<any>(
         `/api/providers/${providerName}/subscription`
-      );
+      )
 
       if (data) {
         enqueueSnackbar(
           `🤟 已用流量：${data.used} 剩余流量：${data.left} 有效期至：${data.expire}`,
           { variant: 'success' }
-        );
+        )
       } else {
-        enqueueSnackbar('该 Provider 不支持查询', { variant: 'error' });
+        enqueueSnackbar('该 Provider 不支持查询', { variant: 'error' })
       }
     })().catch((err) => {
-      enqueueSnackbar('网络问题', { variant: 'error' });
-    });
-  };
+      enqueueSnackbar('网络问题', { variant: 'error' })
+    })
+  }
 
   return (
     <Card className={classes.ProviderCard}>
@@ -100,7 +100,7 @@ function ProviderCard({ provider }: ProviderCardProps) {
         </div>
       </CardActions>
     </Card>
-  );
+  )
 }
 
-export default ProviderCard;
+export default ProviderCard

@@ -1,19 +1,19 @@
-import { HttpException } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import { join } from 'path';
-import httpClient from 'surgio/build/utils/http-client';
+import { HttpException } from '@nestjs/common'
+import { Test, TestingModule } from '@nestjs/testing'
+import { join } from 'path'
+import httpClient from 'surgio/build/utils/http-client'
 
-import { SurgioModule } from './surgio.module';
-import { SurgioService } from './surgio.service';
+import { SurgioModule } from './surgio.module'
+import { SurgioService } from './surgio.service'
 
 describe('SurgioService', () => {
-  let surgioService: SurgioService;
-  let mockedHttpClient;
+  let surgioService: SurgioService
+  let mockedHttpClient
 
   beforeEach(async () => {
-    jest.clearAllMocks();
+    jest.clearAllMocks()
 
-    mockedHttpClient = jest.spyOn(httpClient, 'get');
+    mockedHttpClient = jest.spyOn(httpClient, 'get')
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [],
@@ -22,36 +22,36 @@ describe('SurgioService', () => {
           cwd: join(__dirname, '../../__tests__/__fixtures__/gateway'),
         }),
       ],
-    }).compile();
+    }).compile()
 
-    surgioService = module.get<SurgioService>(SurgioService);
-  });
+    surgioService = module.get<SurgioService>(SurgioService)
+  })
 
   it('should be defined', () => {
-    expect(surgioService).toBeDefined();
-  });
+    expect(surgioService).toBeDefined()
+  })
 
   test('getArtifact should work', async () => {
-    const artifact = await surgioService.getArtifact('test.conf');
+    const artifact = await surgioService.getArtifact('test.conf')
 
-    expect(artifact).not.toBeUndefined();
-    expect(artifact?.render()).toMatchSnapshot();
-  });
+    expect(artifact).not.toBeUndefined()
+    expect(artifact?.render()).toMatchSnapshot()
+  })
 
   test('transformArtifact format should work', async () => {
     expect(
       await surgioService.transformArtifact('test.conf', 'surge-policy')
-    ).toMatchSnapshot();
+    ).toMatchSnapshot()
     expect(
       await surgioService.transformArtifact('test.conf', 'qx-server')
-    ).toMatchSnapshot();
+    ).toMatchSnapshot()
     expect(
       await surgioService.transformArtifact('test.conf', 'clash-provider')
-    ).toMatchSnapshot();
+    ).toMatchSnapshot()
     await expect(
       surgioService.transformArtifact('test.conf', 'unknown')
-    ).rejects.toThrowError(HttpException);
-  });
+    ).rejects.toThrowError(HttpException)
+  })
 
   test('transformArtifact filter should work', async () => {
     expect(
@@ -60,30 +60,30 @@ describe('SurgioService', () => {
         'surge-policy',
         'customFilters.globalFilter'
       )
-    ).toMatchSnapshot();
+    ).toMatchSnapshot()
     expect(
       await surgioService.transformArtifact(
         'test.conf',
         'qx-server',
         'customFilters.globalFilter'
       )
-    ).toMatchSnapshot();
+    ).toMatchSnapshot()
     expect(
       await surgioService.transformArtifact(
         'test.conf',
         'clash-provider',
         'customFilters.globalFilter'
       )
-    ).toMatchSnapshot();
-  });
+    ).toMatchSnapshot()
+  })
 
   test('listProviders', () => {
-    const providers = surgioService.listProviders();
+    const providers = surgioService.listProviders()
 
-    expect(providers).toHaveLength(6);
+    expect(providers).toHaveLength(6)
 
     providers.forEach((item) => {
-      expect(item.name).toBeDefined();
-    });
-  });
-});
+      expect(item.name).toBeDefined()
+    })
+  })
+})
