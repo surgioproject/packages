@@ -1,7 +1,7 @@
 import Container from '@material-ui/core/Container'
 import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { ArtifactConfig } from 'surgio/build/types'
+import { ArtifactConfig } from 'surgio/internal'
 import useSWR from 'swr'
 import { useParams, useLocation } from 'react-router-dom'
 import ArtifactCard from '../../../components/ArtifactCard'

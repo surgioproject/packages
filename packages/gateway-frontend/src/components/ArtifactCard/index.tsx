@@ -19,7 +19,7 @@ import Button from '@material-ui/core/Button'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ShareIcon from '@material-ui/icons/Share'
-import { ArtifactConfig } from 'surgio/build/types'
+import { ArtifactConfig } from 'surgio/internal'
 import Clipboard from 'react-clipboard.js'
 
 import { getDownloadUrl } from '../../libs/utils'

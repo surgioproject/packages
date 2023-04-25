@@ -11,9 +11,9 @@ import {
   Logger,
 } from '@nestjs/common'
 import { Request, Response } from 'express'
-import { Artifact } from 'surgio/build/generator/artifact'
+import { Artifact } from 'surgio/generator'
 import _ from 'lodash'
-import { getUrl } from 'surgio/build/utils'
+import { getUrl } from 'surgio/utils'
 import { URL } from 'url'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
@@ -336,7 +336,7 @@ export class AppController {
       }
 
       const body = artifact.render(undefined, {
-        urlParams: urlParams ? this.processUrlParams(urlParams) : undefined,
+        ...(urlParams ? this.processUrlParams(urlParams) : undefined),
       })
 
       if (gatewayConfig?.useCacheOnError && !isCachedPayload) {

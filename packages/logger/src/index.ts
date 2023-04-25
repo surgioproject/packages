@@ -17,9 +17,13 @@ export const createLogger = (options: CreateLoggerOptions = {}): Logger => {
     }),
     format.errors({ stack: true }),
     format.splat(),
-    format.colorize(),
     customFormat,
   ]
+
+  if (process.env.NODE_ENV !== 'production') {
+    formats.push(format.colorize())
+  }
+
   const loggerFormat = format.combine(...formats)
 
   return winston.createLogger({

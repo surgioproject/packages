@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import React from 'react'
-import { ArtifactConfig } from 'surgio/build/types'
-import { CATEGORIES } from 'surgio/build/utils/constant'
+import { ArtifactConfig } from 'surgio/internal'
+import { CATEGORIES } from 'surgio/constant'
 
 import ArtifactActionButtons from './'
 

@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react'
 import React from 'react'
-import { ArtifactConfig } from 'surgio/build/types'
+import { ArtifactConfig } from 'surgio/internal'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Link from '@material-ui/core/Link'
 import Button from '@material-ui/core/Button'
-import { CATEGORIES } from 'surgio/build/utils/constant'
+import { CATEGORIES } from 'surgio/constant'
 import { JsonObject } from 'type-fest'
 
 import { getDownloadUrl } from '../../libs/utils'

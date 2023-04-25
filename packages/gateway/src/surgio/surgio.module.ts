@@ -1,7 +1,6 @@
 import { Module, DynamicModule, Global } from '@nestjs/common'
-import path from 'path'
+import { loadConfig } from 'surgio/config'
 
-import { loadConfig } from 'surgio/build/utils/config'
 import { KEY, SurgioHelper } from './surgio-helper'
 import { SurgioService } from './surgio.service'
 
@@ -16,8 +15,7 @@ export class SurgioModule {
         {
           provide: KEY,
           useFactory: (): Promise<SurgioHelper> => {
-            const configFile = path.join(options.cwd, 'surgio.conf.js')
-            const config = loadConfig(options.cwd, configFile)
+            const config = loadConfig(options.cwd)
             const helper = new SurgioHelper(options.cwd, config)
 
             return helper.init()

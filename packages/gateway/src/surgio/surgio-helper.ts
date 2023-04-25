@@ -1,18 +1,18 @@
 import os from 'os'
 import { basename, join } from 'path'
 import fs from 'fs-extra'
-import { TMP_FOLDER_NAME } from 'surgio/build/utils/constant'
 import { Environment } from 'nunjucks'
 import semver from 'semver'
 import { Logger } from '@nestjs/common'
-import { getEngine } from 'surgio/build/generator/template'
-import { getProvider, PossibleProviderType } from 'surgio/build/provider'
-import {
+import { getEngine } from 'surgio/generator'
+import { getProvider, PossibleProviderType } from 'surgio/provider'
+import type {
   ArtifactConfig,
   CommandConfig,
   RemoteSnippet,
-} from 'surgio/build/types'
-import { pkg as corePkgFile, caches as coreCaches } from 'surgio'
+} from 'surgio/internal'
+import { packageJson as corePackageJson, cleanCaches } from 'surgio/internal'
+import { TMP_FOLDER_NAME } from 'surgio/constant'
 import { createHash } from 'crypto'
 
 export const KEY = 'SURGIO_HELPER'
@@ -43,9 +43,9 @@ export class SurgioHelper {
     })
 
     async function readProvider(
-      path
+      path: string
     ): Promise<PossibleProviderType | undefined> {
-      let provider
+      let provider: PossibleProviderType
 
       try {
         const providerName = basename(path, '.js')
@@ -73,7 +73,7 @@ export class SurgioHelper {
   private async checkCoreVersion(): Promise<void> {
     const gatewayPkgFile = require('../../package.json')
     const peerVersion = gatewayPkgFile.peerDependencies.surgio
-    const corePkgVersion = corePkgFile.version as string
+    const corePkgVersion = corePackageJson.version as string
 
     // Pre-release doesn't need to check
     if (corePkgVersion.includes('-')) {
@@ -88,7 +88,7 @@ export class SurgioHelper {
         false
       )
       Logger.warn(
-        `要求版本 ${peerVersion}，当前版本 ${corePkgFile.version}`,
+        `要求版本 ${peerVersion}，当前版本 ${corePackageJson.version}`,
         undefined,
         false
       )
@@ -117,7 +117,7 @@ export class SurgioHelper {
       await fs.remove(tmpDir)
     }
 
-    await coreCaches.cleanCaches()
+    await cleanCaches()
     Logger.log('已清除 内存/Redis 缓存')
   }
 }

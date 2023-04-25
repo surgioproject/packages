@@ -1,8 +1,8 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { SnackbarProvider } from 'notistack'
-import { ArtifactConfig } from 'surgio/build/types'
-import { CATEGORIES } from 'surgio/build/utils/constant'
+import { ArtifactConfig } from 'surgio/internal'
+import { CATEGORIES } from 'surgio/constant'
 
 import ArtifactCopyButtons from './'
 

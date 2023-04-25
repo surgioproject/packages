@@ -1,7 +1,7 @@
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common'
-import { Artifact } from 'surgio/build/generator/artifact'
-import { PossibleProviderType } from 'surgio/build/provider'
-import { CommandConfig } from 'surgio/build/types'
+import { Artifact } from 'surgio/generator'
+import { PossibleProviderType } from 'surgio/provider'
+import { CommandConfig } from 'surgio/internal'
 
 import { KEY, SurgioHelper } from './surgio-helper'
 
@@ -53,10 +53,10 @@ export class SurgioService {
     options: ExportProviderOptions = {}
   ): Promise<Artifact> {
     const artifactConfig = format
-      ? {
+      ? ({
           name: `${providerName}.conf`,
           provider: providerName,
-          template: undefined,
+          template: '',
           templateString: this.getTemplateByFormat(
             format,
             options.filter,
@@ -67,9 +67,9 @@ export class SurgioService {
                 combineProviders: options.combineProviders,
               }
             : null),
-        }
+        } as const)
       : template
-      ? {
+      ? ({
           name: `${providerName}.conf`,
           downloadUrl: options.downloadUrl,
           provider: providerName,
@@ -79,7 +79,7 @@ export class SurgioService {
                 combineProviders: options.combineProviders,
               }
             : null),
-        }
+        } as const)
       : (() => {
           throw new Error('未指定 format 和 template')
         })()
@@ -113,7 +113,7 @@ export class SurgioService {
 
     const artifact = {
       ...target,
-      template: undefined,
+      template: '',
       templateString: this.getTemplateByFormat(format, filter, target.provider),
     }
     const artifactInstance = new Artifact(this.surgioHelper.config, artifact, {
@@ -178,5 +178,5 @@ export class SurgioService {
 export interface ExportProviderOptions {
   readonly downloadUrl?: string
   readonly filter?: string
-  readonly combineProviders?: ReadonlyArray<string>
+  readonly combineProviders?: string[]
 }

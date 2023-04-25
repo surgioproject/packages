@@ -1,7 +1,7 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { SnackbarProvider } from 'notistack'
-import { ArtifactConfig } from 'surgio/build/types'
+import { ArtifactConfig } from 'surgio/internal'
 
 import ArtifactCard from './'
 

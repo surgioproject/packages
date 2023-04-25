@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common'
 import { Response } from 'express'
 import _ from 'lodash'
-import { formatSubscriptionUserInfo } from 'surgio/build/utils/subscription'
+import { formatSubscriptionUserInfo } from 'surgio/utils'
 
 import { APIAuthGuard } from '../auth/api-auth.guard'
 import { Roles } from '../auth/roles.decorator'

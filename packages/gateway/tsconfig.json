@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    // https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping
+    "target": "ES2022",
+    "module": "Node16",
+    "moduleResolution": "Node",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es6",
     "inlineSourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
