@@ -1,13 +1,14 @@
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common'
 import { Artifact } from 'surgio/generator'
-import { PossibleProviderType } from 'surgio/provider'
+import { PossibleProviderType, GetNodeListParams } from 'surgio/provider'
 import { CommandConfig } from 'surgio/internal'
 
 import { KEY, SurgioHelper } from './surgio-helper'
 
 @Injectable()
 export class SurgioService {
-  constructor(@Inject(KEY) public surgioHelper: SurgioHelper) {}
+  @Inject(KEY)
+  public surgioHelper: SurgioHelper
 
   public get config(): CommandConfig {
     return this.surgioHelper.config
@@ -17,8 +18,10 @@ export class SurgioService {
     artifactName: string,
     {
       downloadUrl,
+      getNodeListParams,
     }: {
       downloadUrl?: string
+      getNodeListParams?: GetNodeListParams
     } = {}
   ): Promise<Artifact | undefined> {
     const target = this.surgioHelper.artifactList.find(
@@ -41,7 +44,9 @@ export class SurgioService {
       }
     )
 
-    await artifactInstance.init()
+    await artifactInstance.init({
+      getNodeListParams,
+    })
 
     return artifactInstance
   }
@@ -93,7 +98,9 @@ export class SurgioService {
       }
     )
 
-    await artifactInstance.init()
+    await artifactInstance.init({
+      getNodeListParams: {},
+    })
 
     return artifactInstance
   }
@@ -176,7 +183,8 @@ export class SurgioService {
 }
 
 export interface ExportProviderOptions {
-  readonly downloadUrl?: string
-  readonly filter?: string
-  readonly combineProviders?: string[]
+  downloadUrl?: string
+  filter?: string
+  combineProviders?: string[]
+  getNodeListParams?: GetNodeListParams
 }

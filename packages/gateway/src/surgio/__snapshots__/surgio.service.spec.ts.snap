@@ -9,7 +9,7 @@ HTTPS = https, us.example.com, 443, username, password
 ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid, vmess-aead=true
-http 1 = https, server, 443, username, password, skip-cert-verify=false, tls13=false
+http 1 = https, server, 443, username, password, tls13=false, skip-cert-verify=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
 ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com
@@ -29,7 +29,7 @@ proxies:
     cipher: chacha20-ietf-poly1305
     name: 🇺🇸 US
     password: password
-    port: \\"443\\"
+    port: "443"
     server: us.example.com
     udp: true
     plugin: obfs
@@ -49,7 +49,7 @@ HTTPS = https, us.example.com, 443, username, password
 ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid, vmess-aead=true
-http 1 = https, server, 443, username, password, skip-cert-verify=false, tls13=false
+http 1 = https, server, 443, username, password, tls13=false, skip-cert-verify=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
 ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com"
@@ -78,7 +78,7 @@ proxies:
     cipher: chacha20-ietf-poly1305
     name: 🇺🇸US 1
     password: password
-    port: \\"443\\"
+    port: "443"
     server: us.example.com
     udp: false
     plugin: obfs
@@ -89,14 +89,14 @@ proxies:
     cipher: chacha20-ietf-poly1305
     name: 🇺🇸US 2
     password: password
-    port: \\"443\\"
+    port: "443"
     server: us.example.com
     udp: false
   - type: ss
     cipher: chacha20-ietf-poly1305
     name: 🇺🇸US 3
     password: password
-    port: \\"443\\"
+    port: "443"
     server: us.example.com
     udp: false
     plugin: v2ray-plugin
@@ -111,7 +111,7 @@ proxies:
     cipher: chacha20-ietf-poly1305
     name: 🇺🇸 US
     password: password
-    port: \\"443\\"
+    port: "443"
     server: us.example.com
     udp: true
     plugin: obfs
@@ -121,14 +121,14 @@ proxies:
   - type: snell
     name: Snell
     server: us.example.com
-    port: \\"443\\"
+    port: "443"
     psk: password
     obfs-opts:
       mode: tls
   - type: http
     name: HTTPS
     server: us.example.com
-    port: \\"443\\"
+    port: "443"
     username: username
     password: password
     tls: true
@@ -173,7 +173,7 @@ proxies:
     port: 443
     udp: false
     uuid: uuid
-    alterId: \\"32\\"
+    alterId: "32"
     tls: false
   - type: http
     name: http 1

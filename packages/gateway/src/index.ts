@@ -22,7 +22,7 @@ export const startServer = (): Promise<Server> => {
 
   return bootstrap()
     .then((app) => {
-      const configService = app.get<ConfigService>('ConfigService')
+      const configService = app.get<ConfigService>(ConfigService)
       port = configService.get('port') as number
 
       return app.listen(port)
@@ -38,12 +38,7 @@ export const startServer = (): Promise<Server> => {
     })
 }
 
-export const createLambdaHandler: () => (
-  event,
-  context
-) => Promise<
-  AWSLambda.APIGatewayProxyResult | AWSLambda.APIGatewayProxyStructuredResultV2
-> = () => {
+export const createLambdaHandler = () => {
   let handler: Handler
 
   return async (event, context) => {

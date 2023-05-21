@@ -52,6 +52,8 @@ export class AppController {
     const urlParams = _.omit(query, ['dl', 'format', 'filter', 'access_token'])
     const artifactName: string = params.name
     const userAgent = req.headers['user-agent']
+    const passRequestUserAgent =
+      this.surgioService.surgioHelper.config.gateway?.passRequestUserAgent
     let artifact: string | undefined | Artifact
     let isCache = false
 
@@ -102,7 +104,7 @@ export class AppController {
         artifact,
         {
           ...urlParams,
-          userAgent: userAgent || '',
+          ...(passRequestUserAgent && userAgent ? { userAgent } : null),
         },
         isCache
       )
@@ -122,6 +124,8 @@ export class AppController {
       ? query.providers.split(',').map((item) => item.trim())
       : []
     const userAgent = req.headers['user-agent']
+    const passRequestUserAgent =
+      this.surgioService.surgioHelper.config.gateway?.passRequestUserAgent
 
     if (!providers.length) {
       throw new HttpException(
@@ -229,7 +233,7 @@ export class AppController {
         artifact,
         {
           ...urlParams,
-          userAgent: userAgent || '',
+          ...(passRequestUserAgent && userAgent ? { userAgent } : null),
         },
         isCache
       )

@@ -11,7 +11,8 @@ export async function bootstrap(): Promise<NestExpressApplication> {
     AppModule,
     createAdapter(),
     {
-      logger: process.env.NODE_ENV === 'production' ? ['error', 'warn'] : true,
+      logger:
+        process.env.NODE_ENV === 'production' ? ['error', 'warn'] : ['verbose'],
     }
   )
 

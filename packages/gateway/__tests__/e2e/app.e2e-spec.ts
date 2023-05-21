@@ -16,7 +16,7 @@ describe('AppController (e2e)', () => {
     app = await NestFactory.create(AppModule, { logger: false })
     applyMiddlwares(app)
 
-    const surgioService = app.get<SurgioService>('SurgioService')
+    const surgioService = app.get<SurgioService>(SurgioService)
     token = surgioService.config.gateway?.accessToken
     viewerToken = surgioService.config.gateway?.viewerToken
 

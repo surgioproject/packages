@@ -45,15 +45,16 @@ export class SurgioHelper {
     async function readProvider(
       path: string
     ): Promise<PossibleProviderType | undefined> {
-      let provider: PossibleProviderType
+      const provider = await (() => {
+        try {
+          const providerName = basename(path, '.js')
 
-      try {
-        const providerName = basename(path, '.js')
-
-        provider = await getProvider(providerName, require(path))
-      } catch (err) {
-        return undefined
-      }
+          return getProvider(providerName, require(path))
+        } catch (err) {
+          Logger.error('读取 Provider 失败: ' + err.message)
+          return undefined
+        }
+      })()
 
       if (!provider?.type) {
         return undefined

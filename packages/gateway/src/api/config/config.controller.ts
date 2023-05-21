@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common'
-import { pkg as corePkgFile } from 'surgio'
+import { packageJson as corePkgFile } from 'surgio/internal'
 import _ from 'lodash'
 
 import { SurgioService } from '../../surgio/surgio.service'

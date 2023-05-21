@@ -2,6 +2,7 @@ import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { join } from 'path'
 import { ServeStaticModule } from '@nestjs/serve-static'
+import getPackage from '@surgio/gateway-frontend'
 
 import { AppController } from './app.controller'
 import { ApiModule } from './api/api.module'
@@ -11,7 +12,6 @@ import { SurgioModule } from './surgio/surgio.module'
 import { SurgioService } from './surgio/surgio.service'
 import { AuthModule } from './auth/auth.module'
 import configuration from './config/configuration'
-import getPackage from '@surgio/gateway-frontend'
 
 const FE_MODULE = require.resolve('@surgio/gateway-frontend')
 const frontendPackage = getPackage()

@@ -18,7 +18,7 @@ describe('ApiController (e2e)', () => {
     app = await NestFactory.create(AppModule, { logger: false })
     applyMiddlwares(app)
 
-    surgioService = app.get<SurgioService>('SurgioService')
+    surgioService = app.get<SurgioService>(SurgioService)
     token = surgioService.config.gateway?.accessToken
     viewerToken = surgioService.config.gateway?.viewerToken
 
