@@ -1,12 +1,14 @@
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import React, { FormEvent } from 'react'
-import { useHistory } from 'react-router-dom'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import Container from '@material-ui/core/Container'
-import TextField from '@material-ui/core/TextField'
-import Paper from '@material-ui/core/Paper'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { useNavigate } from 'react-router-dom'
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
+import TextField from '@mui/material/TextField'
+import Paper from '@mui/material/Paper'
+import { Theme } from '@mui/material/styles'
+import makeStyles from '@mui/styles/makeStyles'
+import createStyles from '@mui/styles/createStyles'
 import { useSnackbar } from 'notistack'
 
 import client from '../../libs/http'
@@ -30,7 +32,7 @@ const Page: React.FC = () => {
   const classes = useStyles()
   const [token, setToken] = React.useState('')
   const { enqueueSnackbar } = useSnackbar()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault()
@@ -42,7 +44,7 @@ const Page: React.FC = () => {
         },
       })
       .then(() => {
-        history.replace('/')
+        navigate('/', { replace: true })
       })
       .catch(() => {
         enqueueSnackbar('授权失败', { variant: 'error' })

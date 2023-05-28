@@ -1,5 +1,5 @@
 import { NormalizedOptions } from 'ky'
-import ky from 'ky-universal'
+import ky from 'ky'
 
 import { stores } from '../stores'
 

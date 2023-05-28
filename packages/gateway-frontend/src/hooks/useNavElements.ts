@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom'
-import { BAREBONE_PAGES } from '../libs/constant'
+
+import { BAREBONE_PAGES } from '@/libs/constant'
 
 export default function useNavElements() {
   const location = useLocation()

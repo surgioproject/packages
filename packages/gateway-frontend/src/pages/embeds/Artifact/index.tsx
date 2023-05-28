@@ -1,11 +1,13 @@
-import Container from '@material-ui/core/Container'
+import Container from '@mui/material/Container'
 import React from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { Theme } from '@mui/material/styles'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
 import { ArtifactConfig } from 'surgio/internal'
 import useSWR from 'swr'
 import { useParams, useLocation } from 'react-router-dom'
-import ArtifactCard from '../../../components/ArtifactCard'
 
+import ArtifactCard from '../../../components/ArtifactCard'
 import { defaultFetcher } from '../../../libs/utils'
 
 const useStyles = makeStyles((theme: Theme) =>

@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx'
+import { action, computed, makeObservable, observable } from 'mobx'
 
 export interface Config {
   urlBase: string
@@ -10,7 +10,6 @@ export interface Config {
 }
 
 export class ConfigStore {
-  @observable
   config: Config = {
     urlBase: '',
     publicUrl: '',
@@ -20,12 +19,18 @@ export class ConfigStore {
     viewerToken: null,
   }
 
-  @action
+  constructor() {
+    makeObservable(this, {
+      config: observable,
+      updateConfig: action,
+      isReady: computed,
+    })
+  }
+
   updateConfig(newConfig: Partial<Config>) {
     Object.assign(this.config, newConfig)
   }
 
-  @computed
   get isReady(): boolean {
     return !!this.config.backendVersion
   }

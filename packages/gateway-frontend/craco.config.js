@@ -1,14 +1,28 @@
 'use strict';
 
-const { ESLINT_MODES } = require('@craco/craco');
 const pkg = require('./package.json');
 
 process.env.REACT_APP_VERSION = pkg.version;
 
-module.exports = {
+/**
+ * @type {import('@craco/types').CracoConfig}
+ */
+const config = {
   eslint: {
-    mode: ESLINT_MODES.file,
+    enable: true,
+    mode: 'file',
   },
   plugins: [],
-  style: {},
+  style: {
+    postcss: {
+      mode: 'file',
+    }
+  },
+  webpack: {
+    alias: {
+      '@': `${__dirname}/src`,
+    },
+  },
 };
+
+module.exports = config;

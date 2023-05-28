@@ -1,7 +1,7 @@
 import React from 'react'
-import Box from '@material-ui/core/Box'
-import Button from '@material-ui/core/Button'
-import Popover from '@material-ui/core/Popover'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Popover from '@mui/material/Popover'
 import QrCode from 'qrcode.react'
 
 import QrCodeIcon from '../QrCodeIcon'

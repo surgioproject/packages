@@ -4,7 +4,7 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -18,11 +18,18 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "strict": true,
-    "experimentalDecorators": true,
+    "experimentalDecorators": false,
     "downlevelIteration": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "useDefineForClassFields": true,
+    "baseUrl": "src",
+    "paths": {
+      "@/*": [
+        "./*",
+      ],
+    },
   },
   "include": [
-    "src"
-  ]
+    "src/**/*",
+  ],
 }

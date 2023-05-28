@@ -13,6 +13,8 @@ test('http client', async () => {
 })
 
 test('http client handles 401', async () => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   delete window.location
   window.location = {
     href: '',
