@@ -9,6 +9,7 @@ import {
 import { Request, Response } from 'express'
 import { ServerResponse } from 'http'
 import Youch from 'youch'
+import _ from 'lodash'
 
 @Catch()
 export class AppExceptionsFilter implements ExceptionFilter {
@@ -52,6 +53,11 @@ export class AppExceptionsFilter implements ExceptionFilter {
       this.logger.error(`${request.method} ${request.url} ${status}`)
       this.logger.error(exception.stack || exception)
 
+      if (exception.cause instanceof Error) {
+        this.logger.error('Caused by:')
+        this.logger.error(exception.cause.stack || exception.cause)
+      }
+
       responsePayload = {
         status: 'error',
         statusCode: status,
@@ -76,6 +82,12 @@ export class AppExceptionsFilter implements ExceptionFilter {
         .addLink(() => {
           return `
 <div>
+  ${
+    _.has(exception, 'cause.message')
+      ? `<p>关联异常原因：${_.get(exception, 'cause.message')}</p>`
+      : ''
+  }
+  <br />
   <p>加入交流群汇报问题：<a href="https://t.me/surgiotg" target="_blank" rel="noopener">https://t.me/surgiotg</a></p>
 </div>
             `

@@ -1,6 +1,5 @@
 import client from '@/libs/http'
 import { useStores } from '@/stores'
-import Divider from '@mui/material/Divider'
 import { observer } from 'mobx-react-lite'
 import { useSnackbar } from 'notistack'
 import React from 'react'
@@ -9,20 +8,27 @@ import {
   PlaneTakeoffIcon,
   EraserIcon,
   HomeIcon,
+  LogOutIcon,
 } from 'lucide-react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { cn } from '@/libs/utils'
+import { Separator } from '@/components/ui/separator'
 
 const AppDrawerContent = () => {
   const stores = useStores()
   const { enqueueSnackbar } = useSnackbar()
   const location = useLocation()
+  const navigate = useNavigate()
 
   const cleanCache = () => {
     return client.post('/api/clean-cache').then(() => {
       enqueueSnackbar('清除成功', { variant: 'success' })
     })
+  }
+
+  const logout = () => {
+    return client.post('/api/auth/logout')
   }
 
   const navigation = [
@@ -35,6 +41,15 @@ const AppDrawerContent = () => {
         cleanCache()
       },
       icon: EraserIcon,
+    },
+    {
+      name: '登出',
+      onClick: () => {
+        logout().then(() => {
+          navigate('/auth', { replace: true })
+        })
+      },
+      icon: LogOutIcon,
     },
   ] as const
 
@@ -55,7 +70,7 @@ const AppDrawerContent = () => {
         ) : null}
       </div>
 
-      <Divider />
+      <Separator />
 
       <ul role="list" className="flex flex-1 flex-col space-y-3 py-4">
         {navigation.map((item) => {

@@ -1,52 +1,27 @@
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
-import CardActions from '@mui/material/CardActions'
-import DnsIcon from '@mui/icons-material/Dns'
-import Chip from '@mui/material/Chip'
-import React from 'react'
-import makeStyles from '@mui/styles/makeStyles'
-import Card from '@mui/material/Card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import React, { useState } from 'react'
 import { useSnackbar } from 'notistack'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Loader2 } from 'lucide-react'
 
 import { Provider } from '../../libs/types'
 import { defaultFetcher } from '../../libs/utils'
 import ProviderCopyButtons from '../ProviderCopyButtons'
-
-const useStyles = makeStyles((theme) => ({
-  ProviderCard: {
-    '& .MuiCardActions-root': {
-      flexWrap: 'wrap',
-    },
-  },
-  providerType: {
-    margin: theme.spacing(0, 0, 2),
-  },
-  urlContainer: {
-    'background-color': '#eee',
-    padding: theme.spacing(2, 3),
-    margin: theme.spacing(2, 0, 0),
-    '-webkit-overflow-scrolling': 'touch',
-    'overflow-x': 'scroll',
-    'font-family': ['fira-code', 'monospace'].join(','),
-  },
-  actionButton: {
-    margin: theme.spacing(1),
-    textDecoration: 'none',
-  },
-}))
 
 export interface ProviderCardProps {
   provider: Provider
 }
 
 function ProviderCard({ provider }: ProviderCardProps) {
-  const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
+  const [isLoading, setIsLoading] = useState(false)
 
   const checkSubscription = (providerName: string) => {
     ;(async () => {
+      setIsLoading(true)
+
       const data = await defaultFetcher<any>(
         `/api/providers/${providerName}/subscription`
       )
@@ -59,46 +34,57 @@ function ProviderCard({ provider }: ProviderCardProps) {
       } else {
         enqueueSnackbar('该 Provider 不支持查询', { variant: 'error' })
       }
-    })().catch((err) => {
-      enqueueSnackbar('网络问题', { variant: 'error' })
-    })
+    })()
+      .catch((err) => {
+        enqueueSnackbar('网络问题', { variant: 'error' })
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   return (
-    <Card className={classes.ProviderCard}>
-      <CardHeader title={provider.name} />
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-xl">{provider.name}</CardTitle>
+      </CardHeader>
 
-      <CardContent>
-        <div className={classes.providerType}>
-          <Chip icon={<DnsIcon fontSize="small" />} label={provider.type} />
+      <CardContent className="space-y-4">
+        <div>
+          <Badge className="capitalize">{provider.type}</Badge>
         </div>
 
         {provider.url ? (
-          <Typography
-            className={classes.urlContainer}
-            component="pre"
-            paragraph
-          >
-            {provider.url}
-          </Typography>
+          <div className="bg-secondary text-secondary-foreground rounded">
+            <pre className="overflow-x-scroll p-4 text-sm">{provider.url}</pre>
+          </div>
         ) : null}
-      </CardContent>
 
-      <CardActions disableSpacing>
         {provider.supportGetSubscriptionUserInfo ? (
-          <Button
-            className={classes.actionButton}
-            variant="contained"
-            color="primary"
-            onClick={() => checkSubscription(provider.name)}
-          >
-            查询流量
-          </Button>
+          <div>
+            <Button
+              disabled={isLoading}
+              onClick={() => checkSubscription(provider.name)}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  查询中...
+                </>
+              ) : (
+                '查询流量'
+              )}
+            </Button>
+          </div>
         ) : null}
-        <div className={classes.actionButton}>
+
+        <Separator className="my-4" />
+
+        <div className="space-y-2">
+          <div className="font-semibold">复制订阅地址</div>
           <ProviderCopyButtons providerNameList={[provider.name]} />
         </div>
-      </CardActions>
+      </CardContent>
     </Card>
   )
 }

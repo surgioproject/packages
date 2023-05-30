@@ -43,9 +43,7 @@ export class AuthController {
         path: '/',
       })
       res.cookie('_t', accessToken, {
-        maxAge:
-          (this.surgioService.surgioHelper.config?.gateway?.cookieMaxAge ??
-            (this.configService.get('defaultCookieMaxAge') as number)) * 1e3,
+        maxAge: -1,
         httpOnly: true,
         signed: true,
         path: '/api',
@@ -56,6 +54,28 @@ export class AuthController {
     } else {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED)
     }
+  }
+
+  @Post('/logout')
+  public async logout(
+    @Req() req: EnrichedRequest,
+    @Res() res: Response
+  ): Promise<void> {
+    res.cookie('_t', '', {
+      maxAge: -1,
+      httpOnly: true,
+      signed: true,
+      path: '/',
+    })
+    res.cookie('_t', '', {
+      maxAge: -1,
+      httpOnly: true,
+      signed: true,
+      path: '/api',
+    })
+    res.status(200).send({
+      status: 'ok',
+    })
   }
 
   @UseGuards(APIAuthGuard)

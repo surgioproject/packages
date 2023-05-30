@@ -1,39 +1,14 @@
-import Grid from '@mui/material/Grid'
-import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Loader2 } from 'lucide-react'
+import React, { useEffect } from 'react'
 import useSWR from 'swr'
-import { Theme } from '@mui/material/styles'
-import makeStyles from '@mui/styles/makeStyles'
-import createStyles from '@mui/styles/createStyles'
-import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
-import Paper from '@mui/material/Paper'
-import FormGroup from '@mui/material/FormGroup'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
-import Divider from '@mui/material/Divider'
 import { ArtifactConfig } from 'surgio/internal'
+import { defaultFetcher } from '@/libs/utils'
+import ArtifactCard from '@/components/ArtifactCard'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Separator } from '@/components/ui/separator'
 
-import { defaultFetcher } from '../../libs/utils'
-import ArtifactCard from '../../components/ArtifactCard'
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    ArtifactListPage: {},
-    headerContainer: {
-      padding: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-    },
-    categories: {
-      margin: theme.spacing(2, 0, 0),
-    },
-    category: {},
-    listContainer: {},
-    listItem: {},
-  })
-)
-
-const Page: React.FC = () => {
-  const classes = useStyles()
+const Page = (): JSX.Element => {
   const { data: artifactList, error } = useSWR<ReadonlyArray<ArtifactConfig>>(
     '/api/artifacts',
     defaultFetcher
@@ -43,7 +18,7 @@ const Page: React.FC = () => {
   }>({})
   const [categories, setCategories] = React.useState<string[]>([])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (artifactList) {
       const result = artifactList
         .reduce<string[]>((accu, curr): string[] => {
@@ -72,27 +47,27 @@ const Page: React.FC = () => {
 
   if (error) {
     return (
-      <Box display="flex" justifyContent="center">
-        Failed to load
-      </Box>
+      <div className="flex justify-center text-2xl font-semibold">
+        🚨 加载失败 🚨
+      </div>
     )
   }
 
   if (!artifactList) {
     return (
-      <Box display="flex" justifyContent="center">
-        Loading...
-      </Box>
+      <div className="flex justify-center items-center text-lg">
+        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+        加载中...
+      </div>
     )
   }
 
-  const handleCategoryChange =
-    (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setCategorySelection({
-        ...categorySelection,
-        [name]: event.target.checked,
-      })
-    }
+  const handleCategoryChange = (name: string) => (checked: boolean) => {
+    setCategorySelection({
+      ...categorySelection,
+      [name]: checked,
+    })
+  }
 
   const getArtifactListElement = () => {
     if (!artifactList) return null
@@ -105,15 +80,9 @@ const Page: React.FC = () => {
     if (!hasSelection) {
       return artifactList.map((item) => {
         return (
-          <Grid
-            item
-            xs={12}
-            lg={6}
-            className={classes.listItem}
-            key={item.name}
-          >
+          <div key={item.name}>
             <ArtifactCard artifact={item} />
-          </Grid>
+          </div>
         )
       })
     }
@@ -127,64 +96,67 @@ const Page: React.FC = () => {
             })
             .map((artifact) => {
               return (
-                <Grid
-                  item
-                  xs={12}
-                  lg={6}
-                  className={classes.listItem}
-                  key={artifact.name}
-                >
+                <div key={artifact.name}>
                   <ArtifactCard artifact={artifact} />
-                </Grid>
+                </div>
               )
             })
         )
       }
     })
 
-    return <>{result}</>
+    return result
   }
 
   return (
-    <div className={classes.ArtifactListPage}>
-      <Paper className={classes.headerContainer}>
+    <div>
+      <Card>
         {categories.length > 0 ? (
           <>
-            <Typography gutterBottom variant="h4">
-              Artifacts
-            </Typography>
-            <Divider />
-            <div className={classes.categories}>
-              <Typography gutterBottom variant="body1">
-                分类
-              </Typography>
-              <FormGroup row>
-                {categories.map((cat) => (
-                  <FormControlLabel
-                    className={classes.category}
-                    key={cat}
-                    control={
+            <CardHeader>
+              <CardTitle className="text-2xl">Artifacts</CardTitle>
+            </CardHeader>
+
+            <CardContent className="space-y-4">
+              <Separator />
+
+              <div className="space-y-2">
+                <div className="font-semibold">分类</div>
+                <div className="flex flex-wrap">
+                  {categories.map((cat) => (
+                    <div
+                      key={cat}
+                      className="flex items-center space-x-2 mr-4 my-1"
+                    >
                       <Checkbox
+                        id={`cb-${cat}`}
                         checked={categorySelection[cat]}
-                        onChange={handleCategoryChange(cat)}
+                        onCheckedChange={(val) =>
+                          handleCategoryChange(cat)(val === true)
+                        }
                         value={cat}
-                        color="primary"
                       />
-                    }
-                    label={cat}
-                  />
-                ))}
-              </FormGroup>
-            </div>
+                      <label
+                        htmlFor={`cb-${cat}`}
+                        className="text-sm leading-none"
+                      >
+                        {cat}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
           </>
         ) : (
-          <Typography variant="h4">Artifacts</Typography>
+          <CardHeader>
+            <CardTitle className="text-2xl">Artifacts</CardTitle>
+          </CardHeader>
         )}
-      </Paper>
-      <div className={classes.listContainer}>
-        <Grid container spacing={3}>
-          {getArtifactListElement()}
-        </Grid>
+      </Card>
+
+      <div className="mt-6 lg:mt-8 grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
+        {getArtifactListElement()}
       </div>
     </div>
   )

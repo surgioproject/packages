@@ -80,3 +80,13 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+html, body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}

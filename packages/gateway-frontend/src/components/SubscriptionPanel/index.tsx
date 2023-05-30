@@ -1,30 +1,17 @@
-import Box from '@mui/material/Box'
-import Paper from '@mui/material/Paper'
-import makeStyles from '@mui/styles/makeStyles'
-import Typography from '@mui/material/Typography'
-import Skeleton from '@mui/material/Skeleton'
-import CircularProgress from '@mui/material/CircularProgress'
-import Grid from '@mui/material/Grid'
+import { Loader2 } from 'lucide-react'
 import React from 'react'
 import useSWR from 'swr'
 import uniqWith from 'lodash-es/uniqWith'
+import { Provider } from '@/libs/types'
+import { defaultFetcher } from '@/libs/utils'
 
-import { Provider } from '../../libs/types'
-import { defaultFetcher } from '../../libs/utils'
-
-const useStyles = makeStyles((theme) => ({
-  SubscriptionPanel: {
-    padding: theme.spacing(2),
-  },
-  SubscriptionPanelItem: {},
-}))
+import SubscriptionPanelItem from './SubscriptionPanelItem'
 
 export interface SubscriptionPanelItemProps {
   provider: Provider
 }
 
 function SubscriptionPanel() {
-  const classes = useStyles()
   const { data: providerList, error } = useSWR<ReadonlyArray<Provider>>(
     '/api/providers',
     defaultFetcher
@@ -32,14 +19,19 @@ function SubscriptionPanel() {
 
   if (error) {
     return (
-      <Box display="flex" justifyContent="center">
-        Failed to load
-      </Box>
+      <div className="flex justify-center text-2xl font-semibold">
+        🚨 加载失败 🚨
+      </div>
     )
   }
 
   if (!providerList) {
-    return <CircularProgress />
+    return (
+      <div className="flex justify-center items-center text-lg">
+        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+        加载中...
+      </div>
+    )
   }
 
   const supportedProviderList = uniqWith(
@@ -61,79 +53,19 @@ function SubscriptionPanel() {
   )
 
   return (
-    <Paper className={classes.SubscriptionPanel}>
-      <Typography gutterBottom variant="h4">
-        订阅
-      </Typography>
+    <>
+      <div className="font-semibold tracking-tight text-lg">订阅</div>
 
-      <Grid container spacing={3}>
+      <div className="mt-3 lg:mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
         {supportedProviderList.map((provider: Provider) => {
           return (
-            <SubscriptionPanelItem provider={provider} key={provider.name} />
+            <div key={provider.name}>
+              <SubscriptionPanelItem provider={provider} />
+            </div>
           )
         })}
-      </Grid>
-    </Paper>
-  )
-}
-
-function SubscriptionPanelItem({ provider }: SubscriptionPanelItemProps) {
-  const classes = useStyles()
-  const { data, error } = useSWR<any>(
-    `/api/providers/${provider.name}/subscription`,
-    defaultFetcher
-  )
-
-  if (error) {
-    return (
-      <Grid item xs={12} sm={6} lg={4} key={provider.name}>
-        <div className={classes.SubscriptionPanelItem}>
-          <Typography gutterBottom variant="h6">
-            {provider.name}
-          </Typography>
-          <Typography gutterBottom variant="body2">
-            Failed to load
-          </Typography>
-        </div>
-      </Grid>
-    )
-  }
-
-  if (typeof data === 'undefined') {
-    return (
-      <Grid item xs={12} sm={6} lg={4} key={provider.name}>
-        <Typography gutterBottom variant="h6">
-          {provider.name}
-        </Typography>
-        <Skeleton />
-        <Skeleton />
-      </Grid>
-    )
-  }
-
-  if (data === null) {
-    return <></>
-  }
-
-  return (
-    <Grid item xs={12} sm={6} lg={4} key={provider.name}>
-      <div className={classes.SubscriptionPanelItem}>
-        <Typography gutterBottom variant="h6">
-          {provider.name}
-        </Typography>
-        <div>
-          <Typography gutterBottom variant="body2">
-            已用流量：{data.used}
-          </Typography>
-          <Typography gutterBottom variant="body2">
-            剩余流量：{data.left}
-          </Typography>
-          <Typography gutterBottom variant="body2">
-            有效期至：{data.expire}
-          </Typography>
-        </div>
       </div>
-    </Grid>
+    </>
   )
 }
 

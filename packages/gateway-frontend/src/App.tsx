@@ -1,26 +1,29 @@
 import AppDrawer from '@/components/AppDrawer'
 import AppHeader from '@/components/AppHeader'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  Suspense,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
-import { Routes, Route, useLocation } from 'react-router-dom'
-import loadable from '@loadable/component'
+import { Routes, Route, useLocation, Outlet } from 'react-router-dom'
 
 import './App.css'
-import useNavElements from './hooks/useNavElements'
 import { defaultFetcher } from './libs/utils'
 import { useStores } from './stores'
 import { Config } from './stores/config'
 import NotFoundPage from './pages/NotFound'
 
-const ArtifactListPage = loadable(() => import('./pages/ArtifactList'), {})
-const ProviderListPage = loadable(() => import('./pages/ProviderList'), {})
-const HomePage = loadable(() => import('./pages/Home'), {})
-const AuthPage = loadable(() => import('./pages/Auth'), {})
-const EmbedArtifactPage = loadable(() => import('./pages/embeds/Artifact'), {})
+const ArtifactListPage = React.lazy(() => import('./pages/ArtifactList'))
+const ProviderListPage = React.lazy(() => import('./pages/ProviderList'))
+const HomePage = React.lazy(() => import('./pages/Home'))
+const AuthPage = React.lazy(() => import('./pages/Auth'))
+const EmbedArtifactPage = React.lazy(() => import('./pages/embeds/Artifact'))
 
 const App = () => {
   const stores = useStores()
-  const isShowNavElements = useNavElements()
   const location = useLocation()
   const [isAppDrawerOpen, setIsAppDrawerOpen] = useState(false)
 
@@ -79,42 +82,75 @@ const App = () => {
       })
   }, [stores.config, validateAuth])
 
+  useEffect(() => {
+    setIsAppDrawerOpen(false)
+  }, [location])
+
+  const NormalLayout = useMemo(() => {
+    return (
+      <>
+        <AppHeader onAppDrawerButtonClick={() => setIsAppDrawerOpen(true)} />
+
+        <AppDrawer
+          isOpen={isAppDrawerOpen}
+          onClose={() => setIsAppDrawerOpen(false)}
+        />
+
+        <main className="flex flex-1 flex-col w-full bg-gray-50 py-4 sm:py-6 lg:py-8 lg:pl-72">
+          <div className="flex flex-1 flex-col px-4 sm:px-6 lg:px-8">
+            <Outlet />
+          </div>
+        </main>
+      </>
+    )
+  }, [isAppDrawerOpen])
+
+  const LayoutWithoutNav = useMemo(() => {
+    return (
+      <main className="flex flex-col w-full min-h-full bg-gray-50 py-4 sm:py-6 lg:py-8 px-4 sm:px-6 lg:px-8">
+        <Outlet />
+      </main>
+    )
+  }, [])
+
   return (
-    <div>
+    <div className="flex flex-1 items-stretch relative flex-col">
       {stores.config.isReady ? (
         <>
-          {isShowNavElements ? (
-            <>
-              <AppHeader
-                onAppDrawerButtonClick={() => setIsAppDrawerOpen(true)}
+          <Routes>
+            <Route path="/" element={NormalLayout}>
+              <Route
+                path="artifacts"
+                element={<RouteSuspense element={<ArtifactListPage />} />}
               />
-
-              <AppDrawer
-                isOpen={isAppDrawerOpen}
-                onClose={() => setIsAppDrawerOpen(false)}
+              <Route
+                path="providers"
+                element={<RouteSuspense element={<ProviderListPage />} />}
               />
-            </>
-          ) : null}
+              <Route index element={<RouteSuspense element={<HomePage />} />} />
+            </Route>
 
-          <main className="py-10 lg:pl-72  bg-gray-50">
-            <div className="px-4 sm:px-6 lg:px-8">
-              <Routes>
-                <Route path="/artifacts" element={<ArtifactListPage />} />
-                <Route path="/providers" element={<ProviderListPage />} />
-                <Route path="/auth" element={<AuthPage />} />
-                <Route
-                  path="/embed/artifact/:artifactName"
-                  element={<EmbedArtifactPage />}
-                />
-                <Route path="/" element={<HomePage />} />
-                <Route path="/*" element={<NotFoundPage />} />
-              </Routes>
-            </div>
-          </main>
+            <Route path="/" element={LayoutWithoutNav}>
+              <Route
+                path="/auth"
+                element={<RouteSuspense element={<AuthPage />} />}
+              />
+              <Route
+                path="/embed/artifact/:artifactName"
+                element={<RouteSuspense element={<EmbedArtifactPage />} />}
+              />
+            </Route>
+
+            <Route path="/*" element={<NotFoundPage />} />
+          </Routes>
         </>
       ) : null}
     </div>
   )
+}
+
+function RouteSuspense({ element }: { element: React.ReactNode }) {
+  return <Suspense fallback={<></>}>{element}</Suspense>
 }
 
 export default observer(App)

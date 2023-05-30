@@ -1,86 +1,94 @@
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { observer } from 'mobx-react-lite'
-import React, { FormEvent } from 'react'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import Container from '@mui/material/Container'
-import TextField from '@mui/material/TextField'
-import Paper from '@mui/material/Paper'
-import { Theme } from '@mui/material/styles'
-import makeStyles from '@mui/styles/makeStyles'
-import createStyles from '@mui/styles/createStyles'
 import { useSnackbar } from 'notistack'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import client from '@/libs/http'
+import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 
-import client from '../../libs/http'
+const formSchema = z.object({
+  accessToken: z.string().nonempty({
+    message: 'Access Token 不能为空',
+  }),
+})
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    AuthPage: {},
-    formContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      padding: theme.spacing(4),
-    },
-    formInner: {
-      marginBottom: theme.spacing(3),
-    },
-  })
-)
-
-const Page: React.FC = () => {
-  const classes = useStyles()
-  const [token, setToken] = React.useState('')
+const Page = () => {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      accessToken: '',
+    },
+  })
 
-  const onSubmit = (event: FormEvent) => {
-    event.preventDefault()
-
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
     client
       .post('/api/auth', {
         json: {
-          accessToken: token,
+          accessToken: values.accessToken,
         },
+      })
+      .catch((err) => {
+        enqueueSnackbar('授权失败', { variant: 'error' })
+        form.control.setError('accessToken', {
+          type: 'custom',
+          message: '授权失败：' + err.message,
+        })
+
+        throw err
       })
       .then(() => {
         navigate('/', { replace: true })
       })
-      .catch(() => {
-        enqueueSnackbar('授权失败', { variant: 'error' })
-        setToken('')
+      .catch((err) => {
+        console.error(err)
       })
   }
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setToken(event.target.value.trim())
-  }
-
   return (
-    <div className={classes.AuthPage}>
-      <Container maxWidth="sm">
-        <Paper variant="outlined" className={classes.formContainer}>
-          <Typography gutterBottom variant="h4">
-            授权
-          </Typography>
-          <form onSubmit={onSubmit}>
-            <div className={classes.formInner}>
-              <TextField
-                required
-                value={token}
-                onChange={onChange}
-                type="password"
-                id="accessToken"
-                label="Access Token"
+    <div className="container mx-auto max-w-3xl">
+      <Card>
+        <CardHeader>
+          <CardTitle>登录</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="accessToken"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Access Token</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        autoComplete="current-password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-
-            <Button variant="contained" color="primary" type="submit">
-              确认
-            </Button>
-          </form>
-        </Paper>
-      </Container>
+              <Button type="submit">登录</Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   )
 }

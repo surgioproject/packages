@@ -1,34 +1,28 @@
+import { Button } from '@/components/ui/button'
 import { observer } from 'mobx-react-lite'
 import React from 'react'
 import { ArtifactConfig } from 'surgio/internal'
-import { Theme } from '@mui/material/styles'
-import makeStyles from '@mui/styles/makeStyles'
-import createStyles from '@mui/styles/createStyles'
-import Link from '@mui/material/Link'
-import Button from '@mui/material/Button'
 import { CATEGORIES } from 'surgio/constant'
 import { JsonObject } from 'type-fest'
-
-import { getDownloadUrl } from '../../libs/utils'
-import { useStores } from '../../stores'
+import { getDownloadUrl } from '@/libs/utils'
+import { useDownloadToken } from '@/stores'
 
 export interface ArtifactActionButtonsProps {
   artifact: ArtifactConfig
+  artifactParams?: URLSearchParams
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    ArtifactActionButtons: {},
-    actionButton: {},
-  })
-)
-
-function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
-  const classes = useStyles()
-  const { config: configStore } = useStores()
-  const downloadToken =
-    configStore.config.viewerToken || configStore.config.accessToken
-  const previewUrl = getDownloadUrl(artifact.name, true, downloadToken)
+function ArtifactActionButtons({
+  artifact,
+  artifactParams,
+}: ArtifactActionButtonsProps) {
+  const downloadToken = useDownloadToken()
+  const previewUrl = getDownloadUrl(
+    artifact.name,
+    true,
+    downloadToken,
+    artifactParams
+  )
 
   const SurgeButtons: React.FC = () => {
     if (
@@ -36,19 +30,14 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
       artifact?.categories?.includes(CATEGORIES.SURGE)
     ) {
       return (
-        <div className={classes.actionButton}>
-          <Button
-            component={Link}
-            color="secondary"
-            size="medium"
-            rel="nofollow"
-            target="_blank"
+        <div>
+          <a
             href={`surge:///install-config?url=${encodeURIComponent(
               previewUrl
             )}`}
           >
-            Add to Surge
-          </Button>
+            <Button variant="secondary">添加到 Surge</Button>
+          </a>
         </div>
       )
     }
@@ -62,19 +51,14 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
       artifact?.categories?.includes(CATEGORIES.CLASH)
     ) {
       return (
-        <div className={classes.actionButton}>
-          <Button
-            component={Link}
-            color="secondary"
-            size="medium"
-            rel="nofollow"
-            target="_blank"
+        <div>
+          <a
             href={`clash://install-config?url=${encodeURIComponent(
               previewUrl
             )}`}
           >
-            Add to ClashX/CFW
-          </Button>
+            <Button variant="secondary">添加到 ClashX/CFW</Button>
+          </a>
         </div>
       )
     }
@@ -88,20 +72,14 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
         server_remote: [previewUrl],
       }
       return (
-        <div className={classes.actionButton}>
-          <Button
-            data-testid="quanx-server-remote"
-            component={Link}
-            color="secondary"
-            size="medium"
-            rel="nofollow"
-            target="_blank"
+        <div>
+          <a
             href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(
               JSON.stringify(json)
             )}`}
           >
-            Add to Quantumult X
-          </Button>
+            <Button variant="secondary">添加到 ClashX/CFW</Button>
+          </a>
         </div>
       )
     }
@@ -111,20 +89,14 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
         filter_remote: [previewUrl],
       }
       return (
-        <div className={classes.actionButton}>
-          <Button
-            data-testid="quanx-filter-remote"
-            component={Link}
-            color="secondary"
-            size="medium"
-            rel="nofollow"
-            target="_blank"
+        <div>
+          <a
             href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(
               JSON.stringify(json)
             )}`}
           >
-            Add to Quantumult X
-          </Button>
+            <Button variant="secondary">添加到 Quantumult X</Button>
+          </a>
         </div>
       )
     }
@@ -134,20 +106,14 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
         rewrite_remote: [previewUrl],
       }
       return (
-        <div className={classes.actionButton}>
-          <Button
-            data-testid="quanx-rewrite-remote"
-            component={Link}
-            color="secondary"
-            size="medium"
-            rel="nofollow"
-            target="_blank"
+        <div>
+          <a
             href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(
               JSON.stringify(json)
             )}`}
           >
-            Add to Quantumult X
-          </Button>
+            <Button variant="secondary">添加到 Quantumult X</Button>
+          </a>
         </div>
       )
     }
@@ -161,17 +127,10 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
       artifact?.categories?.includes(CATEGORIES.LOON)
     ) {
       return (
-        <div className={classes.actionButton}>
-          <Button
-            component={Link}
-            color="secondary"
-            size="medium"
-            rel="nofollow"
-            target="_blank"
-            href={`loon://import?sub=${encodeURIComponent(previewUrl)}`}
-          >
-            Add to Loon
-          </Button>
+        <div>
+          <a href={`loon://import?sub=${encodeURIComponent(previewUrl)}`}>
+            <Button variant="secondary">添加到 Loon</Button>
+          </a>
         </div>
       )
     }
@@ -185,19 +144,14 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
       artifact?.categories?.includes('Surfboard')
     ) {
       return (
-        <div className={classes.actionButton}>
-          <Button
-            component={Link}
-            color="secondary"
-            size="medium"
-            rel="nofollow"
-            target="_blank"
+        <div>
+          <a
             href={`surfboard:///install-config?url=${encodeURIComponent(
               previewUrl
             )}`}
           >
-            Add to Surfboard
-          </Button>
+            <Button variant="secondary">添加到 Surfboard</Button>
+          </a>
         </div>
       )
     }
@@ -206,7 +160,7 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
   }
 
   return (
-    <div data-testid="action-buttons" className={classes.ArtifactActionButtons}>
+    <div data-testid="action-buttons">
       <SurgeButtons />
       <ClashButtons />
       <QuantumultXButtons />
