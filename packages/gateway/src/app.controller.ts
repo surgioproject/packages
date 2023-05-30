@@ -9,6 +9,7 @@ import {
   UseGuards,
   Req,
   Logger,
+  Post,
 } from '@nestjs/common'
 import { Request, Response } from 'express'
 import { Artifact } from 'surgio/generator'
@@ -23,6 +24,7 @@ import { APIAuthGuard } from './auth/api-auth.guard'
 import { Roles } from './auth/roles.decorator'
 import { Role } from './constants/role'
 import { SurgioService } from './surgio/surgio.service'
+import { EnrichedRequest } from './types/app'
 
 dayjs.extend(duration)
 

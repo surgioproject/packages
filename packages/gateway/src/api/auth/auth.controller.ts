@@ -42,12 +42,6 @@ export class AuthController {
         signed: true,
         path: '/',
       })
-      res.cookie('_t', accessToken, {
-        maxAge: -1,
-        httpOnly: true,
-        signed: true,
-        path: '/api',
-      })
       res.status(200).send({
         status: 'ok',
       })
@@ -57,7 +51,7 @@ export class AuthController {
   }
 
   @Post('/logout')
-  public async logout(
+  public async postLogout(
     @Req() req: EnrichedRequest,
     @Res() res: Response
   ): Promise<void> {
@@ -76,6 +70,26 @@ export class AuthController {
     res.status(200).send({
       status: 'ok',
     })
+  }
+
+  @Get('/logout')
+  public async getLogout(
+    @Req() req: EnrichedRequest,
+    @Res() res: Response
+  ): Promise<void> {
+    res.cookie('_t', '', {
+      maxAge: -1,
+      httpOnly: true,
+      signed: true,
+      path: '/',
+    })
+    res.cookie('_t', '', {
+      maxAge: -1,
+      httpOnly: true,
+      signed: true,
+      path: '/api',
+    })
+    res.redirect('/auth')
   }
 
   @UseGuards(APIAuthGuard)

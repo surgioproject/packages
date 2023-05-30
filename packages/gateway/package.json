@@ -35,7 +35,7 @@
     "@nestjs/passport": "^9.0.3",
     "@nestjs/platform-express": "^9.4.1",
     "@nestjs/serve-static": "^3.0.1",
-    "@surgio/gateway-frontend": "file:../gateway-frontend",
+    "@surgio/gateway-frontend": "workspace:*",
     "bluebird": "^3.7.2",
     "cookie-parser": "^1.4.6",
     "dayjs": "^1.11.7",

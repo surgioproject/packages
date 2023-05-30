@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports = {
+const { defineSurgioConfig } = require('surgio');
+
+module.exports = defineSurgioConfig({
   artifacts: [
     {
       name: 'test.conf',
@@ -35,6 +37,11 @@ module.exports = {
       template: 'test',
       provider: 'clash-error-after-first',
     },
+    {
+      name: 'hooks.conf',
+      template: 'test',
+      provider: 'hooks',
+    }
   ],
   urlBase: 'https://example.com/',
   binPath: {
@@ -53,4 +60,4 @@ module.exports = {
   customFilters: {
     globalFilter: (node) => node.nodeName === '🇺🇸 US',
   },
-};
+});

@@ -213,6 +213,17 @@ describe('AppController (e2e)', () => {
       .expect(401)
   })
 
+  test('/export-providers (GET) with user-agent', async () => {
+    const res = await supertest(app.getHttpServer())
+      .get(
+        `/export-providers?access_token=${token}&providers=hooks&format=surge-policy`
+      )
+      .set('User-Agent', 'test-agent')
+    console.log(res.text)
+    expect(res.status).toBe(200)
+    expect(res.text).toMatchSnapshot()
+  })
+
   test('/render (GET)', async () => {
     const res = await supertest(app.getHttpServer()).get(
       `/render?access_token=${token}&template=render`

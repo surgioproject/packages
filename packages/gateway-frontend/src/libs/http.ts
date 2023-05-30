@@ -16,10 +16,9 @@ const client = ky.create({
       },
     ],
     afterResponse: [
-      // Or retry with a fresh token on a 403 error
       (request: Request, options: NormalizedOptions, response: Response) => {
         if (response.status === 401 && window.location.pathname !== '/auth') {
-          window.location.href = '/auth'
+          window.location.href = '/api/auth/logout'
           return
         }
         return response
