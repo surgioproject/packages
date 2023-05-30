@@ -99,7 +99,9 @@ export class SurgioService {
     )
 
     await artifactInstance.init({
-      getNodeListParams: {},
+      getNodeListParams: {
+        ...options.getNodeListParams,
+      },
     })
 
     return artifactInstance
@@ -108,7 +110,13 @@ export class SurgioService {
   public async transformArtifact(
     artifactName: string,
     format: string,
-    filter?: string
+    {
+      filter,
+      getNodeListParams,
+    }: {
+      filter?: string
+      getNodeListParams?: GetNodeListParams
+    } = {}
   ): Promise<Artifact | string | undefined> {
     const target = this.surgioHelper.artifactList.find(
       (item) => item.name === artifactName
@@ -128,7 +136,9 @@ export class SurgioService {
       templateEngine: this.surgioHelper.templateEngine,
     })
 
-    await artifactInstance.init()
+    await artifactInstance.init({
+      getNodeListParams,
+    })
 
     return artifactInstance.render()
   }

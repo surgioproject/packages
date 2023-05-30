@@ -52,24 +52,26 @@ export class AppController {
     const urlParams = _.omit(query, ['dl', 'format', 'filter', 'access_token'])
     const artifactName: string = params.name
     const userAgent = req.headers['user-agent']
-    const passRequestUserAgent =
-      this.surgioService.surgioHelper.config.gateway?.passRequestUserAgent
+    const getNodeListParams = {
+      ...urlParams,
+      ...(userAgent ? { requestUserAgent: userAgent } : null),
+    }
     let artifact: string | undefined | Artifact
     let isCache = false
 
     try {
       artifact =
         format !== void 0
-          ? await this.surgioService.transformArtifact(
-              artifactName,
-              format,
-              filter
-            )
+          ? await this.surgioService.transformArtifact(artifactName, format, {
+              filter,
+              getNodeListParams,
+            })
           : await this.surgioService.getArtifact(artifactName, {
               downloadUrl: new URL(
                 req.url,
                 this.surgioService.config.publicUrl
               ).toString(),
+              getNodeListParams,
             })
     } catch (err) {
       if (resCache.has(req.url)) {
@@ -104,7 +106,7 @@ export class AppController {
         artifact,
         {
           ...urlParams,
-          ...(passRequestUserAgent && userAgent ? { userAgent } : null),
+          ...(userAgent ? { userAgent } : null),
         },
         isCache
       )
@@ -124,8 +126,6 @@ export class AppController {
       ? query.providers.split(',').map((item) => item.trim())
       : []
     const userAgent = req.headers['user-agent']
-    const passRequestUserAgent =
-      this.surgioService.surgioHelper.config.gateway?.passRequestUserAgent
 
     if (!providers.length) {
       throw new HttpException(
@@ -163,6 +163,10 @@ export class AppController {
       'access_token',
       'providers',
     ])
+    const getNodeListParams = {
+      ...urlParams,
+      ...(userAgent ? { requestUserAgent: userAgent } : null),
+    }
     let artifact: Artifact | string
     let isCache = false
 
@@ -179,6 +183,7 @@ export class AppController {
                   combineProviders: providers.splice(1),
                 }
               : null),
+            getNodeListParams,
           }
         )
       } else {
@@ -197,6 +202,7 @@ export class AppController {
                   combineProviders: providers.splice(1),
                 }
               : null),
+            getNodeListParams,
           }
         )
       }
@@ -233,7 +239,7 @@ export class AppController {
         artifact,
         {
           ...urlParams,
-          ...(passRequestUserAgent && userAgent ? { userAgent } : null),
+          ...(userAgent ? { userAgent } : null),
         },
         isCache
       )
@@ -298,7 +304,7 @@ export class AppController {
     req: Request,
     res: Response,
     artifact: string | Artifact,
-    urlParams?: Record<string, string>,
+    customParams?: Record<string, string>,
     isCachedPayload?: boolean
   ): Promise<void> {
     const config = this.surgioService.config
@@ -319,11 +325,16 @@ export class AppController {
       if (!isCachedPayload && artifact.providerMap.size === 1) {
         const providers = artifact.providerMap.values()
         const provider = providers.next().value
+        const requestUserAgent = this.surgioService.config.gateway
+          ?.passRequestUserAgent
+          ? customParams?.requestUserAgent
+          : undefined
 
         if (provider.supportGetSubscriptionUserInfo) {
           try {
-            const subscriptionUserInfo =
-              await provider.getSubscriptionUserInfo()
+            const subscriptionUserInfo = await provider.getSubscriptionUserInfo(
+              { requestUserAgent }
+            )
 
             if (subscriptionUserInfo) {
               const values = ['upload', 'download', 'total', 'expire'].map(
@@ -340,7 +351,7 @@ export class AppController {
       }
 
       const body = artifact.render(undefined, {
-        ...(urlParams ? this.processUrlParams(urlParams) : undefined),
+        ...(customParams ? this.processUrlParams(customParams) : undefined),
       })
 
       if (gatewayConfig?.useCacheOnError && !isCachedPayload) {
@@ -356,12 +367,12 @@ export class AppController {
   }
 
   private processUrlParams(
-    urlParams: Record<string, string>
+    customParams: Record<string, string>
   ): Record<string, string> {
     const result: NonNullable<any> = Object.create(null)
 
-    Object.keys(urlParams).forEach((key) => {
-      _.set(result, key, urlParams[key])
+    Object.keys(customParams).forEach((key) => {
+      _.set(result, key, customParams[key])
     })
 
     return result

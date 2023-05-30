@@ -55,25 +55,19 @@ describe('SurgioService', () => {
 
   test('transformArtifact filter should work', async () => {
     expect(
-      await surgioService.transformArtifact(
-        'test.conf',
-        'surge-policy',
-        'customFilters.globalFilter'
-      )
+      await surgioService.transformArtifact('test.conf', 'surge-policy', {
+        filter: 'customFilters.globalFilter',
+      })
     ).toMatchSnapshot()
     expect(
-      await surgioService.transformArtifact(
-        'test.conf',
-        'qx-server',
-        'customFilters.globalFilter'
-      )
+      await surgioService.transformArtifact('test.conf', 'qx-server', {
+        filter: 'customFilters.globalFilter',
+      })
     ).toMatchSnapshot()
     expect(
-      await surgioService.transformArtifact(
-        'test.conf',
-        'clash-provider',
-        'customFilters.globalFilter'
-      )
+      await surgioService.transformArtifact('test.conf', 'clash-provider', {
+        filter: 'customFilters.globalFilter',
+      })
     ).toMatchSnapshot()
   })
 

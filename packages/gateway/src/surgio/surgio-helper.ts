@@ -47,11 +47,15 @@ export class SurgioHelper {
     ): Promise<PossibleProviderType | undefined> {
       const provider = await (() => {
         try {
+          if (!path.endsWith('.js')) {
+            return undefined
+          }
+
           const providerName = basename(path, '.js')
 
           return getProvider(providerName, require(path))
         } catch (err) {
-          Logger.error('读取 Provider 失败: ' + err.message)
+          Logger.error(`读取 Provider (${path}) 失败: ` + err.message)
           return undefined
         }
       })()
