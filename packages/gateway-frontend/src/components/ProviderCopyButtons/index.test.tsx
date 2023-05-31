@@ -6,16 +6,16 @@ import ProviderCopyButtons from './'
 
 describe('<ProviderCopyButtons />', () => {
   test('renders component', () => {
-    const { getByLabelText, getByTestId } = render(
+    const { getByTestId } = render(
       <SnackbarProvider>
         <ProviderCopyButtons providerNameList={['test']} />
       </SnackbarProvider>
     )
     const $copyButton = getByTestId('copy-button')
-    const $changeTypeButton = getByLabelText('select url type')
+    const $changeTypeButton = getByTestId('format-select')
 
     expect($copyButton).toBeInTheDocument()
-    expect($copyButton.textContent).toBe('复制 Surge Policy 地址')
+    expect($copyButton.textContent).toBe('复制')
     expect($changeTypeButton).toBeInTheDocument()
   })
 })

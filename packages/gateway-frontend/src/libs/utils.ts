@@ -5,14 +5,11 @@ import client from './http'
 
 export const defaultFetcher = <T>(url: string): Promise<T> =>
   client
-    .get(url)
-    .then((res) =>
-      res.json<{
-        status: 'ok'
-        data: T
-      }>()
-    )
-    .then((json) => json.data)
+    .get<{
+      status: 'ok'
+      data: T
+    }>(url)
+    .then((res) => res.data.data)
 
 export const getDownloadUrl = (
   artifactName: string,

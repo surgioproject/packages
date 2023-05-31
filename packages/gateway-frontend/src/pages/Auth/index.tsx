@@ -37,9 +37,7 @@ const Page = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     client
       .post('/api/auth', {
-        json: {
-          accessToken: values.accessToken,
-        },
+        accessToken: values.accessToken,
       })
       .catch((err) => {
         enqueueSnackbar('授权失败', { variant: 'error' })

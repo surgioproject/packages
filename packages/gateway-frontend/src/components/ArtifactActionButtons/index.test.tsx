@@ -24,7 +24,7 @@ describe('<ArtifactActionButtons />', () => {
     )
 
     expect(getByTestId('action-buttons')?.querySelector('a')?.textContent).toBe(
-      'Add to Surge'
+      '添加到 Surge'
     )
   })
 
@@ -38,7 +38,7 @@ describe('<ArtifactActionButtons />', () => {
     )
 
     expect(getByTestId('action-buttons')?.querySelector('a')?.textContent).toBe(
-      'Add to Surge'
+      '添加到 Surge'
     )
   })
 
@@ -51,7 +51,7 @@ describe('<ArtifactActionButtons />', () => {
     )
 
     expect(getByTestId('action-buttons')?.querySelector('a')?.textContent).toBe(
-      'Add to ClashX/CFW'
+      '添加到 ClashX/CFW'
     )
   })
 
@@ -65,7 +65,7 @@ describe('<ArtifactActionButtons />', () => {
     )
 
     expect(getByTestId('action-buttons')?.querySelector('a')?.textContent).toBe(
-      'Add to ClashX/CFW'
+      '添加到 ClashX/CFW'
     )
   })
 
@@ -114,7 +114,7 @@ describe('<ArtifactActionButtons />', () => {
     )
 
     expect(getByTestId('action-buttons')?.querySelector('a')?.textContent).toBe(
-      'Add to Loon'
+      '添加到 Loon'
     )
   })
 
@@ -128,7 +128,7 @@ describe('<ArtifactActionButtons />', () => {
     )
 
     expect(getByTestId('action-buttons')?.querySelector('a')?.textContent).toBe(
-      'Add to Loon'
+      '添加到 Loon'
     )
   })
 
@@ -141,7 +141,7 @@ describe('<ArtifactActionButtons />', () => {
     )
 
     expect(getByTestId('action-buttons')?.querySelector('a')?.textContent).toBe(
-      'Add to Surfboard'
+      '添加到 Surfboard'
     )
   })
 
@@ -155,7 +155,7 @@ describe('<ArtifactActionButtons />', () => {
     )
 
     expect(getByTestId('action-buttons')?.querySelector('a')?.textContent).toBe(
-      'Add to Surfboard'
+      '添加到 Surfboard'
     )
   })
 })

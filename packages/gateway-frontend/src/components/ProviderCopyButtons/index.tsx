@@ -93,7 +93,10 @@ function ProviderCopyButtons({ providerNameList }: ProviderCopyButtonsProps) {
         value={selectedFormat}
         onValueChange={(val) => setSelectedFormat(val)}
       >
-        <SelectTrigger className="w-[150px] sm:w-[180px]">
+        <SelectTrigger
+          className="w-[150px] sm:w-[180px]"
+          data-testid="format-select"
+        >
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

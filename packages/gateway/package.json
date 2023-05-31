@@ -66,6 +66,9 @@
     "@types/nunjucks": "^3.2.2",
     "@types/passport": "^1.0.12",
     "@types/semver": "^7.5.0",
+    "@types/supertest": "^2.0.12",
+    "sinon": "^15.0.4",
+    "supertest": "^6.3.3",
     "tsconfig-paths": "^4.2.0"
   },
   "peerDependencies": {

@@ -1,30 +1,32 @@
-import { NormalizedOptions } from 'ky'
-import ky from 'ky'
+import axios, { isAxiosError } from 'axios'
+import { stores } from '@/stores'
 
-import { stores } from '../stores'
+const client = axios.create({})
 
-const client = ky.create({
-  hooks: {
-    beforeRequest: [
-      (request) => {
-        if (stores.config.config?.accessToken) {
-          request.headers.set(
-            'Authorization',
-            `Bearer ${stores.config.config.accessToken}`
-          )
-        }
-      },
-    ],
-    afterResponse: [
-      (request: Request, options: NormalizedOptions, response: Response) => {
-        if (response.status === 401 && window.location.pathname !== '/auth') {
-          window.location.href = '/api/auth/logout'
-          return
-        }
-        return response
-      },
-    ],
-  },
+client.interceptors.request.use((config) => {
+  if (stores.config.config?.accessToken) {
+    config.headers.Authorization = `Bearer ${stores.config.config.accessToken}`
+  }
+
+  return config
 })
+
+client.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    if (!isAxiosError(error) || !error.response) {
+      return Promise.reject(error)
+    }
+
+    if (error.response.status === 401 && window.location.pathname !== '/auth') {
+      window.location.href = '/api/auth/logout'
+      return
+    }
+
+    return Promise.reject(error)
+  }
+)
 
 export default client

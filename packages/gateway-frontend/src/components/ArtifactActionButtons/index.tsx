@@ -74,11 +74,12 @@ function ArtifactActionButtons({
       return (
         <div>
           <a
-            href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(
+            data-testid="quanx-server-remote"
+            href={`quantumult-x:///add-resource?remote-resource=${encodeURIComponent(
               JSON.stringify(json)
             )}`}
           >
-            <Button variant="secondary">添加到 ClashX/CFW</Button>
+            <Button variant="secondary">添加到 Quantumult X</Button>
           </a>
         </div>
       )
@@ -91,7 +92,8 @@ function ArtifactActionButtons({
       return (
         <div>
           <a
-            href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(
+            data-testid="quanx-filter-remote"
+            href={`quantumult-x:///add-resource?remote-resource=${encodeURIComponent(
               JSON.stringify(json)
             )}`}
           >
@@ -108,7 +110,8 @@ function ArtifactActionButtons({
       return (
         <div>
           <a
-            href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(
+            data-testid="quanx-rewrite-remote"
+            href={`quantumult-x:///add-resource?remote-resource=${encodeURIComponent(
               JSON.stringify(json)
             )}`}
           >

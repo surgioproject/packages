@@ -1,24 +1,4 @@
-import fetchMock from 'fetch-mock'
-
 import * as utils from './utils'
-
-afterEach(() => {
-  fetchMock.reset()
-})
-
-test('defaultFetcher', async () => {
-  fetchMock.get('/api/test', {
-    data: {
-      foo: 'bar',
-    },
-  })
-
-  const result = await utils.defaultFetcher('/api/test')
-
-  expect(result).toEqual({
-    foo: 'bar',
-  })
-})
 
 test('getDownloadUrl', () => {
   expect(utils.getDownloadUrl('test.conf')).toBe(

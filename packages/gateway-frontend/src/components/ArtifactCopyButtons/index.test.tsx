@@ -9,16 +9,16 @@ import ArtifactCopyButtons from './'
 describe('<ArtifactCopyButtons />', () => {
   test('renders component', () => {
     const artifact = generateArtifact()
-    const { getByLabelText, getByTestId } = render(
+    const { getByTestId } = render(
       <SnackbarProvider>
         <ArtifactCopyButtons artifact={artifact} />
       </SnackbarProvider>
     )
     const $copyButton = getByTestId('copy-button')
-    const $changeTypeButton = getByLabelText('select url type')
+    const $changeTypeButton = getByTestId('format-select')
 
     expect($copyButton).toBeInTheDocument()
-    expect($copyButton.textContent).toBe('复制地址')
+    expect($copyButton.textContent).toBe('复制')
     expect($changeTypeButton).toBeInTheDocument()
   })
 
@@ -26,17 +26,17 @@ describe('<ArtifactCopyButtons />', () => {
     const artifact = generateArtifact({
       categories: [CATEGORIES.SNIPPET],
     })
-    const { queryByLabelText, getByTestId } = render(
+    const { getByTestId } = render(
       <SnackbarProvider>
         <ArtifactCopyButtons artifact={artifact} />
       </SnackbarProvider>
     )
     const $copyButton = getByTestId('copy-button')
-    const $changeTypeButton = queryByLabelText('select url type')
+    const $changeTypeButton = getByTestId('format-select')
 
     expect($copyButton).toBeInTheDocument()
-    expect($copyButton.textContent).toBe('复制地址')
-    expect($changeTypeButton).toBeNull()
+    expect($copyButton.textContent).toBe('复制')
+    expect($changeTypeButton).toBeDisabled()
   })
 })
 

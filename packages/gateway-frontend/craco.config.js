@@ -23,6 +23,15 @@ const config = {
       '@': `${__dirname}/src`,
     },
   },
+  jest: {
+    configure: (jestConfig, { env, paths, resolve, rootDir }) => {
+      jestConfig.transformIgnorePatterns = ["node_modules/(?!@axios)/"]
+      jestConfig.moduleNameMapper = {
+        '^@/(.*)$': '<rootDir>/src/$1',
+      }
+      return jestConfig;
+    },
+  }
 };
 
 module.exports = config;
