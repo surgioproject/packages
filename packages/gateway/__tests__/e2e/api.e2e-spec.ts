@@ -47,19 +47,19 @@ describe('ApiController (e2e)', () => {
 
   test('/api/auth/validate-cookie (GET)', async () => {
     await supertest(app.getHttpServer())
-      .get('/api/auth/validate-cookie')
+      .post('/api/auth/validate-cookie')
       .set('Cookie', `_t=${tokenCookie}`)
       .expect(200)
 
     await supertest(app.getHttpServer())
-      .get('/api/auth/validate-cookie')
+      .post('/api/auth/validate-cookie')
       .set('Cookie', `_t=wrong`)
       .expect(401)
   })
 
   test('/api/auth/validate-token (GET)', async () => {
     const res = await supertest(app.getHttpServer())
-      .get('/api/auth/validate-token')
+      .post('/api/auth/validate-token')
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
 
@@ -69,7 +69,7 @@ describe('ApiController (e2e)', () => {
     })
 
     const viewerRes = await supertest(app.getHttpServer())
-      .get('/api/auth/validate-token')
+      .post('/api/auth/validate-token')
       .set('Authorization', `Bearer ${viewerToken}`)
       .expect(200)
 
@@ -79,7 +79,7 @@ describe('ApiController (e2e)', () => {
     })
 
     await supertest(app.getHttpServer())
-      .get('/api/auth/validate-token')
+      .post('/api/auth/validate-token')
       .set('Authorization', `Bearer wrong`)
       .expect(401)
   })

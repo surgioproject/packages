@@ -1,15 +1,10 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-import client from './http'
+import client, { SuccessResponse } from './http'
 
 export const defaultFetcher = <T>(url: string): Promise<T> =>
-  client
-    .get<{
-      status: 'ok'
-      data: T
-    }>(url)
-    .then((res) => res.data.data)
+  client.get<SuccessResponse<T>>(url).then((res) => res.data.data)
 
 export const getDownloadUrl = (
   artifactName: string,

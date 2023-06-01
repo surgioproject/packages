@@ -1,5 +1,6 @@
 import AppDrawer from '@/components/AppDrawer'
 import AppHeader from '@/components/AppHeader'
+import { validateCookie, validateToken } from '@/libs/http'
 import React, {
   useCallback,
   useEffect,
@@ -35,18 +36,10 @@ const App = () => {
         accessToken: search.get('access_token'),
       })
 
-      return defaultFetcher<{
-        roles: string[]
-        accessToken?: string
-        viewerToken?: string
-      }>('/api/auth/validate-token')
+      return validateToken()
     }
 
-    return defaultFetcher<{
-      roles: string[]
-      accessToken?: string
-      viewerToken?: string
-    }>('/api/auth/validate-cookie')
+    return validateCookie()
   }, [location.search, stores.config])
 
   const fetchConfig = () => {

@@ -29,4 +29,33 @@ client.interceptors.response.use(
   }
 )
 
+export interface SuccessResponse<T> {
+  status: 'ok'
+  data: T
+}
+
+export const validateCookie = async () => {
+  return client
+    .post<
+      SuccessResponse<{
+        roles: string[]
+        accessToken?: string
+        viewerToken?: string
+      }>
+    >('/api/auth/validate-cookie')
+    .then((res) => res.data.data)
+}
+
+export const validateToken = async () => {
+  return client
+    .post<
+      SuccessResponse<{
+        roles: string[]
+        accessToken?: string
+        viewerToken?: string
+      }>
+    >('/api/auth/validate-token')
+    .then((res) => res.data.data)
+}
+
 export default client

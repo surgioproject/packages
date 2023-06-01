@@ -1,12 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useStores } from '@/stores'
 import { observer } from 'mobx-react-lite'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import client from '@/libs/http'
+import client, { validateCookie } from '@/libs/http'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -27,6 +28,7 @@ const formSchema = z.object({
 const Page = () => {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
+  const stores = useStores()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,27 +36,44 @@ const Page = () => {
     },
   })
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    client
-      .post('/api/auth', {
-        accessToken: values.accessToken,
-      })
-      .catch((err) => {
-        enqueueSnackbar('授权失败', { variant: 'error' })
-        form.control.setError('accessToken', {
-          type: 'custom',
-          message: '授权失败：' + err.message,
+  const onSubmit = useCallback(
+    (values: z.infer<typeof formSchema>) => {
+      client
+        .post('/api/auth', {
+          accessToken: values.accessToken,
         })
+        .catch((err) => {
+          enqueueSnackbar('授权失败', { variant: 'error' })
+          form.control.setError('accessToken', {
+            type: 'custom',
+            message: '授权失败：' + err.message,
+          })
 
-        throw err
-      })
-      .then(() => {
-        navigate('/', { replace: true })
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }
+          throw err
+        })
+        .then(() => {
+          return validateCookie().then((user) => {
+            if (user.accessToken) {
+              stores.config.updateConfig({
+                accessToken: user.accessToken,
+              })
+            }
+
+            if (user.viewerToken) {
+              stores.config.updateConfig({
+                viewerToken: user.viewerToken,
+              })
+            }
+
+            navigate('/', { replace: true })
+          })
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    },
+    [enqueueSnackbar, form.control, navigate, stores.config]
+  )
 
   return (
     <div className="container mx-auto max-w-3xl">

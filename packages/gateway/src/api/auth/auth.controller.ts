@@ -93,44 +93,53 @@ export class AuthController {
   }
 
   @UseGuards(APIAuthGuard)
-  @Get('/validate-token')
-  public async validateToken(@Req() req: EnrichedRequest): Promise<any> {
+  @Post('/validate-token')
+  public async validateToken(
+    @Req() req: EnrichedRequest,
+    @Res() res: Response
+  ): Promise<void> {
     const data = {
       ...req.user,
       viewerToken: this.surgioService.surgioHelper.config?.gateway?.viewerToken,
     }
 
     if (data.viewerToken) {
-      return {
+      res.status(200).send({
         status: 'ok',
         data: _.omit(data, ['accessToken']),
-      }
+      })
+
+      return
     }
 
-    return {
+    res.status(200).send({
       status: 'ok',
       data,
-    }
+    })
   }
 
   @UseGuards(APIAuthGuard)
-  @Get('/validate-cookie')
-  public async validateCookie(@Req() req: EnrichedRequest): Promise<any> {
+  @Post('/validate-cookie')
+  public async validateCookie(
+    @Req() req: EnrichedRequest,
+    @Res() res: Response
+  ): Promise<void> {
     const data = {
       ...req.user,
       viewerToken: this.surgioService.surgioHelper.config?.gateway?.viewerToken,
     }
 
     if (data.viewerToken) {
-      return {
+      res.status(200).send({
         status: 'ok',
         data: _.omit(data, ['accessToken']),
-      }
+      })
+      return
     }
 
-    return {
+    res.status(200).send({
       status: 'ok',
       data,
-    }
+    })
   }
 }
