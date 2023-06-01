@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.2](https://github.com/surgioproject/packages/compare/@surgio/gateway-frontend@2.0.0-alpha.1...@surgio/gateway-frontend@2.0.0-alpha.2) (2023-06-01)
+
+### Bug Fixes
+
+- token isn't put on the url ([a38ed3f](https://github.com/surgioproject/packages/commit/a38ed3fdf45792b592fe650020ab4d417f011107))
+
 # [2.0.0-alpha.1](https://github.com/surgioproject/packages/compare/@surgio/gateway-frontend@2.0.0-alpha.0...@surgio/gateway-frontend@2.0.0-alpha.1) (2023-06-01)
 
 **Note:** Version bump only for package @surgio/gateway-frontend
