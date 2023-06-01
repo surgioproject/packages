@@ -74,7 +74,7 @@ describe('SurgioService', () => {
   test('listProviders', () => {
     const providers = surgioService.listProviders()
 
-    expect(providers).toHaveLength(6)
+    expect(providers).toHaveLength(7)
 
     providers.forEach((item) => {
       expect(item.name).toBeDefined()
