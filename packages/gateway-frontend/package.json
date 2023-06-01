@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": false,
   "repository": "https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend",
-  "author": "Yihang Li <me@royli.dev>",
+  "author": "Roy Li <me@royli.dev>",
   "scripts": {
     "dev": "BROWSER=none craco start",
     "prebuild": "rimraf build",

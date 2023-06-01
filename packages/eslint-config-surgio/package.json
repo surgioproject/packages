@@ -6,14 +6,11 @@
     "surgio",
     "eslint"
   ],
-  "author": "Roy Li <me@dada.li>",
   "homepage": "https://surgio.js.org",
   "license": "MIT",
   "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/surgioproject/packages.git"
-  },
+  "repository": "https://github.com/surgioproject/packages/tree/master/packages/eslint-config-surgio",
+  "author": "Roy Li <me@royli.dev>",
   "bugs": {
     "url": "https://github.com/surgioproject/surgio/issues"
   },

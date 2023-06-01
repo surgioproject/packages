@@ -42,7 +42,7 @@
     "typescript": "^5.0.4"
   },
   "repository": "https://github.com/surgioproject/packages",
-  "author": "Yihang Li <me@royli.dev>",
+  "author": "Roy Li <me@royli.dev>",
   "bugs": {
     "url": "https://github.com/surgioproject/surgio/issues"
   },

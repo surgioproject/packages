@@ -7,7 +7,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "repository": "https://github.com/surgioproject/packages/tree/master/packages/gateway",
-  "author": "Yihang Li <me@royli.dev>",
+  "author": "Roy Li <me@royli.dev>",
   "bugs": {
     "url": "https://github.com/surgioproject/surgio/issues"
   },
