@@ -44,7 +44,7 @@
     "url": "git+https://github.com/surgioproject/packages.git"
   },
   "bugs": {
-    "url": "https://github.com/surgioproject/packages/issues"
+    "url": "https://github.com/surgioproject/surgio/issues"
   },
   "dependencies": {
     "winston": "^3.2.1"

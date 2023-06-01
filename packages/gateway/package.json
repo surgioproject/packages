@@ -9,7 +9,7 @@
   "repository": "https://github.com/surgioproject/packages/tree/master/packages/gateway",
   "author": "Yihang Li <me@royli.dev>",
   "bugs": {
-    "url": "https://github.com/surgioproject/packages/issues"
+    "url": "https://github.com/surgioproject/surgio/issues"
   },
   "homepage": "https://surgio.js.org",
   "scripts": {
