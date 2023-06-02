@@ -61,12 +61,6 @@ export class AuthController {
       signed: true,
       path: '/',
     })
-    res.cookie('_t', '', {
-      maxAge: -1,
-      httpOnly: true,
-      signed: true,
-      path: '/api',
-    })
     res.status(200).send({
       status: 'ok',
     })
@@ -82,12 +76,6 @@ export class AuthController {
       httpOnly: true,
       signed: true,
       path: '/',
-    })
-    res.cookie('_t', '', {
-      maxAge: -1,
-      httpOnly: true,
-      signed: true,
-      path: '/api',
     })
     res.redirect('/auth')
   }
