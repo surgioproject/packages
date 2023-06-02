@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.3](https://github.com/surgioproject/packages/compare/@surgio/gateway@2.0.0-alpha.2...@surgio/gateway@2.0.0-alpha.3) (2023-06-02)
+
+### Bug Fixes
+
+- always invalidate incorrect cookie ([3788a49](https://github.com/surgioproject/packages/commit/3788a4980451e28d7b13a82fffa920860e63ae15))
+
 # [2.0.0-alpha.2](https://github.com/surgioproject/packages/compare/@surgio/gateway@2.0.0-alpha.1...@surgio/gateway@2.0.0-alpha.2) (2023-06-01)
 
 ### Bug Fixes
