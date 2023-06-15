@@ -37,13 +37,14 @@ const Page = () => {
   })
 
   const onSubmit = useCallback(
-    (values: z.infer<typeof formSchema>) => {
-      client
+    async (values: z.infer<typeof formSchema>) => {
+      await client
         .post('/api/auth', {
           accessToken: values.accessToken,
         })
         .catch((err) => {
           enqueueSnackbar('授权失败', { variant: 'error' })
+
           form.control.setError('accessToken', {
             type: 'custom',
             message: '授权失败：' + err.message,
@@ -75,6 +76,10 @@ const Page = () => {
     [enqueueSnackbar, form.control, navigate, stores.config]
   )
 
+  const onSubmitError = useCallback((errors: any) => {
+    console.error(errors)
+  }, [])
+
   return (
     <div className="container mx-auto max-w-3xl">
       <Card>
@@ -83,7 +88,10 @@ const Page = () => {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form
+              onSubmit={form.handleSubmit(onSubmit, onSubmitError)}
+              className="space-y-8"
+            >
               <FormField
                 control={form.control}
                 name="accessToken"
@@ -101,7 +109,9 @@ const Page = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit">登录</Button>
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                登录
+              </Button>
             </form>
           </Form>
         </CardContent>

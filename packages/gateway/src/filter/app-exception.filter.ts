@@ -9,7 +9,7 @@ import {
 import { Request, Response } from 'express'
 import { ServerResponse } from 'http'
 import Youch from 'youch'
-import _ from 'lodash'
+import { isSurgioError } from 'surgio/internal'
 
 @Catch()
 export class AppExceptionsFilter implements ExceptionFilter {
@@ -51,11 +51,11 @@ export class AppExceptionsFilter implements ExceptionFilter {
       response.status(status)
 
       this.logger.error(`${request.method} ${request.url} ${status}`)
-      this.logger.error(exception.stack || exception)
 
-      if (exception.cause instanceof Error) {
-        this.logger.error('Caused by:')
-        this.logger.error(exception.cause.stack || exception.cause)
+      if (isSurgioError(exception)) {
+        this.logger.error(exception.format())
+      } else {
+        this.logger.error(exception.stack || exception)
       }
 
       responsePayload = {
@@ -83,8 +83,8 @@ export class AppExceptionsFilter implements ExceptionFilter {
           return `
 <div>
   ${
-    _.has(exception, 'cause.message')
-      ? `<p>关联异常原因：${_.get(exception, 'cause.message')}</p>`
+    isSurgioError(exception)
+      ? `<div class="frame-preview" style="width: 100%;"><pre class="language-text">${exception.format()}</pre></div>`
       : ''
   }
   <br />
