@@ -21,10 +21,15 @@ const frontendPackage = getPackage()
     ServeStaticModule.forRoot({
       rootPath: join(FE_MODULE, '../build'),
       serveStaticOptions: {
+        cacheControl: true,
         etag: true,
         maxAge: '31d',
         setHeaders: (res, path) => {
-          if (path.endsWith('.js')) {
+          if (
+            path.endsWith('.js') ||
+            path.endsWith('.css') ||
+            path.endsWith('.json')
+          ) {
             res.setHeader('x-frontend-version', frontendPackage.version)
           }
         },
