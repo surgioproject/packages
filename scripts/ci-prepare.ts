@@ -1,8 +1,7 @@
 import * as execa from 'execa';
 import { join } from 'path';
 import * as fs from 'fs';
-import * as rimraf from 'rimraf';
-import { promisify } from 'util';
+import { rimraf } from 'rimraf';
 
 const project = join(__dirname, '..');
 const projects = {
@@ -22,7 +21,7 @@ const projects = {
   await buildProc;
 
   if (fs.existsSync(buildTarget)) {
-    await promisify(rimraf)(buildTarget);
+    await rimraf(buildTarget);
   }
 
   await execa('cp', [
