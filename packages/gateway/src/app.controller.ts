@@ -9,29 +9,23 @@ import {
   UseGuards,
   Req,
   Logger,
-  Post,
 } from '@nestjs/common'
 import { Request, Response } from 'express'
-import { Artifact } from 'surgio/generator'
 import _ from 'lodash'
-import { getUrl } from 'surgio/utils'
+import { Artifact } from 'surgio/generator'
+import { getUrl, toMD5, getRenderedArtifactCacheMaxage } from 'surgio/utils'
+import { unifiedCache } from 'surgio/internal'
+import { CACHE_KEYS } from 'surgio/constant'
 import { URL } from 'url'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
-import NodeCache from 'node-cache'
 
 import { APIAuthGuard } from './auth/api-auth.guard'
 import { Roles } from './auth/roles.decorator'
 import { Role } from './constants/role'
 import { SurgioService } from './surgio/surgio.service'
-import { EnrichedRequest } from './types/app'
 
 dayjs.extend(duration)
-
-const resCache = new NodeCache({
-  maxKeys: 100,
-  stdTTL: dayjs.duration({ days: 7 }).asSeconds(),
-})
 
 @Controller()
 @UseGuards(APIAuthGuard)
@@ -58,6 +52,7 @@ export class AppController {
       ...urlParams,
       ...(userAgent ? { requestUserAgent: userAgent } : null),
     }
+    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(req.url)}`
     let artifact: string | undefined | Artifact
     let isCache = false
 
@@ -76,9 +71,11 @@ export class AppController {
               getNodeListParams,
             })
     } catch (err) {
-      if (resCache.has(req.url)) {
+      const cached = await unifiedCache.get<string>(cacheKey)
+
+      if (cached) {
         isCache = true
-        artifact = resCache.get(req.url) as string
+        artifact = cached
 
         this.logger.warn('Artifact 生成错误，使用缓存')
         this.logger.warn(err.stack || err)
@@ -128,6 +125,7 @@ export class AppController {
       ? query.providers.split(',').map((item) => item.trim())
       : []
     const userAgent = req.headers['user-agent']
+    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(req.url)}`
 
     if (!providers.length) {
       throw new HttpException(
@@ -209,9 +207,11 @@ export class AppController {
         )
       }
     } catch (err) {
-      if (resCache.has(req.url)) {
+      const cached = await unifiedCache.get<string>(cacheKey)
+
+      if (cached) {
         isCache = true
-        artifact = resCache.get(req.url) as string
+        artifact = cached
 
         this.logger.warn('Provider 导出错误，使用缓存')
         this.logger.warn(err.stack || err)
@@ -311,10 +311,15 @@ export class AppController {
   ): Promise<void> {
     const config = this.surgioService.config
     const gatewayConfig = config?.gateway
+    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(req.url)}`
 
     if (typeof artifact === 'string') {
       if (gatewayConfig?.useCacheOnError && !isCachedPayload) {
-        resCache.set(req.url, artifact)
+        await unifiedCache.set(
+          cacheKey,
+          artifact,
+          getRenderedArtifactCacheMaxage()
+        )
       }
 
       if (isCachedPayload) {
@@ -357,7 +362,7 @@ export class AppController {
       })
 
       if (gatewayConfig?.useCacheOnError && !isCachedPayload) {
-        resCache.set(req.url, body)
+        await unifiedCache.set(cacheKey, body, getRenderedArtifactCacheMaxage())
       }
 
       if (isCachedPayload) {

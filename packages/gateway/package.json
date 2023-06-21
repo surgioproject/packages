@@ -43,7 +43,6 @@
     "fs-extra": "^11.1.1",
     "http-errors": "^2.0.0",
     "lodash": "^4.17.21",
-    "node-cache": "^5.1.2",
     "nunjucks": "^3.2.4",
     "passport": "^0.6.0",
     "passport-cookie": "^1.0.9",
