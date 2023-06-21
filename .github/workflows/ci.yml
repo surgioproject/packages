@@ -49,7 +49,6 @@ jobs:
       - name: Install dependencies
         run: |
           pnpm install
-          pnpm prepare-ci
 
       - name: Test, report coverage
         run: |
