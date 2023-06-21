@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.0](https://github.com/surgioproject/packages/compare/@surgio/gateway@2.0.0-alpha.5...@surgio/gateway@2.0.0-beta.0) (2023-06-21)
+
+### Features
+
+- improve login ([bd14d7c](https://github.com/surgioproject/packages/commit/bd14d7c59e9b311c8c81f9381e7a49e76b0c6bc6))
+- use unifiedCache to store rendered artifacts ([ea1ad3c](https://github.com/surgioproject/packages/commit/ea1ad3c8c4e117064f400e3d0301f72bcb16a7c7))
+
 # [2.0.0-alpha.5](https://github.com/surgioproject/packages/compare/@surgio/gateway@2.0.0-alpha.4...@surgio/gateway@2.0.0-alpha.5) (2023-06-15)
 
 **Note:** Version bump only for package @surgio/gateway
