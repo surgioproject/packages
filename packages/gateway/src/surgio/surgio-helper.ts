@@ -27,7 +27,7 @@ export class SurgioHelper {
   constructor(public cwd: string, public readonly config: CommandConfig) {
     this.artifactList = config.artifacts
     this.templateEngine = getEngine(config.templateDir)
-    this.configHash = this.getConfigSHA1Hash()
+    this.configHash = this.getConfigSHA256Hash()
   }
 
   public async init(): Promise<this> {
@@ -105,8 +105,10 @@ export class SurgioHelper {
     }
   }
 
-  private getConfigSHA1Hash(): string {
-    return createHash('sha1').update(JSON.stringify(this.config)).digest('hex')
+  private getConfigSHA256Hash(): string {
+    return createHash('sha256')
+      .update(JSON.stringify(this.config))
+      .digest('hex')
   }
 
   public async cleanCache(): Promise<void> {

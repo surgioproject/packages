@@ -5,25 +5,29 @@ import { Injectable, UnauthorizedException, Req } from '@nestjs/common'
 import { Request } from 'express'
 
 import { Role } from '../constants/role'
+import { SurgioService } from '../surgio/surgio.service'
 import { UserContext } from '../types/app'
 import { AuthService } from './auth.service'
 
 @Injectable()
 export class CookieStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly authService: AuthService) {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly d: SurgioService
+  ) {
     super({
       cookieName: '_t',
-      signed: true,
+      signed: false,
       passReqToCallback: true,
     })
   }
 
   public async validate(
     @Req() req: Request,
-    accessToken: string
+    cookie: string
   ): Promise<UserContext> {
-    const isAccessToken = this.authService.validateAccessToken(accessToken)
-    const isViewerToken = this.authService.validateViewerToken(accessToken)
+    const isAccessToken = this.authService.validateSignedAccessToken(cookie)
+    const isViewerToken = this.authService.validateViewerToken(cookie)
     const roles: UserContext['roles'] = []
 
     if (!isAccessToken && !isViewerToken) {
@@ -38,6 +42,9 @@ export class CookieStrategy extends PassportStrategy(Strategy) {
       roles.push(Role.ADMIN, Role.VIEWER)
     }
 
-    return { accessToken, roles: _.uniq(roles) }
+    return {
+      accessToken: this.d.surgioHelper.config?.gateway?.accessToken as string,
+      roles: _.uniq(roles),
+    }
   }
 }

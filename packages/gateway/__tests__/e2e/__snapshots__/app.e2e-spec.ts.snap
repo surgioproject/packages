@@ -53,7 +53,11 @@ HTTPS = https, us.example.com, 443, username, password
 "
 `;
 
-exports[`AppController (e2e) /export-providers (GET) with user-agent 1`] = `"test-agent = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"`;
+exports[`AppController (e2e) /export-providers (GET) with user-agent 1`] = `
+"🇺🇸 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
+Snell = snell, us.example.com, 443, psk=password, obfs=tls
+HTTPS = https, us.example.com, 443, username, password"
+`;
 
 exports[`AppController (e2e) /export-providers (GET) with viewerToken 1`] = `
 "ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true

@@ -7,7 +7,6 @@ export class FixCookieMiddleware implements NestMiddleware {
     res.cookie('_t', '', {
       maxAge: -1,
       httpOnly: true,
-      signed: true,
       path: '/api',
     })
     next()

@@ -7,12 +7,14 @@ import {
   Res,
   UseGuards,
   Req,
+  Inject,
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Response } from 'express'
 import _ from 'lodash'
 
 import { APIAuthGuard } from '../../auth/api-auth.guard'
+import { AuthService } from '../../auth/auth.service'
 import { SurgioService } from '../../surgio/surgio.service'
 import { EnrichedRequest } from '../../types/app'
 
@@ -20,7 +22,8 @@ import { EnrichedRequest } from '../../types/app'
 export class AuthController {
   constructor(
     private readonly surgioService: SurgioService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly authService: AuthService
   ) {}
 
   @Post('/')
@@ -34,12 +37,11 @@ export class AuthController {
       accessToken ===
       this.surgioService.surgioHelper.config?.gateway?.accessToken
     ) {
-      res.cookie('_t', accessToken, {
+      res.cookie('_t', this.authService.sign(accessToken), {
         maxAge:
           (this.surgioService.surgioHelper.config?.gateway?.cookieMaxAge ??
             (this.configService.get('defaultCookieMaxAge') as number)) * 1e3,
         httpOnly: true,
-        signed: true,
         path: '/',
       })
       res.status(200).send({
@@ -58,7 +60,6 @@ export class AuthController {
     res.cookie('_t', '', {
       maxAge: -1,
       httpOnly: true,
-      signed: true,
       path: '/',
     })
     res.status(200).send({
@@ -74,7 +75,6 @@ export class AuthController {
     res.cookie('_t', '', {
       maxAge: -1,
       httpOnly: true,
-      signed: true,
       path: '/',
     })
     res.redirect('/auth')

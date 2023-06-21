@@ -7,14 +7,7 @@ import { CookieStrategy } from './cookie.strategy'
 
 @Module({
   imports: [PassportModule],
-  providers: [
-    AuthService,
-    BearerStrategy,
-    CookieStrategy,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: RolesGuard,
-    // },
-  ],
+  providers: [AuthService, BearerStrategy, CookieStrategy],
+  exports: [AuthService],
 })
 export class AuthModule {}

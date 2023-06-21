@@ -49,14 +49,10 @@ const frontendPackage = getPackage()
   controllers: [AppController],
 })
 export class AppModule {
-  constructor(
-    private configService: ConfigService,
-    private surgioService: SurgioService
-  ) {}
+  constructor(private surgioService: SurgioService) {}
 
   configure(consumer: MiddlewareConsumer): void {
-    const envSecret = this.configService.get<string | undefined>('secret')
-    const secret = envSecret || this.surgioService.surgioHelper.configHash
+    const secret = this.surgioService.surgioHelper.configHash
 
     CookieParserMiddleware.configure(secret)
     consumer.apply(CookieParserMiddleware).forRoutes('*')
