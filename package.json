@@ -10,7 +10,9 @@
     "prepublishOnly": "turbo run build",
     "lerna": "lerna",
     "prepare": "husky install",
-    "prepare-ci": "ts-node -P scripts/tsconfig.json scripts/ci-prepare.ts"
+    "prepare-ci": "ts-node -P scripts/tsconfig.json scripts/ci-prepare.ts",
+    "release": "lerna version && lerna publish from-git",
+    "release:beta": "lerna version --preid beta && lerna publish from-git --dist-tag beta"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.1",
