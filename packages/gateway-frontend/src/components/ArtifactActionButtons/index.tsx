@@ -1,32 +1,28 @@
-import { observer } from 'mobx-react';
-import React from 'react';
-import { ArtifactConfig } from 'surgio/build/types';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Link from '@material-ui/core/Link';
-import Button from '@material-ui/core/Button';
-import { CATEGORIES } from 'surgio/build/utils/constant';
-import { JsonObject } from 'type-fest';
-
-import { getDownloadUrl } from '../../libs/utils';
-import { useStores } from '../../stores';
+import { Button } from '@/components/ui/button'
+import { observer } from 'mobx-react-lite'
+import React from 'react'
+import { ArtifactConfig } from 'surgio/internal'
+import { CATEGORIES } from 'surgio/constant'
+import { JsonObject } from 'type-fest'
+import { getDownloadUrl } from '@/libs/utils'
+import { useDownloadToken } from '@/stores'
 
 export interface ArtifactActionButtonsProps {
-  artifact: ArtifactConfig;
+  artifact: ArtifactConfig
+  artifactParams?: URLSearchParams
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    ArtifactActionButtons: {},
-    actionButton: {},
-  })
-);
-
-function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
-  const classes = useStyles();
-  const { config: configStore } = useStores();
-  const downloadToken =
-    configStore.config.viewerToken || configStore.config.accessToken;
-  const previewUrl = getDownloadUrl(artifact.name, true, downloadToken);
+function ArtifactActionButtons({
+  artifact,
+  artifactParams,
+}: ArtifactActionButtonsProps) {
+  const downloadToken = useDownloadToken()
+  const previewUrl = getDownloadUrl(
+    artifact.name,
+    true,
+    downloadToken,
+    artifactParams
+  )
 
   const SurgeButtons: React.FC = () => {
     if (
@@ -34,25 +30,20 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
       artifact?.categories?.includes(CATEGORIES.SURGE)
     ) {
       return (
-        <div className={classes.actionButton}>
-          <Button
-            component={Link}
-            color="secondary"
-            size="medium"
-            rel="nofollow"
-            target="_blank"
+        <div>
+          <a
             href={`surge:///install-config?url=${encodeURIComponent(
               previewUrl
             )}`}
           >
-            Add to Surge
-          </Button>
+            <Button variant="secondary">添加到 Surge</Button>
+          </a>
         </div>
-      );
+      )
     }
 
-    return <></>;
-  };
+    return <></>
+  }
 
   const ClashButtons: React.FC = () => {
     if (
@@ -60,98 +51,78 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
       artifact?.categories?.includes(CATEGORIES.CLASH)
     ) {
       return (
-        <div className={classes.actionButton}>
-          <Button
-            component={Link}
-            color="secondary"
-            size="medium"
-            rel="nofollow"
-            target="_blank"
+        <div>
+          <a
             href={`clash://install-config?url=${encodeURIComponent(
               previewUrl
             )}`}
           >
-            Add to ClashX/CFW
-          </Button>
+            <Button variant="secondary">添加到 ClashX/CFW</Button>
+          </a>
         </div>
-      );
+      )
     }
 
-    return <></>;
-  };
+    return <></>
+  }
 
   const QuantumultXButtons: React.FC = () => {
     if (artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_SERVER)) {
       const json: JsonObject = {
         server_remote: [previewUrl],
-      };
+      }
       return (
-        <div className={classes.actionButton}>
-          <Button
+        <div>
+          <a
             data-testid="quanx-server-remote"
-            component={Link}
-            color="secondary"
-            size="medium"
-            rel="nofollow"
-            target="_blank"
-            href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(
+            href={`quantumult-x:///add-resource?remote-resource=${encodeURIComponent(
               JSON.stringify(json)
             )}`}
           >
-            Add to Quantumult X
-          </Button>
+            <Button variant="secondary">添加到 Quantumult X</Button>
+          </a>
         </div>
-      );
+      )
     }
 
     if (artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_FILTER)) {
       const json: JsonObject = {
         filter_remote: [previewUrl],
-      };
+      }
       return (
-        <div className={classes.actionButton}>
-          <Button
+        <div>
+          <a
             data-testid="quanx-filter-remote"
-            component={Link}
-            color="secondary"
-            size="medium"
-            rel="nofollow"
-            target="_blank"
-            href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(
+            href={`quantumult-x:///add-resource?remote-resource=${encodeURIComponent(
               JSON.stringify(json)
             )}`}
           >
-            Add to Quantumult X
-          </Button>
+            <Button variant="secondary">添加到 Quantumult X</Button>
+          </a>
         </div>
-      );
+      )
     }
 
     if (artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_REWRITE)) {
       const json: JsonObject = {
         rewrite_remote: [previewUrl],
-      };
+      }
       return (
-        <div className={classes.actionButton}>
-          <Button
+        <div>
+          <a
             data-testid="quanx-rewrite-remote"
-            component={Link}
-            color="secondary"
-            size="medium"
-            rel="nofollow"
-            target="_blank"
-            href={`quantumult-x:///update-configuration?remote-resource=${encodeURIComponent(
+            href={`quantumult-x:///add-resource?remote-resource=${encodeURIComponent(
               JSON.stringify(json)
             )}`}
           >
-            Add to Quantumult X
-          </Button>
+            <Button variant="secondary">添加到 Quantumult X</Button>
+          </a>
         </div>
-      );
+      )
     }
 
-    return <></>;
-  };
+    return <></>
+  }
 
   const LoonButtons: React.FC = () => {
     if (
@@ -159,23 +130,16 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
       artifact?.categories?.includes(CATEGORIES.LOON)
     ) {
       return (
-        <div className={classes.actionButton}>
-          <Button
-            component={Link}
-            color="secondary"
-            size="medium"
-            rel="nofollow"
-            target="_blank"
-            href={`loon://import?sub=${encodeURIComponent(previewUrl)}`}
-          >
-            Add to Loon
-          </Button>
+        <div>
+          <a href={`loon://import?sub=${encodeURIComponent(previewUrl)}`}>
+            <Button variant="secondary">添加到 Loon</Button>
+          </a>
         </div>
-      );
+      )
     }
 
-    return <></>;
-  };
+    return <></>
+  }
 
   const SurfboardButtons: React.FC = () => {
     if (
@@ -183,35 +147,30 @@ function ArtifactActionButtons({ artifact }: ArtifactActionButtonsProps) {
       artifact?.categories?.includes('Surfboard')
     ) {
       return (
-        <div className={classes.actionButton}>
-          <Button
-            component={Link}
-            color="secondary"
-            size="medium"
-            rel="nofollow"
-            target="_blank"
+        <div>
+          <a
             href={`surfboard:///install-config?url=${encodeURIComponent(
               previewUrl
             )}`}
           >
-            Add to Surfboard
-          </Button>
+            <Button variant="secondary">添加到 Surfboard</Button>
+          </a>
         </div>
-      );
+      )
     }
 
-    return <></>;
-  };
+    return <></>
+  }
 
   return (
-    <div data-testid="action-buttons" className={classes.ArtifactActionButtons}>
+    <div data-testid="action-buttons">
       <SurgeButtons />
       <ClashButtons />
       <QuantumultXButtons />
       <LoonButtons />
       <SurfboardButtons />
     </div>
-  );
+  )
 }
 
-export default observer(ArtifactActionButtons);
+export default observer(ArtifactActionButtons)

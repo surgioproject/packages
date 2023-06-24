@@ -1,32 +1,35 @@
-import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
-import { Artifact } from 'surgio/build/generator/artifact';
-import { PossibleProviderType } from 'surgio/build/provider';
-import { CommandConfig } from 'surgio/build/types';
+import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common'
+import { Artifact } from 'surgio/generator'
+import { PossibleProviderType, GetNodeListParams } from 'surgio/provider'
+import { CommandConfig } from 'surgio/internal'
 
-import { KEY, SurgioHelper } from './surgio-helper';
+import { KEY, SurgioHelper } from './surgio-helper'
 
 @Injectable()
 export class SurgioService {
-  constructor(@Inject(KEY) public surgioHelper: SurgioHelper) {}
+  @Inject(KEY)
+  public surgioHelper: SurgioHelper
 
   public get config(): CommandConfig {
-    return this.surgioHelper.config;
+    return this.surgioHelper.config
   }
 
   public async getArtifact(
     artifactName: string,
     {
       downloadUrl,
+      getNodeListParams,
     }: {
-      downloadUrl?: string;
+      downloadUrl?: string
+      getNodeListParams?: GetNodeListParams
     } = {}
   ): Promise<Artifact | undefined> {
     const target = this.surgioHelper.artifactList.find(
       (item) => item.name === artifactName
-    );
+    )
 
     if (!target) {
-      return undefined;
+      return undefined
     }
 
     const artifactInstance = new Artifact(
@@ -39,11 +42,13 @@ export class SurgioService {
         remoteSnippetList: this.surgioHelper.remoteSnippetList,
         templateEngine: this.surgioHelper.templateEngine,
       }
-    );
+    )
 
-    await artifactInstance.init();
+    await artifactInstance.init({
+      getNodeListParams,
+    })
 
-    return artifactInstance;
+    return artifactInstance
   }
 
   public async exportProvider(
@@ -53,10 +58,10 @@ export class SurgioService {
     options: ExportProviderOptions = {}
   ): Promise<Artifact> {
     const artifactConfig = format
-      ? {
+      ? ({
           name: `${providerName}.conf`,
           provider: providerName,
-          template: undefined,
+          template: '',
           templateString: this.getTemplateByFormat(
             format,
             options.filter,
@@ -67,9 +72,9 @@ export class SurgioService {
                 combineProviders: options.combineProviders,
               }
             : null),
-        }
+        } as const)
       : template
-      ? {
+      ? ({
           name: `${providerName}.conf`,
           downloadUrl: options.downloadUrl,
           provider: providerName,
@@ -79,10 +84,10 @@ export class SurgioService {
                 combineProviders: options.combineProviders,
               }
             : null),
-        }
+        } as const)
       : (() => {
-          throw new Error('未指定 format 和 template');
-        })();
+          throw new Error('未指定 format 和 template')
+        })()
 
     const artifactInstance = new Artifact(
       this.surgioHelper.config,
@@ -91,43 +96,55 @@ export class SurgioService {
         remoteSnippetList: this.surgioHelper.remoteSnippetList || [],
         templateEngine: this.surgioHelper.templateEngine,
       }
-    );
+    )
 
-    await artifactInstance.init();
+    await artifactInstance.init({
+      getNodeListParams: {
+        ...options.getNodeListParams,
+      },
+    })
 
-    return artifactInstance;
+    return artifactInstance
   }
 
   public async transformArtifact(
     artifactName: string,
     format: string,
-    filter?: string
+    {
+      filter,
+      getNodeListParams,
+    }: {
+      filter?: string
+      getNodeListParams?: GetNodeListParams
+    } = {}
   ): Promise<Artifact | string | undefined> {
     const target = this.surgioHelper.artifactList.find(
       (item) => item.name === artifactName
-    );
+    )
 
     if (!target) {
-      return undefined;
+      return undefined
     }
 
     const artifact = {
       ...target,
-      template: undefined,
+      template: '',
       templateString: this.getTemplateByFormat(format, filter, target.provider),
-    };
+    }
     const artifactInstance = new Artifact(this.surgioHelper.config, artifact, {
       remoteSnippetList: this.surgioHelper.remoteSnippetList || [],
       templateEngine: this.surgioHelper.templateEngine,
-    });
+    })
 
-    await artifactInstance.init();
+    await artifactInstance.init({
+      getNodeListParams,
+    })
 
-    return artifactInstance.render();
+    return artifactInstance.render()
   }
 
   public listProviders(): ReadonlyArray<PossibleProviderType> {
-    return Array.from(this.surgioHelper.providerMap.values());
+    return Array.from(this.surgioHelper.providerMap.values())
   }
 
   public getTemplateByFormat(
@@ -137,12 +154,12 @@ export class SurgioService {
   ): string {
     switch (format) {
       case 'surge-policy':
-        return `{{ getSurgeNodes(nodeList${filter ? `, ${filter}` : ''}) }}`;
+        return `{{ getSurgeNodes(nodeList${filter ? `, ${filter}` : ''}) }}`
 
       case 'qx-server':
         return `{{ getQuantumultXNodes(nodeList${
           filter ? `, ${filter}` : ''
-        }) }}`;
+        }) }}`
 
       case 'clash-provider':
         return [
@@ -151,32 +168,33 @@ export class SurgioService {
             filter ? `, ${filter}` : ''
           })} | yaml }}`,
           '',
-        ].join('\n');
+        ].join('\n')
 
       case 'ss':
         return `{{ getShadowsocksNodes(nodeList, ${JSON.stringify(
           providerName || 'Surgio'
-        )}) | base64 }}`;
+        )}) | base64 }}`
 
       case 'ssr':
         return `{{ getShadowsocksrNodes(nodeList, ${JSON.stringify(
           providerName || 'Surgio'
-        )}) | base64 }}`;
+        )}) | base64 }}`
 
       case 'v2ray':
-        return `{{ getV2rayNNodes(nodeList) | base64 }}`;
+        return `{{ getV2rayNNodes(nodeList) | base64 }}`
 
       default:
         throw new HttpException(
           '参数 format 不存在或不正确',
           HttpStatus.BAD_REQUEST
-        );
+        )
     }
   }
 }
 
 export interface ExportProviderOptions {
-  readonly downloadUrl?: string;
-  readonly filter?: string;
-  readonly combineProviders?: ReadonlyArray<string>;
+  downloadUrl?: string
+  filter?: string
+  combineProviders?: string[]
+  getNodeListParams?: GetNodeListParams
 }

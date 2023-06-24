@@ -1,88 +1,35 @@
-import { observer } from 'mobx-react';
-import { useSnackbar } from 'notistack';
-import React from 'react';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import Link from '@material-ui/core/Link';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import Chip from '@material-ui/core/Chip';
-import Button from '@material-ui/core/Button';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ShareIcon from '@material-ui/icons/Share';
-import { ArtifactConfig } from 'surgio/build/types';
-import Clipboard from 'react-clipboard.js';
+import ArtifactParamsPopover from '@/components/ArtifactParamsPopover'
+import ArtifactShareButton from '@/components/ArtifactShareButton'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { cn, getDownloadUrl } from '@/libs/utils'
+import { useDownloadToken } from '@/stores'
+import styled from '@emotion/styled'
+import { observer } from 'mobx-react-lite'
+import React, { useMemo } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { ArtifactConfig } from 'surgio/internal'
+import { spacing } from 'tailwindcss/defaultTheme'
 
-import { getDownloadUrl } from '../../libs/utils';
-import { useStores } from '../../stores';
-import ArtifactActionButtons from '../ArtifactActionButtons';
-import ArtifactCopyButtons from '../ArtifactCopyButtons';
-import QrCodeButton from '../QrCodeButton';
+import ArtifactActionButtons from '../ArtifactActionButtons'
+import ArtifactCopyButtons from '../ArtifactCopyButtons'
+import QrCodeButton from '../QrCodeButton'
 
-const useStyles = makeStyles((theme) => ({
-  ArtifactCard: {
-    '& .MuiCardActions-root': {
-      flexWrap: 'wrap',
-    },
-  },
-  Embed: {
-    width: '100%',
-  },
-  contentSection: {
-    margin: theme.spacing(1.5, 0),
-    '&:first-child': {
-      marginTop: 0,
-    },
-    '&:last-child': {
-      marginBottom: 0,
-    },
-  },
-  providersContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  categoriesContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  tag: {
-    margin: theme.spacing(0.5),
-  },
-  actionButton: {
-    margin: theme.spacing(0.5, 1),
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  urlContainer: {
-    'background-color': '#eee',
-    padding: theme.spacing(2, 3),
-    '-webkit-overflow-scrolling': 'touch',
-    'overflow-x': 'scroll',
-    'font-family': ['fira-code', 'monospace'].join(','),
-  },
-}));
+const ButtonsWrapper = styled.div`
+  & > * {
+    display: block;
+    white-space: nowrap;
+    margin-right: ${spacing[2]};
+    margin-bottom: ${spacing[2]};
+  }
+  margin-bottom: -${spacing[2]};
+`
 
-export interface ArtifactCardProps {
-  artifact: ArtifactConfig;
-  isEmbed?: boolean;
-  artifactParams?: URLSearchParams;
+interface ArtifactCardProps {
+  artifact: ArtifactConfig
+  isEmbed?: boolean
+  artifactParams?: URLSearchParams
 }
 
 function ArtifactCard({
@@ -90,255 +37,123 @@ function ArtifactCard({
   isEmbed,
   artifactParams,
 }: ArtifactCardProps) {
-  const classes = useStyles();
-  const { config: configStore } = useStores();
-  const providers = [artifact.provider].concat(artifact.combineProviders || []);
-  const downloadToken =
-    configStore.config.viewerToken || configStore.config.accessToken;
-  const downloadUrl = getDownloadUrl(
-    artifact.name,
-    false,
-    downloadToken,
-    artifactParams
-  );
-  const previewUrl = getDownloadUrl(
-    artifact.name,
-    true,
-    downloadToken,
-    artifactParams
-  );
-  const [expanded, setExpanded] = React.useState(false);
-  const { enqueueSnackbar } = useSnackbar();
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
-  const onCopySuccess = () => {
-    enqueueSnackbar('复制成功', { variant: 'success' });
-  };
-
-  const onCopyError = () => {
-    enqueueSnackbar('复制失败', { variant: 'error' });
-  };
+  const providers = [artifact.provider].concat(artifact.combineProviders || [])
+  const downloadToken = useDownloadToken()
+  const downloadUrl = useMemo(
+    () => getDownloadUrl(artifact.name, false, downloadToken, artifactParams),
+    [artifact.name, artifactParams, downloadToken]
+  )
+  const previewUrl = useMemo(
+    () => getDownloadUrl(artifact.name, true, downloadToken, artifactParams),
+    [artifact.name, artifactParams, downloadToken]
+  )
+  const extraParams = useMemo(() => {
+    const pairs: [string, string][] = []
+    if (!artifactParams) {
+      return pairs
+    }
+    for (const [key, value] of artifactParams.entries()) {
+      pairs.push([key, value])
+    }
+    return pairs
+  }, [artifactParams])
 
   const providersElement = providers.map((item) => {
     return (
-      <Chip
+      <Badge
         data-testid="display-provider-item"
-        className={classes.tag}
+        className="mr-3 mb-3"
         key={item}
-        label={item}
-      />
-    );
-  });
+      >
+        {item}
+      </Badge>
+    )
+  })
 
   const categoriesElement = artifact.categories
     ? artifact.categories.map((cat) => (
-        <Chip
+        <Badge
           data-testid="display-category-item"
-          className={classes.tag}
+          className="mr-3 mb-3"
           key={cat}
-          label={cat}
-        />
+        >
+          {cat}
+        </Badge>
       ))
-    : null;
+    : null
 
   return (
-    <Card
-      className={clsx(classes.ArtifactCard, {
-        [classes.Embed]: isEmbed,
-      })}
-    >
-      <CardHeader title={artifact.name} />
+    <Card className={cn(isEmbed && `w-full`)}>
+      <CardHeader>
+        <CardTitle className="flex items-center">
+          <div className="text-xl flex-1">{artifact.name}</div>
+          {extraParams.length > 0 && (
+            <ArtifactParamsPopover params={extraParams} />
+          )}
+        </CardTitle>
+      </CardHeader>
 
       <CardContent>
-        <div
-          data-testid="display-provider-list"
-          className={classes.contentSection}
-        >
-          <Typography gutterBottom variant="body1">
-            Providers
-          </Typography>
-          <div className={classes.providersContainer}>{providersElement}</div>
+        <div data-testid="display-provider-list" className="space-y-2 -mb-3">
+          <div className="font-semibold">Providers</div>
+          <div className="flex flex-wrap">{providersElement}</div>
         </div>
 
         {artifact.categories && (
           <>
-            <Divider />
-            <div className={classes.contentSection}>
-              <Typography gutterBottom variant="body1">
-                分类
-              </Typography>
-              <div className={classes.categoriesContainer}>
-                {categoriesElement}
-              </div>
+            <Separator className="my-4" />
+            <div className="space-y-2 -mb-3">
+              <div className="font-semibold">分类</div>
+              <div className="flex flex-wrap">{categoriesElement}</div>
             </div>
           </>
         )}
+
+        <Separator className="my-4" />
+
+        <div>
+          <ButtonsWrapper className="flex flex-wrap">
+            <a
+              data-testid="download-button"
+              target="_blank"
+              rel="nofollow noreferrer"
+              href={downloadUrl}
+            >
+              <Button className="block">下载</Button>
+            </a>
+
+            <a
+              data-testid="preview-button"
+              target="_blank"
+              rel="nofollow noreferrer"
+              href={previewUrl}
+            >
+              <Button>预览</Button>
+            </a>
+
+            <QrCodeButton text={previewUrl} />
+
+            {isEmbed ? null : <ArtifactShareButton artifact={artifact} />}
+
+            <ArtifactActionButtons
+              artifact={artifact}
+              artifactParams={artifactParams}
+            />
+          </ButtonsWrapper>
+
+          <div className="mt-6 space-y-4">
+            <div className="space-y-2">
+              <div className="font-semibold">复制订阅地址</div>
+              <ArtifactCopyButtons
+                artifact={artifact}
+                artifactParams={artifactParams}
+              />
+            </div>
+          </div>
+        </div>
       </CardContent>
-
-      <CardActions disableSpacing>
-        <Link
-          data-testid="download-button"
-          target="_blank"
-          rel="nofollow"
-          href={downloadUrl}
-        >
-          <Button
-            className={classes.actionButton}
-            variant="contained"
-            size="medium"
-            color="primary"
-          >
-            下载
-          </Button>
-        </Link>
-
-        <Link
-          data-testid="preview-button"
-          target="_blank"
-          rel="nofollow"
-          href={previewUrl}
-        >
-          <Button
-            className={classes.actionButton}
-            variant="contained"
-            size="medium"
-            color="primary"
-          >
-            预览
-          </Button>
-        </Link>
-
-        <div className={classes.actionButton}>
-          <QrCodeButton text={previewUrl} />
-        </div>
-
-        <div className={classes.actionButton}>
-          <ArtifactCopyButtons artifact={artifact} />
-        </div>
-
-        <div className={classes.actionButton}>
-          <ArtifactActionButtons artifact={artifact} />
-        </div>
-
-        {!isEmbed && (
-          <IconButton
-            data-testid="expand-extra-button"
-            className={clsx(classes.expand, {
-              [classes.expandOpen]: expanded,
-            })}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        )}
-      </CardActions>
-
-      {!isEmbed && (
-        <Collapse
-          in={expanded}
-          timeout="auto"
-          unmountOnExit
-          data-testid="collapse-area"
-        >
-          <CardContent>
-            <Box marginBottom={2}>
-              <Typography paragraph>Embed</Typography>
-
-              <Grid
-                container
-                direction="row"
-                justify="center"
-                alignItems="center"
-              >
-                <Grid item>
-                  <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    height="100%"
-                  >
-                    <Clipboard
-                      component={IconButton}
-                      data-testid="copy-button"
-                      data-clipboard-text={getEmbedCode(
-                        artifact.name,
-                        downloadToken
-                      )}
-                      onSuccess={onCopySuccess}
-                      onError={onCopyError}
-                    >
-                      <FileCopyIcon />
-                    </Clipboard>
-                  </Box>
-                </Grid>
-                <Grid item style={{ flex: 1, width: 0, marginLeft: 10 }}>
-                  <Typography className={classes.urlContainer} component="pre">
-                    {getEmbedCode(artifact.name, downloadToken)}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Box>
-            <Box>
-              <Typography paragraph>Share</Typography>
-
-              <Grid
-                container
-                direction="row"
-                justify="center"
-                alignItems="center"
-              >
-                <Grid item>
-                  <Link
-                    target="_blank"
-                    rel="nofollow"
-                    href={getEmbedUrl(artifact.name, downloadToken)}
-                  >
-                    <IconButton aria-label="share">
-                      <ShareIcon />
-                    </IconButton>
-                  </Link>
-                </Grid>
-                <Grid
-                  item
-                  style={{ flex: 1, marginLeft: 10 }}
-                  container
-                  direction="row"
-                  alignItems="center"
-                >
-                  <Typography variant="body2" color="textSecondary">
-                    你可以分享这个地址给别人，拥有链接的人将无法看到其它
-                    Artifact
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Box>
-          </CardContent>
-        </Collapse>
-      )}
     </Card>
-  );
+  )
 }
 
-function getEmbedCode(artifact: string, accessToken?: string | null): string {
-  return `<iframe loading="lazy" src="${getEmbedUrl(
-    artifact,
-    accessToken
-  )}" height="400px" width="100%"></iframe>`;
-}
-
-function getEmbedUrl(artifact: string, accessToken?: string | null): string {
-  const url = new URL(`/embed/artifact/${artifact}`, window.location.origin);
-
-  if (accessToken) {
-    url.searchParams.set('access_token', accessToken);
-  }
-
-  return url.toString();
-}
-
-export default observer(ArtifactCard);
+export default observer(ArtifactCard)

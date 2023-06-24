@@ -1,176 +1,127 @@
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grow';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
-import { makeStyles } from '@material-ui/core/styles';
-import { observer } from 'mobx-react';
-import { useSnackbar } from 'notistack';
-import React, { forwardRef } from 'react';
-import Clipboard from 'react-clipboard.js';
-
-import { getExportProviderUrl } from '../../libs/utils';
-import { useStores } from '../../stores';
-
-const useStyles = makeStyles((theme) => ({
-  ProviderCopyButtons: {},
-}));
-
-const options = [
-  '复制 Surge Policy 地址',
-  '复制 Clash Provider 地址',
-  '复制 Quantumult X Server Remote 地址',
-  '复制 SS 订阅',
-  '复制 SSR 订阅',
-  '复制 V2Ray 订阅',
-];
+import { Button } from '@/components/ui/button'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { observer } from 'mobx-react-lite'
+import { useSnackbar } from 'notistack'
+import React, { useMemo, useState } from 'react'
+import Clipboard from 'react-clipboard.js'
+import { getExportProviderUrl } from '@/libs/utils'
+import { useDownloadToken } from '@/stores'
 
 export interface ProviderCopyButtonsProps {
-  providerNameList: ReadonlyArray<string>;
+  providerNameList: ReadonlyArray<string>
 }
 
 function ProviderCopyButtons({ providerNameList }: ProviderCopyButtonsProps) {
-  const classes = useStyles();
-  const { config: configStore } = useStores();
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef<HTMLDivElement>(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const { enqueueSnackbar } = useSnackbar();
-  const providers = providerNameList.join(',');
-  const downloadToken =
-    configStore.config.viewerToken || configStore.config.accessToken;
-  const urls: string[] = [
-    getExportProviderUrl(providers, 'surge-policy', true, downloadToken),
-    getExportProviderUrl(providers, 'clash-provider', true, downloadToken),
-    getExportProviderUrl(providers, 'qx-server', true, downloadToken),
-    getExportProviderUrl(providers, 'ss', true, downloadToken),
-    getExportProviderUrl(providers, 'ssr', true, downloadToken),
-    getExportProviderUrl(providers, 'v2ray', true, downloadToken),
-  ];
+  const { enqueueSnackbar } = useSnackbar()
+
+  const providers = useMemo(
+    () => providerNameList.join(','),
+    [providerNameList]
+  )
+
+  const downloadToken = useDownloadToken()
+  const formatOptions = useMemo(
+    () =>
+      [
+        {
+          name: 'Surge Policy',
+          url: getExportProviderUrl(
+            providers,
+            'surge-policy',
+            true,
+            downloadToken
+          ),
+        },
+        {
+          name: 'Clash Provider',
+          url: getExportProviderUrl(
+            providers,
+            'clash-provider',
+            true,
+            downloadToken
+          ),
+        },
+        {
+          name: 'Quantumult X Server Remote',
+          url: getExportProviderUrl(
+            providers,
+            'qx-server',
+            true,
+            downloadToken
+          ),
+        },
+        {
+          name: 'SS 订阅',
+          url: getExportProviderUrl(providers, 'ss', true, downloadToken),
+        },
+        {
+          name: 'SSR 订阅',
+          url: getExportProviderUrl(providers, 'ssr', true, downloadToken),
+        },
+        {
+          name: 'V2Ray 订阅',
+          url: getExportProviderUrl(providers, 'v2ray', true, downloadToken),
+        },
+      ] as const,
+    [downloadToken, providers]
+  )
+  const [selectedFormat, setSelectedFormat] = useState<string>(
+    formatOptions[0].name
+  )
+  const selectedUrl = useMemo(() => {
+    return formatOptions.find((option) => option.name === selectedFormat)?.url
+  }, [formatOptions, selectedFormat])
 
   const onCopySuccess = () => {
-    enqueueSnackbar('复制成功', { variant: 'success' });
-  };
+    enqueueSnackbar('复制成功', { variant: 'success' })
+  }
 
   const onCopyError = () => {
-    enqueueSnackbar('复制失败', { variant: 'error' });
-  };
-
-  const handleMenuItemClick = (
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>,
-    index: number
-  ) => {
-    setSelectedIndex(index);
-    setOpen(false);
-  };
-
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleClose = (event: React.MouseEvent<Document, MouseEvent>) => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
-      return;
-    }
-
-    setOpen(false);
-  };
+    enqueueSnackbar('复制失败', { variant: 'error' })
+  }
 
   return (
-    <Grid item xs={12} className={classes.ProviderCopyButtons}>
-      <ButtonGroup
-        variant="contained"
-        color="primary"
-        ref={anchorRef}
-        aria-label="split button"
+    <div className="flex space-x-4">
+      <Select
+        value={selectedFormat}
+        onValueChange={(val) => setSelectedFormat(val)}
       >
-        <Clipboard
-          component={CopyButton}
-          data-testid="copy-button"
-          data-clipboard-text={urls[selectedIndex]}
-          onSuccess={onCopySuccess}
-          onError={onCopyError}
+        <SelectTrigger
+          className="w-[150px] sm:w-[180px]"
+          data-testid="format-select"
         >
-          {options[selectedIndex]}
-        </Clipboard>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {formatOptions.map((option) => (
+              <SelectItem key={option.name} value={option.name}>
+                {option.name}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
 
-        <Button
-          color="primary"
-          size="small"
-          aria-controls={open ? 'split-button-menu' : undefined}
-          aria-expanded={open ? 'true' : undefined}
-          aria-label="select url type"
-          aria-haspopup="menu"
-          onClick={handleToggle}
-        >
-          <ArrowDropDownIcon />
-        </Button>
-      </ButtonGroup>
-      <Popper
-        open={open}
-        anchorEl={anchorRef.current}
-        role={undefined}
-        transition
-        disablePortal
-        style={{ zIndex: 2 }}
+      <Clipboard
+        component={Button}
+        data-testid="copy-button"
+        data-clipboard-text={selectedUrl || ''}
+        onSuccess={onCopySuccess}
+        onError={onCopyError}
+        button-variant="secondary"
       >
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin:
-                placement === 'bottom' ? 'center top' : 'center bottom',
-            }}
-          >
-            <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
-                <MenuList id="split-button-menu">
-                  {options.map((option, index) => (
-                    <MenuItem
-                      key={option}
-                      selected={index === selectedIndex}
-                      onClick={(event) => handleMenuItemClick(event, index)}
-                    >
-                      {option}
-                    </MenuItem>
-                  ))}
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
-    </Grid>
-  );
+        复制
+      </Clipboard>
+    </div>
+  )
 }
 
-interface CopyButtonProps {
-  children: React.ReactNode[];
-}
-
-const CopyButton = forwardRef<any, CopyButtonProps>(function CopyButton(
-  props,
-  ref
-) {
-  return (
-    <Button
-      ref={ref}
-      variant="contained"
-      size="medium"
-      color="primary"
-      {...props}
-    >
-      {props.children}
-    </Button>
-  );
-});
-
-export default observer(ProviderCopyButtons);
+export default observer(ProviderCopyButtons)

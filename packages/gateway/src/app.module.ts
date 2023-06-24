@@ -1,31 +1,36 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { join } from 'path';
-import { ServeStaticModule } from '@nestjs/serve-static';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { join } from 'path'
+import { ServeStaticModule } from '@nestjs/serve-static'
+import getPackage from '@surgio/gateway-frontend'
 
-import { AppController } from './app.controller';
-import { ApiModule } from './api/api.module';
-import { CookieParserMiddleware } from './middleware/cookie-parser.middleware';
-import { PrepareMiddleware } from './middleware/prepare.middleware';
-import { SurgioModule } from './surgio/surgio.module';
-import { SurgioService } from './surgio/surgio.service';
-import { AuthModule } from './auth/auth.module';
-import configuration from './config/configuration';
-import getPackage from '@surgio/gateway-frontend';
+import { AppController } from './app.controller'
+import { ApiModule } from './api/api.module'
+import { CookieParserMiddleware } from './middleware/cookie-parser.middleware'
+import { PrepareMiddleware } from './middleware/prepare.middleware'
+import { SurgioModule } from './surgio/surgio.module'
+import { SurgioService } from './surgio/surgio.service'
+import { AuthModule } from './auth/auth.module'
+import configuration from './config/configuration'
 
-const FE_MODULE = require.resolve('@surgio/gateway-frontend');
-const frontendPackage = getPackage();
+const FE_MODULE = require.resolve('@surgio/gateway-frontend')
+const frontendPackage = getPackage()
 
 @Module({
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(FE_MODULE, '../build'),
       serveStaticOptions: {
+        cacheControl: true,
         etag: true,
         maxAge: '31d',
         setHeaders: (res, path) => {
-          if (path.endsWith('.js')) {
-            res.setHeader('x-frontend-version', frontendPackage.version);
+          if (
+            path.endsWith('.js') ||
+            path.endsWith('.css') ||
+            path.endsWith('.json')
+          ) {
+            res.setHeader('x-frontend-version', frontendPackage.version)
           }
         },
       },
@@ -44,21 +49,17 @@ const frontendPackage = getPackage();
   controllers: [AppController],
 })
 export class AppModule {
-  constructor(
-    private configService: ConfigService,
-    private surgioService: SurgioService
-  ) {}
+  constructor(private surgioService: SurgioService) {}
 
   configure(consumer: MiddlewareConsumer): void {
-    const envSecret = this.configService.get<string | undefined>('secret');
-    const secret = envSecret || this.surgioService.surgioHelper.configHash;
+    const secret = this.surgioService.surgioHelper.configHash
 
-    CookieParserMiddleware.configure(secret);
-    consumer.apply(CookieParserMiddleware).forRoutes('*');
+    CookieParserMiddleware.configure(secret)
+    consumer.apply(CookieParserMiddleware).forRoutes('*')
 
     consumer
       .apply(PrepareMiddleware)
       .exclude({ path: 'render', method: RequestMethod.ALL })
-      .forRoutes(AppController);
+      .forRoutes(AppController)
   }
 }

@@ -1,86 +1,123 @@
-import { observer } from 'mobx-react';
-import React, { FormEvent } from 'react';
-import { useHistory } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { useSnackbar } from 'notistack';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useStores } from '@/stores'
+import { observer } from 'mobx-react-lite'
+import React, { useCallback } from 'react'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import client, { validateCookie } from '@/libs/http'
+import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 
-import client from '../../libs/http';
+const formSchema = z.object({
+  accessToken: z.string().nonempty({
+    message: 'Access Token 不能为空',
+  }),
+})
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    AuthPage: {},
-    formContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      padding: theme.spacing(4),
-    },
-    formInner: {
-      marginBottom: theme.spacing(3),
+const Page = () => {
+  const { enqueueSnackbar } = useSnackbar()
+  const navigate = useNavigate()
+  const stores = useStores()
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      accessToken: '',
     },
   })
-);
 
-const Page: React.FC = () => {
-  const classes = useStyles();
-  const [token, setToken] = React.useState('');
-  const { enqueueSnackbar } = useSnackbar();
-  const history = useHistory();
+  const onSubmit = useCallback(
+    async (values: z.infer<typeof formSchema>) => {
+      await client
+        .post('/api/auth', {
+          accessToken: values.accessToken,
+        })
+        .catch((err) => {
+          enqueueSnackbar('授权失败', { variant: 'error' })
 
-  const onSubmit = (event: FormEvent) => {
-    event.preventDefault();
+          form.control.setError('accessToken', {
+            type: 'custom',
+            message: '授权失败：' + err.message,
+          })
 
-    client
-      .post('/api/auth', {
-        json: {
-          accessToken: token,
-        },
-      })
-      .then(() => {
-        history.replace('/');
-      })
-      .catch(() => {
-        enqueueSnackbar('授权失败', { variant: 'error' });
-        setToken('');
-      });
-  };
+          throw err
+        })
+        .then(() => {
+          return validateCookie().then((user) => {
+            if (user.accessToken) {
+              stores.config.updateConfig({
+                accessToken: user.accessToken,
+              })
+            }
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setToken(event.target.value.trim());
-  };
+            if (user.viewerToken) {
+              stores.config.updateConfig({
+                viewerToken: user.viewerToken,
+              })
+            }
+
+            navigate('/', { replace: true })
+          })
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    },
+    [enqueueSnackbar, form.control, navigate, stores.config]
+  )
+
+  const onSubmitError = useCallback((errors: any) => {
+    console.error(errors)
+  }, [])
 
   return (
-    <div className={classes.AuthPage}>
-      <Container maxWidth="sm">
-        <Paper variant="outlined" className={classes.formContainer}>
-          <Typography gutterBottom variant="h4">
-            授权
-          </Typography>
-          <form onSubmit={onSubmit}>
-            <div className={classes.formInner}>
-              <TextField
-                required
-                value={token}
-                onChange={onChange}
-                type="password"
-                id="accessToken"
-                label="Access Token"
+    <div className="container mx-auto max-w-3xl">
+      <Card>
+        <CardHeader>
+          <CardTitle>登录</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit, onSubmitError)}
+              className="space-y-8"
+            >
+              <FormField
+                control={form.control}
+                name="accessToken"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Access Token</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        autoComplete="current-password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-
-            <Button variant="contained" color="primary" type="submit">
-              确认
-            </Button>
-          </form>
-        </Paper>
-      </Container>
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                登录
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
-  );
-};
+  )
+}
 
-export default observer(Page);
+export default observer(Page)

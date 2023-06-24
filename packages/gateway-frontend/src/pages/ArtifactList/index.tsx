@@ -1,119 +1,90 @@
-import Grid from '@material-ui/core/Grid';
-import React from 'react';
-import useSWR from 'swr';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import Paper from '@material-ui/core/Paper';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Divider from '@material-ui/core/Divider';
-import { ArtifactConfig } from 'surgio/build/types';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Loader2 } from 'lucide-react'
+import React, { useEffect } from 'react'
+import useSWR from 'swr'
+import { ArtifactConfig } from 'surgio/internal'
+import { defaultFetcher } from '@/libs/utils'
+import ArtifactCard from '@/components/ArtifactCard'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Separator } from '@/components/ui/separator'
 
-import { defaultFetcher } from '../../libs/utils';
-import ArtifactCard from '../../components/ArtifactCard';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    ArtifactListPage: {},
-    headerContainer: {
-      padding: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-    },
-    categories: {
-      margin: theme.spacing(2, 0, 0),
-    },
-    category: {},
-    listContainer: {},
-    listItem: {},
-  })
-);
-
-const Page: React.FC = () => {
-  const classes = useStyles();
+const Page = (): JSX.Element => {
   const { data: artifactList, error } = useSWR<ReadonlyArray<ArtifactConfig>>(
     '/api/artifacts',
     defaultFetcher
-  );
+  )
   const [categorySelection, setCategorySelection] = React.useState<{
-    [key: string]: boolean;
-  }>({});
-  const [categories, setCategories] = React.useState<string[]>([]);
+    [key: string]: boolean
+  }>({})
+  const [categories, setCategories] = React.useState<string[]>([])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (artifactList) {
       const result = artifactList
         .reduce<string[]>((accu, curr): string[] => {
           if (Array.isArray(curr?.categories)) {
-            accu.push(...curr.categories);
+            accu.push(...curr.categories)
           }
-          return accu;
+          return accu
         }, [])
         .filter((item, index, arr) => {
-          const find = arr.findIndex((i) => i === item);
-          return index === find;
-        });
+          const find = arr.findIndex((i) => i === item)
+          return index === find
+        })
 
       result.forEach((cat) => {
         setCategorySelection((prevVal) => {
           return {
             ...prevVal,
             [cat]: false,
-          };
-        });
-      });
+          }
+        })
+      })
 
-      setCategories(result);
+      setCategories(result)
     }
-  }, [artifactList]);
+  }, [artifactList])
 
   if (error) {
     return (
-      <Box display="flex" justifyContent="center">
-        Failed to load
-      </Box>
-    );
+      <div className="flex justify-center text-2xl font-semibold">
+        🚨 加载失败 🚨
+      </div>
+    )
   }
 
   if (!artifactList) {
     return (
-      <Box display="flex" justifyContent="center">
-        Loading...
-      </Box>
-    );
+      <div className="flex justify-center items-center text-lg">
+        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+        加载中...
+      </div>
+    )
   }
 
-  const handleCategoryChange =
-    (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setCategorySelection({
-        ...categorySelection,
-        [name]: event.target.checked,
-      });
-    };
+  const handleCategoryChange = (name: string) => (checked: boolean) => {
+    setCategorySelection({
+      ...categorySelection,
+      [name]: checked,
+    })
+  }
 
   const getArtifactListElement = () => {
-    if (!artifactList) return null;
+    if (!artifactList) return null
 
-    const result: JSX.Element[] = [];
+    const result: JSX.Element[] = []
     const hasSelection = Object.keys(categorySelection).some(
       (key) => categorySelection[key]
-    );
+    )
 
     if (!hasSelection) {
       return artifactList.map((item) => {
         return (
-          <Grid
-            item
-            xs={12}
-            lg={6}
-            className={classes.listItem}
-            key={item.name}
-          >
+          <div key={item.name}>
             <ArtifactCard artifact={item} />
-          </Grid>
-        );
-      });
+          </div>
+        )
+      })
     }
 
     Object.keys(categorySelection).forEach((item) => {
@@ -121,71 +92,74 @@ const Page: React.FC = () => {
         result.push(
           ...artifactList
             .filter((artifact) => {
-              return artifact?.categories?.includes(item);
+              return artifact?.categories?.includes(item)
             })
             .map((artifact) => {
               return (
-                <Grid
-                  item
-                  xs={12}
-                  lg={6}
-                  className={classes.listItem}
-                  key={artifact.name}
-                >
+                <div key={artifact.name}>
                   <ArtifactCard artifact={artifact} />
-                </Grid>
-              );
+                </div>
+              )
             })
-        );
+        )
       }
-    });
+    })
 
-    return <>{result}</>;
-  };
+    return result
+  }
 
   return (
-    <div className={classes.ArtifactListPage}>
-      <Paper className={classes.headerContainer}>
+    <div>
+      <Card>
         {categories.length > 0 ? (
           <>
-            <Typography gutterBottom variant="h4">
-              Artifacts
-            </Typography>
-            <Divider />
-            <div className={classes.categories}>
-              <Typography gutterBottom variant="body1">
-                分类
-              </Typography>
-              <FormGroup row>
-                {categories.map((cat) => (
-                  <FormControlLabel
-                    className={classes.category}
-                    key={cat}
-                    control={
+            <CardHeader>
+              <CardTitle className="text-2xl">Artifacts</CardTitle>
+            </CardHeader>
+
+            <CardContent className="space-y-4">
+              <Separator />
+
+              <div className="space-y-2">
+                <div className="font-semibold">分类</div>
+                <div className="flex flex-wrap">
+                  {categories.map((cat) => (
+                    <div
+                      key={cat}
+                      className="flex items-center space-x-2 mr-4 my-1"
+                    >
                       <Checkbox
+                        id={`cb-${cat}`}
                         checked={categorySelection[cat]}
-                        onChange={handleCategoryChange(cat)}
+                        onCheckedChange={(val) =>
+                          handleCategoryChange(cat)(val === true)
+                        }
                         value={cat}
-                        color="primary"
                       />
-                    }
-                    label={cat}
-                  />
-                ))}
-              </FormGroup>
-            </div>
+                      <label
+                        htmlFor={`cb-${cat}`}
+                        className="text-sm leading-none"
+                      >
+                        {cat}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
           </>
         ) : (
-          <Typography variant="h4">Artifacts</Typography>
+          <CardHeader>
+            <CardTitle className="text-2xl">Artifacts</CardTitle>
+          </CardHeader>
         )}
-      </Paper>
-      <div className={classes.listContainer}>
-        <Grid container spacing={3}>
-          {getArtifactListElement()}
-        </Grid>
+      </Card>
+
+      <div className="mt-6 lg:mt-8 grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
+        {getArtifactListElement()}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

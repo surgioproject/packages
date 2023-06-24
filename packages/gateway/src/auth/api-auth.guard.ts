@@ -1,11 +1,11 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { AuthGuard } from '@nestjs/passport';
+import { ExecutionContext, Injectable } from '@nestjs/common'
+import { Reflector } from '@nestjs/core'
+import { AuthGuard } from '@nestjs/passport'
 
-import { Role } from '../constants/role';
-import { SurgioService } from '../surgio/surgio.service';
-import { EnrichedRequest } from '../types/app';
-import { ROLES_KEY } from './roles.decorator';
+import { Role } from '../constants/role'
+import { SurgioService } from '../surgio/surgio.service'
+import { EnrichedRequest } from '../types/app'
+import { ROLES_KEY } from './roles.decorator'
 
 @Injectable()
 export class APIAuthGuard extends AuthGuard(['cookie', 'bearer']) {
@@ -13,30 +13,30 @@ export class APIAuthGuard extends AuthGuard(['cookie', 'bearer']) {
     private surgioService: SurgioService,
     private reflector: Reflector
   ) {
-    super();
+    super()
   }
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
-    const needAuth = this.surgioService.surgioHelper.config?.gateway?.auth;
+    const needAuth = this.surgioService.surgioHelper.config?.gateway?.auth
     const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
-    ]);
+    ])
 
     if (needAuth) {
-      const authResult = (await super.canActivate(context)) as boolean;
+      const authResult = (await super.canActivate(context)) as boolean
 
       if (!requiredRoles) {
-        return authResult;
+        return authResult
       }
 
-      const { user } = context.switchToHttp().getRequest<EnrichedRequest>();
+      const { user } = context.switchToHttp().getRequest<EnrichedRequest>()
 
       return user
         ? requiredRoles.some((role) => user.roles?.includes(role))
-        : authResult;
+        : authResult
     }
 
-    return true;
+    return true
   }
 }

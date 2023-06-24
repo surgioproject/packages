@@ -1,6 +1,6 @@
 type Package = {
-  name: string;
-  version: string;
-};
+  name: string
+  version: string
+}
 
-export default function getPackage(): Package;
+export default function getPackage(): Package

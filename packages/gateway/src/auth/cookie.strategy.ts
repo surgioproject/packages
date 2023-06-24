@@ -1,43 +1,50 @@
-import _ from 'lodash';
-import { Strategy } from 'passport-cookie';
-import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException, Req } from '@nestjs/common';
-import { Request } from 'express';
+import _ from 'lodash'
+import { Strategy } from 'passport-cookie'
+import { PassportStrategy } from '@nestjs/passport'
+import { Injectable, UnauthorizedException, Req } from '@nestjs/common'
+import { Request } from 'express'
 
-import { Role } from '../constants/role';
-import { UserContext } from '../types/app';
-import { AuthService } from './auth.service';
+import { Role } from '../constants/role'
+import { SurgioService } from '../surgio/surgio.service'
+import { UserContext } from '../types/app'
+import { AuthService } from './auth.service'
 
 @Injectable()
 export class CookieStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly authService: AuthService) {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly d: SurgioService
+  ) {
     super({
       cookieName: '_t',
-      signed: true,
+      signed: false,
       passReqToCallback: true,
-    });
+    })
   }
 
   public async validate(
     @Req() req: Request,
-    accessToken: string
+    cookie: string
   ): Promise<UserContext> {
-    const isAccessToken = this.authService.validateAccessToken(accessToken);
-    const isViewerToken = this.authService.validateViewerToken(accessToken);
-    const roles: UserContext['roles'] = [];
+    const isAccessToken = this.authService.validateSignedAccessToken(cookie)
+    const isViewerToken = this.authService.validateViewerToken(cookie)
+    const roles: UserContext['roles'] = []
 
     if (!isAccessToken && !isViewerToken) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException()
     }
 
     if (isViewerToken) {
-      roles.push(Role.VIEWER);
+      roles.push(Role.VIEWER)
     }
 
     if (isAccessToken) {
-      roles.push(Role.ADMIN, Role.VIEWER);
+      roles.push(Role.ADMIN, Role.VIEWER)
     }
 
-    return { accessToken, roles: _.uniq(roles) };
+    return {
+      accessToken: this.d.surgioHelper.config?.gateway?.accessToken as string,
+      roles: _.uniq(roles),
+    }
   }
 }

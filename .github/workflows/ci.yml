@@ -16,7 +16,7 @@ jobs:
       max-parallel: 3
       matrix:
         os: [ubuntu-latest]
-        node-version: [14, 16]
+        node-version: [18, 20]
 
     steps:
       - uses: actions/checkout@v3
@@ -49,9 +49,9 @@ jobs:
       - name: Install dependencies
         run: |
           pnpm install
-          pnpm prepare-ci
 
       - name: Test, report coverage
         run: |
+          pnpm build
           pnpm lint
           pnpm test

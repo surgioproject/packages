@@ -1,16 +1,15 @@
-import { observable, action, computed } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx'
 
 export interface Config {
-  urlBase: string;
-  publicUrl: string;
-  backendVersion: string;
-  coreVersion: string;
-  accessToken: string | null;
-  viewerToken: string | null;
+  urlBase: string
+  publicUrl: string
+  backendVersion: string
+  coreVersion: string
+  accessToken: string | null
+  viewerToken: string | null
 }
 
 export class ConfigStore {
-  @observable
   config: Config = {
     urlBase: '',
     publicUrl: '',
@@ -18,15 +17,21 @@ export class ConfigStore {
     coreVersion: '',
     accessToken: null,
     viewerToken: null,
-  };
-
-  @action
-  updateConfig(newConfig: Partial<Config>) {
-    Object.assign(this.config, newConfig);
   }
 
-  @computed
+  constructor() {
+    makeObservable(this, {
+      config: observable,
+      updateConfig: action,
+      isReady: computed,
+    })
+  }
+
+  updateConfig(newConfig: Partial<Config>) {
+    Object.assign(this.config, newConfig)
+  }
+
   get isReady(): boolean {
-    return !!this.config.backendVersion;
+    return !!this.config.backendVersion
   }
 }

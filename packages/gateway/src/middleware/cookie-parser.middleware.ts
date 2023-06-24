@@ -1,7 +1,6 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import { NextFunction, Request, Response } from 'express';
-import cookieParser from 'cookie-parser';
-import { isNow } from 'surgio/build/utils';
+import { Injectable, NestMiddleware } from '@nestjs/common'
+import { NextFunction, Request, Response } from 'express'
+import cookieParser from 'cookie-parser'
 
 @Injectable()
 export class CookieParserMiddleware implements NestMiddleware {
@@ -9,27 +8,23 @@ export class CookieParserMiddleware implements NestMiddleware {
     secret: string | ReadonlyArray<string>,
     opts?: cookieParser.CookieParseOptions
   ): void {
-    this.secret = secret;
+    this.secret = secret
     if (opts) {
-      this.options = opts;
+      this.options = opts
     }
   }
 
-  private static secret: string | ReadonlyArray<string>;
-  private static options: cookieParser.CookieParseOptions;
+  private static secret: string | ReadonlyArray<string>
+  private static options: cookieParser.CookieParseOptions
 
   public use(req: Request, res: Response, next: NextFunction): void {
-    if (isNow() && req.cookies) {
-      req.cookies = undefined;
-    }
-
     if (CookieParserMiddleware.secret) {
       cookieParser(
         CookieParserMiddleware.secret as string | string[],
         CookieParserMiddleware.options
-      )(req, res, next);
+      )(req, res, next)
     } else {
-      cookieParser()(req, res, next);
+      cookieParser()(req, res, next)
     }
   }
 }

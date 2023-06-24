@@ -1,9 +1,9 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { NextFunction, Request, Response } from 'express';
+import { MiddlewareConsumer, Module } from '@nestjs/common'
+import { NextFunction, Request, Response } from 'express'
 
-import { ApiController } from './api.controller';
-import { AuthAPIModule } from './auth/auth.module';
-import { ConfigAPIModule } from './config/config.module';
+import { ApiController } from './api.controller'
+import { AuthAPIModule } from './auth/auth.module'
+import { ConfigAPIModule } from './config/config.module'
 
 @Module({
   controllers: [ApiController],
@@ -16,9 +16,9 @@ export class ApiModule {
         res.header(
           'cache-control',
           'private, no-cache, no-store, must-revalidate'
-        );
-        next();
+        )
+        next()
       })
-      .forRoutes('api/*');
+      .forRoutes('api/*')
   }
 }

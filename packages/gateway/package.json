@@ -3,13 +3,13 @@
   "description": "Surgio API Gateway 面板",
   "private": false,
   "license": "MIT",
-  "version": "1.8.1",
+  "version": "2.0.0-beta.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "repository": "https://github.com/surgioproject/packages/tree/master/packages/gateway",
-  "author": "Yihang Li <me@royli.dev>",
+  "author": "Roy Li <me@royli.dev>",
   "bugs": {
-    "url": "https://github.com/surgioproject/packages/issues"
+    "url": "https://github.com/surgioproject/surgio/issues"
   },
   "homepage": "https://surgio.js.org",
   "scripts": {
@@ -29,47 +29,49 @@
     "test:ci": "run-s test:unit test:e2e"
   },
   "dependencies": {
-    "@nestjs/common": "^7.3.2",
-    "@nestjs/config": "^0.5.0",
-    "@nestjs/core": "^7.3.2",
-    "@nestjs/passport": "^7.0.0",
-    "@nestjs/platform-express": "^7.3.2",
-    "@nestjs/serve-static": "^2.1.1",
-    "@surgio/gateway-frontend": "file:../gateway-frontend",
+    "@nestjs/common": "^9.4.1",
+    "@nestjs/config": "^2.3.2",
+    "@nestjs/core": "^9.4.1",
+    "@nestjs/passport": "^9.0.3",
+    "@nestjs/platform-express": "^9.4.1",
+    "@nestjs/serve-static": "^3.0.1",
+    "@surgio/gateway-frontend": "workspace:*",
     "bluebird": "^3.7.2",
-    "cookie-parser": "^1.4.5",
-    "dayjs": "^1.9.5",
-    "express": "^4.17.1",
-    "fs-extra": "^9.1.0",
-    "http-errors": "^1.7.3",
-    "lodash": "^4.17.19",
-    "node-cache": "^5.1.2",
-    "nunjucks": "^3.2.1",
-    "passport": "^0.4.1",
-    "passport-cookie": "^1.0.6",
+    "cookie-parser": "^1.4.6",
+    "dayjs": "^1.11.7",
+    "express": "^4.18.2",
+    "fs-extra": "^11.1.1",
+    "http-errors": "^2.0.0",
+    "lodash": "^4.17.21",
+    "nunjucks": "^3.2.4",
+    "passport": "^0.6.0",
+    "passport-cookie": "^1.0.9",
     "passport-http-bearer": "^1.0.1",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.5.5",
-    "semver": "^7.3.2",
-    "serverless-http": "^2.7.0",
-    "source-map-support": "^0.5.19",
-    "youch": "^2.0.10"
+    "rxjs": "^7.8.1",
+    "semver": "^7.5.1",
+    "serverless-http": "^3.2.0",
+    "source-map-support": "^0.5.21",
+    "youch": "^3.2.3"
   },
   "devDependencies": {
-    "@nestjs/cli": "^7.1.2",
-    "@nestjs/schematics": "^7.0.0",
-    "@nestjs/testing": "^7.3.2",
-    "@types/bluebird": "^3.5.36",
+    "@nestjs/cli": "^9.5.0",
+    "@nestjs/schematics": "^9.2.0",
+    "@nestjs/testing": "^9.4.1",
+    "@types/bluebird": "^3.5.38",
     "@types/cookie-parser": "^1.4.3",
-    "@types/express": "^4.17.13",
-    "@types/lodash": "^4.14.182",
-    "@types/nunjucks": "^3.2.1",
-    "@types/passport": "^1.0.9",
-    "@types/semver": "^7.3.10",
-    "tsconfig-paths": "^3.9.0"
+    "@types/express": "^4.17.17",
+    "@types/lodash": "^4.14.194",
+    "@types/nunjucks": "^3.2.2",
+    "@types/passport": "^1.0.12",
+    "@types/semver": "^7.5.0",
+    "@types/supertest": "^2.0.12",
+    "sinon": "^15.0.4",
+    "supertest": "^6.3.3",
+    "tsconfig-paths": "^4.2.0"
   },
   "peerDependencies": {
-    "surgio": "^2.20.0"
+    "surgio": "^3.0.0"
   },
   "files": [
     "dist"
@@ -98,7 +100,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=18.0.0"
   },
   "gitHead": "da96fe077b24097d0a721392bd32ec4a88ac2ee0"
 }
