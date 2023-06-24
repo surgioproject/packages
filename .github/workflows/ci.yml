@@ -16,7 +16,7 @@ jobs:
       max-parallel: 3
       matrix:
         os: [ubuntu-latest]
-        node-version: [18]
+        node-version: [18, 20]
 
     steps:
       - uses: actions/checkout@v3
@@ -52,5 +52,6 @@ jobs:
 
       - name: Test, report coverage
         run: |
+          pnpm build
           pnpm lint
           pnpm test
