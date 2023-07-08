@@ -99,7 +99,7 @@ function getEmbedCode(artifact: string, accessToken?: string | null): string {
   return `<iframe loading="lazy" src="${getEmbedUrl(
     artifact,
     accessToken
-  )}" height="400px" width="100%"></iframe>`
+  )}" height="480px" width="100%"></iframe>`
 }
 
 function getEmbedUrl(artifact: string, accessToken?: string | null): string {

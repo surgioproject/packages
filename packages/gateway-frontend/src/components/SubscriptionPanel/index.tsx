@@ -54,17 +54,23 @@ function SubscriptionPanel() {
 
   return (
     <>
-      <div className="font-semibold tracking-tight text-lg">订阅</div>
+      <div className="font-semibold tracking-tight text-xl">订阅</div>
 
-      <div className="mt-3 lg:mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
-        {supportedProviderList.map((provider: Provider) => {
-          return (
-            <div key={provider.name}>
-              <SubscriptionPanelItem provider={provider} />
-            </div>
-          )
-        })}
-      </div>
+      {supportedProviderList.length === 0 ? (
+        <div className="mt-3 lg:mt-4 py-5 rounded outline outline-slate-200 flex justify-center text-lg font-semibold bg-secondary">
+          🚧 暂无可用订阅 🚧
+        </div>
+      ) : (
+        <div className="mt-3 lg:mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
+          {supportedProviderList.map((provider: Provider) => {
+            return (
+              <div key={provider.name}>
+                <SubscriptionPanelItem provider={provider} />
+              </div>
+            )
+          })}
+        </div>
+      )}
     </>
   )
 }

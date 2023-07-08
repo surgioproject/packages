@@ -1,4 +1,4 @@
-import { cn } from '@/libs/utils'
+import { cn } from '@/libs/shadcn'
 import React from 'react'
 
 function Skeleton({

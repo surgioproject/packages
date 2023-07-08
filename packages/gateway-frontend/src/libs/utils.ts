@@ -1,6 +1,3 @@
-import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-
 import client, { SuccessResponse } from './http'
 
 export const defaultFetcher = <T>(url: string): Promise<T> =>
@@ -48,8 +45,4 @@ export const getExportProviderUrl = (
     urlObject.searchParams.set('dl', '1')
   }
   return urlObject.toString()
-}
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
 }

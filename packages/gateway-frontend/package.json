@@ -16,7 +16,8 @@
     "test:watch": "craco test --watchAll",
     "test:cov": "craco test --coverage --watchAll=false",
     "test:ci": "craco test --watchAll=false",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx",
+    "shadcn": "shadcn-ui"
   },
   "devDependencies": {
     "@craco/craco": "^7.1.0",
@@ -65,6 +66,7 @@
     "react-router-dom": "^6.11.2",
     "react-scripts": "5.0.1",
     "react-test-renderer": "^18.2.0",
+    "shadcn-ui": "^0.3.0",
     "swr": "^2.1.5",
     "tailwind-merge": "^1.12.0",
     "tailwindcss": "^3.3.2",

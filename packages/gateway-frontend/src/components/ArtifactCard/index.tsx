@@ -2,7 +2,8 @@ import ArtifactParamsPopover from '@/components/ArtifactParamsPopover'
 import ArtifactShareButton from '@/components/ArtifactShareButton'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { cn, getDownloadUrl } from '@/libs/utils'
+import { getDownloadUrl } from '@/libs/utils'
+import { cn } from '@/libs/shadcn'
 import { useDownloadToken } from '@/stores'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -86,7 +87,7 @@ function ArtifactCard({
     <Card className={cn(isEmbed && `w-full`)}>
       <CardHeader>
         <CardTitle className="flex items-center">
-          <div className="text-xl flex-1">{artifact.name}</div>
+          <div className="text-xl flex-1 truncate">{artifact.name}</div>
           {extraParams.length > 0 && (
             <ArtifactParamsPopover params={extraParams} />
           )}

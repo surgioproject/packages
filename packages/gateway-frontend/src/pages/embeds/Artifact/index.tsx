@@ -20,7 +20,7 @@ const Page: React.FC = () => {
   })
 
   return (
-    <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-full flex justify-center items-center p-6 bg-white dark:bg-gray-800">
+    <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-full flex justify-center items-center bg-white dark:bg-gray-800">
       {error ? (
         <div className="text-2xl font-semibold">🚨 加载失败 🚨</div>
       ) : null}

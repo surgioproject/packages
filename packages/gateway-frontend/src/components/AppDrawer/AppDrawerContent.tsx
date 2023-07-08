@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import { cn } from '@/libs/utils'
+import { cn } from '@/libs/shadcn'
 import { Separator } from '@/components/ui/separator'
 
 const AppDrawerContent = () => {
