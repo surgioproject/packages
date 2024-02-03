@@ -332,11 +332,12 @@ export class AppController {
       if (!isCachedPayload) {
         const providers = artifact.providerMap.values()
         let provider: PossibleProviderType | undefined = undefined
+
         if (artifact.artifact.subscriptionUserInfoProvider) {
           for (const p of providers) {
             if (
               p.supportGetSubscriptionUserInfo &&
-              p.name == artifact.artifact.subscriptionUserInfoProvider
+              p.name === artifact.artifact.subscriptionUserInfoProvider
             ) {
               provider = p
               break
@@ -348,6 +349,7 @@ export class AppController {
         } else if (artifact.providerMap.size === 1) {
           provider = providers.next().value
         }
+
         if (provider) {
           const requestUserAgent = this.surgioService.config.gateway
             ?.passRequestUserAgent
