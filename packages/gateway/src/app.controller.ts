@@ -24,6 +24,7 @@ import { APIAuthGuard } from './auth/api-auth.guard'
 import { Roles } from './auth/roles.decorator'
 import { Role } from './constants/role'
 import { SurgioService } from './surgio/surgio.service'
+import { PossibleProviderType } from 'surgio/provider'
 
 dayjs.extend(duration)
 
@@ -328,31 +329,47 @@ export class AppController {
 
       res.send(artifact)
     } else {
-      // 只支持输出单个 Provider 的流量信息
-      if (!isCachedPayload && artifact.providerMap.size === 1) {
+      if (!isCachedPayload) {
         const providers = artifact.providerMap.values()
-        const provider = providers.next().value
-        const requestUserAgent = this.surgioService.config.gateway
-          ?.passRequestUserAgent
-          ? customParams?.requestUserAgent
-          : undefined
-
-        if (provider.supportGetSubscriptionUserInfo) {
-          try {
-            const subscriptionUserInfo = await provider.getSubscriptionUserInfo(
-              { requestUserAgent }
-            )
-
-            if (subscriptionUserInfo) {
-              const values = ['upload', 'download', 'total', 'expire'].map(
-                (key) => `${key}=${subscriptionUserInfo[key] || 0}`
-              )
-
-              res.header('subscription-userinfo', values.join('; '))
+        let provider: PossibleProviderType | undefined = undefined
+        if (artifact.artifact.subscriptionUserInfoProvider) {
+          for (const p of providers) {
+            if (
+              p.supportGetSubscriptionUserInfo &&
+              p.name == artifact.artifact.subscriptionUserInfoProvider
+            ) {
+              provider = p
+              break
             }
-          } catch (err) {
-            this.logger.error('处理订阅信息失败')
-            this.logger.error(err.stack || err)
+          }
+          if (!provider) {
+            this.logger.error(`subscriptionUserInfoProvider ${provider} 不存在`)
+          }
+        } else if (artifact.providerMap.size === 1) {
+          provider = providers.next().value
+        }
+        if (provider) {
+          const requestUserAgent = this.surgioService.config.gateway
+            ?.passRequestUserAgent
+            ? customParams?.requestUserAgent
+            : undefined
+
+          if (provider.supportGetSubscriptionUserInfo) {
+            try {
+              const subscriptionUserInfo =
+                await provider.getSubscriptionUserInfo({ requestUserAgent })
+
+              if (subscriptionUserInfo) {
+                const values = ['upload', 'download', 'total', 'expire'].map(
+                  (key) => `${key}=${subscriptionUserInfo[key] || 0}`
+                )
+
+                res.header('subscription-userinfo', values.join('; '))
+              }
+            } catch (err) {
+              this.logger.error('处理订阅信息失败')
+              this.logger.error(err.stack || err)
+            }
           }
         }
       }
