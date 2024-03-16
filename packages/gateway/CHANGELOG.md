@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/surgioproject/packages/compare/@surgio/gateway@2.1.0...@surgio/gateway@2.1.1) (2024-03-16)
+
+### Bug Fixes
+
+- Extend getEngine in surgio-helper to accept clashCore configuration ([29deb88](https://github.com/surgioproject/packages/commit/29deb8824bbe98e611fbf68ad676a2baccda1f6a))
+
 # [2.1.0](https://github.com/surgioproject/packages/compare/@surgio/gateway@2.0.1...@surgio/gateway@2.1.0) (2024-02-03)
 
 ### Features
