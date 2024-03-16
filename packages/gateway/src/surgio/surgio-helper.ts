@@ -26,7 +26,9 @@ export class SurgioHelper {
 
   constructor(public cwd: string, public readonly config: CommandConfig) {
     this.artifactList = config.artifacts
-    this.templateEngine = getEngine(config.templateDir)
+    this.templateEngine = getEngine(config.templateDir, {
+      clashCore: config.clashConfig?.clashCore,
+    })
     this.configHash = this.getConfigSHA256Hash()
   }
 
