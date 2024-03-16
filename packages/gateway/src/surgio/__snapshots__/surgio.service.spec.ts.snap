@@ -174,7 +174,7 @@ proxies:
     udp: false
     uuid: uuid
     alterId: "32"
-    tls: false
+    network: tcp
   - type: http
     name: http 1
     server: server
