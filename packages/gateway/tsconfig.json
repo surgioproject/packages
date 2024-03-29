@@ -3,7 +3,7 @@
     // https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping
     "target": "ES2022",
     "module": "Node16",
-    "moduleResolution": "Node",
+    "moduleResolution": "Node16",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
