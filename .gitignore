@@ -113,3 +113,6 @@ packages/**/src/*.js
 
 # Misc
 scripts/**/*.js
+
+# Turbopack
+.turbo

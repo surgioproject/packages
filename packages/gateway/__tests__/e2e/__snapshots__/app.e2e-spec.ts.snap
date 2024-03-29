@@ -4,6 +4,7 @@ exports[`AppController (e2e) /export-providers (GET) 1`] = `
 "ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid, vmess-aead=true
+socks = socks5, server, 443
 http 1 = https, server, 443, username, password, tls13=false, skip-cert-verify=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
@@ -18,6 +19,7 @@ exports[`AppController (e2e) /export-providers (GET) multiple providers 1`] = `
 "ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid, vmess-aead=true
+socks = socks5, server, 443
 http 1 = https, server, 443, username, password, tls13=false, skip-cert-verify=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
@@ -43,6 +45,7 @@ exports[`AppController (e2e) /export-providers (GET) using template 1`] = `
 ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid, vmess-aead=true
+socks = socks5, server, 443
 http 1 = https, server, 443, username, password, tls13=false, skip-cert-verify=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
@@ -63,6 +66,7 @@ exports[`AppController (e2e) /export-providers (GET) with viewerToken 1`] = `
 "ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid, vmess-aead=true
+socks = socks5, server, 443
 http 1 = https, server, 443, username, password, tls13=false, skip-cert-verify=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
@@ -78,12 +82,13 @@ HTTPS = https, us.example.com, 443, username, password
 ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid, vmess-aead=true
+socks = socks5, server, 443
 http 1 = https, server, 443, username, password, tls13=false, skip-cert-verify=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
 ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com
 ----
-🇺🇸US 1, 🇺🇸US 2, 🇺🇸US 3, 🇺🇸 US, Snell, HTTPS, ss1, ss2, ss3, vmess, http 1, http 2, snell, ss4, ss-wss
+🇺🇸US 1, 🇺🇸US 2, 🇺🇸US 3, 🇺🇸 US, Snell, HTTPS, ss1, ss2, ss3, vmess, socks, http 1, http 2, snell, ss4, ss-wss
 "
 `;
 
@@ -110,12 +115,13 @@ HTTPS = https, us.example.com, 443, username, password
 ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid, vmess-aead=true
+socks = socks5, server, 443
 http 1 = https, server, 443, username, password, tls13=false, skip-cert-verify=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
 ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com
 ----
-🇺🇸US 1, 🇺🇸US 2, 🇺🇸US 3, 🇺🇸 US, Snell, HTTPS, ss1, ss2, ss3, vmess, http 1, http 2, snell, ss4, ss-wss
+🇺🇸US 1, 🇺🇸US 2, 🇺🇸US 3, 🇺🇸 US, Snell, HTTPS, ss1, ss2, ss3, vmess, socks, http 1, http 2, snell, ss4, ss-wss
 "
 `;
 

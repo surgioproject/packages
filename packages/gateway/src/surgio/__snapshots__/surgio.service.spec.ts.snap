@@ -9,12 +9,13 @@ HTTPS = https, us.example.com, 443, username, password
 ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid, vmess-aead=true
+socks = socks5, server, 443
 http 1 = https, server, 443, username, password, tls13=false, skip-cert-verify=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
 ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com
 ----
-🇺🇸US 1, 🇺🇸US 2, 🇺🇸US 3, 🇺🇸 US, Snell, HTTPS, ss1, ss2, ss3, vmess, http 1, http 2, snell, ss4, ss-wss
+🇺🇸US 1, 🇺🇸US 2, 🇺🇸US 3, 🇺🇸 US, Snell, HTTPS, ss1, ss2, ss3, vmess, socks, http 1, http 2, snell, ss4, ss-wss
 "
 `;
 
@@ -49,6 +50,7 @@ HTTPS = https, us.example.com, 443, username, password
 ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid, vmess-aead=true
+socks = socks5, server, 443
 http 1 = https, server, 443, username, password, tls13=false, skip-cert-verify=false
 http 2 = http, server, 443, username, password
 snell = snell, server, 44046, psk=yourpsk, obfs=http
@@ -64,7 +66,7 @@ http=us.example.com:443, username=username, password=password, over-tls=true, tl
 shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, udp-relay=true, tag=ss1
 shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=www.bing.com, tag=ss2
 shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=ws, obfs-host=server, obfs-uri=/, tag=ss3
-vmess=server:443, method=chacha20-ietf-poly1305, password=uuid, aead=true, tag=vmess
+vmess=server:443, method=chacha20-poly1305, password=uuid, aead=true, tag=vmess
 http=server:443, username=username, password=password, over-tls=true, tls-verification=true, tag=http 1
 http=server:443, username=username, password=password, tag=http 2
 shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=example.com, tag=ss4
@@ -173,8 +175,12 @@ proxies:
     port: 443
     udp: false
     uuid: uuid
-    alterId: "32"
     network: tcp
+    alterId: "32"
+  - type: socks5
+    name: socks
+    server: server
+    port: 443
   - type: http
     name: http 1
     server: server
