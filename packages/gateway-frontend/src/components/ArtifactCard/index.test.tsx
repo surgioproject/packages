@@ -103,6 +103,7 @@ function generateArtifact(partial?: Partial<ArtifactConfig>): ArtifactConfig {
     name: 'test.conf',
     template: 'test',
     provider: 'test',
+    templateType: 'default',
     ...partial,
   }
 }
