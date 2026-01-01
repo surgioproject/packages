@@ -395,7 +395,7 @@ export class AppController {
   private processUrlParams(
     customParams: Record<string, string>
   ): Record<string, string> {
-    const result: NonNullable<any> = Object.create(null)
+    const result: Record<string, string> = Object.create(null)
 
     Object.keys(customParams).forEach((key) => {
       _.set(result, key, customParams[key])
