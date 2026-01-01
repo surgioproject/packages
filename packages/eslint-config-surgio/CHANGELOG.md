@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/surgioproject/packages/compare/@surgio/eslint-config-surgio@1.0.6...@surgio/eslint-config-surgio@2.0.0) (2026-01-01)
+
+### chore
+
+- **eslint-config-surgio:** migrate to eslint v9 flat config format ([605a4dc](https://github.com/surgioproject/packages/commit/605a4dc74e04b263b117ff42e216dc06cc4afbb0))
+
+### BREAKING CHANGES
+
+- **eslint-config-surgio:** Migrate eslint-config-surgio from legacy .eslintrc format to ESLint
+  v9 flat config format. Add @eslint/js and globals as dependencies,
+  and update peerDependencies to require eslint >=9.0.0.
+
 ## [1.0.6](https://github.com/surgioproject/packages/compare/@surgio/eslint-config-surgio@1.0.5...@surgio/eslint-config-surgio@1.0.6) (2023-06-01)
 
 **Note:** Version bump only for package @surgio/eslint-config-surgio

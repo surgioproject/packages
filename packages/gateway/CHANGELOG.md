@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.1](https://github.com/surgioproject/packages/compare/@surgio/gateway@2.2.0...@surgio/gateway@2.2.1) (2026-01-01)
+
+**Note:** Version bump only for package @surgio/gateway
+
 # [2.2.0](https://github.com/surgioproject/packages/compare/@surgio/gateway@2.1.1...@surgio/gateway@2.2.0) (2024-03-29)
 
 **Note:** Version bump only for package @surgio/gateway
