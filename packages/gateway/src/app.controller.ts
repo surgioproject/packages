@@ -33,7 +33,7 @@ dayjs.extend(duration)
 export class AppController {
   private readonly logger = new Logger(AppController.name)
 
-  constructor(private readonly surgioService: SurgioService) { }
+  constructor(private readonly surgioService: SurgioService) {}
 
   @Get('/get-artifact/:name')
   @Roles(Role.VIEWER)
@@ -61,16 +61,16 @@ export class AppController {
       artifact =
         format !== void 0
           ? await this.surgioService.transformArtifact(artifactName, format, {
-            filter,
-            getNodeListParams,
-          })
+              filter,
+              getNodeListParams,
+            })
           : await this.surgioService.getArtifact(artifactName, {
-            downloadUrl: new URL(
-              req.url,
-              this.surgioService.config.publicUrl
-            ).toString(),
-            getNodeListParams,
-          })
+              downloadUrl: new URL(
+                req.url,
+                this.surgioService.config.publicUrl
+              ).toString(),
+              getNodeListParams,
+            })
     } catch (err) {
       const cached = await unifiedCache.get<string>(cacheKey)
 
@@ -181,8 +181,8 @@ export class AppController {
             filter,
             ...(providers.length > 1
               ? {
-                combineProviders: providers.splice(1),
-              }
+                  combineProviders: providers.splice(1),
+                }
               : null),
             getNodeListParams,
           }
@@ -200,8 +200,8 @@ export class AppController {
             ).toString(),
             ...(providers.length > 1
               ? {
-                combineProviders: providers.splice(1),
-              }
+                  combineProviders: providers.splice(1),
+                }
               : null),
             getNodeListParams,
           }
