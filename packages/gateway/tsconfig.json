@@ -9,6 +9,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "inlineSourceMap": true,
+    "isolatedModules": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
@@ -24,5 +25,9 @@
       "ES2022"
     ]
   },
-  "exclude": ["node_modules", "dist", "coverage"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage"
+  ]
 }
