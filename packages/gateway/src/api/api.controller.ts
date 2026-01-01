@@ -8,7 +8,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common'
-import { Response } from 'express'
+import type { Response } from 'express'
 import _ from 'lodash'
 import { formatSubscriptionUserInfo } from 'surgio/utils'
 

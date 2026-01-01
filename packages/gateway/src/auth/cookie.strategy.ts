@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { Strategy } from 'passport-cookie'
 import { PassportStrategy } from '@nestjs/passport'
 import { Injectable, UnauthorizedException, Req } from '@nestjs/common'
-import { Request } from 'express'
+import type { Request } from 'express'
 
 import { Role } from '../constants/role'
 import { SurgioService } from '../surgio/surgio.service'

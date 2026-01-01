@@ -10,13 +10,13 @@ import {
   Inject,
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Response } from 'express'
+import type { Response } from 'express'
 import _ from 'lodash'
 
 import { APIAuthGuard } from '../../auth/api-auth.guard'
 import { AuthService } from '../../auth/auth.service'
 import { SurgioService } from '../../surgio/surgio.service'
-import { EnrichedRequest } from '../../types/app'
+import type { EnrichedRequest } from '../../types/app'
 
 @Controller('api/auth')
 export class AuthController {
