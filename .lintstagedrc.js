@@ -1,4 +1,3 @@
 module.exports = {
-  '*.{ts}': files =>
-    'eslint --max-warnings=0 ' + files.join(' '),
+  '*.{ts,tsx}': (files) => 'eslint --max-warnings=0 ' + files.join(' '),
 };
