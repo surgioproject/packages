@@ -24,9 +24,8 @@
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.1.0",
-    "globals": "^16.0.0",
-    "typescript-eslint": "^8.20.0",
     "execa": "^4.1.0",
+    "globals": "^16.0.0",
     "husky": "^8.0.3",
     "jest": "29.5.0",
     "lerna": "^6.6.2",
@@ -41,7 +40,8 @@
     "ts-node": "^10.9.2",
     "turbo": "^1.13.4",
     "type-fest": "^3.13.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.20.0"
   },
   "repository": "https://github.com/surgioproject/packages",
   "author": "Roy Li <me@royli.dev>",
@@ -64,9 +64,7 @@
     ]
   },
   "pnpm": {
-    "overrides": {
-      "surgio": "link:../../../../../Library/pnpm/global/5/node_modules/surgio"
-    }
+    "overrides": {}
   },
   "packageManager": "pnpm@10.27.0+sha512.72d699da16b1179c14ba9e64dc71c9a40988cbdc65c264cb0e489db7de917f20dcf4d64d8723625f2969ba52d4b7e2a1170682d9ac2a5dcaeaab732b7e16f04a"
 }
