@@ -6,10 +6,11 @@ import globals from 'globals';
 /**
  * Base ESLint flat config for TypeScript packages (gateway, logger)
  * @param {string} tsconfigPath - Path to tsconfig.eslint.json
+ * @param {string} tsconfigRootDir - Root directory for tsconfig resolution (use import.meta.dirname)
  * @param {object} options - Additional options
  * @param {string[]} [options.ignores] - Additional patterns to ignore
  */
-export function createBaseConfig(tsconfigPath, options = {}) {
+export function createBaseConfig(tsconfigPath, tsconfigRootDir, options = {}) {
   const ignores = [
     'node_modules/**',
     'dist/**',
@@ -29,6 +30,7 @@ export function createBaseConfig(tsconfigPath, options = {}) {
         parser: tseslint.parser,
         parserOptions: {
           project: tsconfigPath,
+          tsconfigRootDir,
           sourceType: 'module',
         },
         globals: { ...globals.node, ...globals.es2020 },

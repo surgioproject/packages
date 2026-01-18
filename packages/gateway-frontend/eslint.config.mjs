@@ -29,7 +29,10 @@ export default tseslint.config(
     plugins: { 'react-hooks': reactHooksPlugin },
     languageOptions: {
       parser: tseslint.parser,
-      parserOptions: { ecmaFeatures: { jsx: true } },
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+        tsconfigRootDir: import.meta.dirname,
+      },
       globals: { ...globals.browser, ...globals.es2020 },
     },
     rules: {
