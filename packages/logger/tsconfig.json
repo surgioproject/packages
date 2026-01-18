@@ -17,6 +17,8 @@
     "skipLibCheck": true
   },
   "exclude": ["node_modules", "dist", "coverage",
-    "src/__tests__/__fixtures__"
+    "src/__tests__/__fixtures__",
+    "eslint.config.mjs",
+    "*.mjs"
   ]
 }
