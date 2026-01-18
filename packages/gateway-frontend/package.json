@@ -16,7 +16,7 @@
     "test:watch": "craco test --watchAll",
     "test:cov": "craco test --coverage --watchAll=false",
     "test:ci": "craco test --watchAll=false",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint .",
     "shadcn": "shadcn-ui"
   },
   "devDependencies": {
