@@ -1,5 +1,0 @@
-/build/
-/coverage/
-/public/
-*.js
-/src/libs/shadcn.ts
