@@ -47,13 +47,13 @@ export class AppController {
     const filter = query.filter
     const urlParams = _.omit(query, ['dl', 'format', 'filter', 'access_token'])
     const artifactName: string = params.name
-    const userAgent = req.headers['user-agent']
+    const userAgent = req.headers['user-agent'] || ''
     const getNodeListParams = {
       ...urlParams,
       ...(userAgent ? { requestUserAgent: userAgent } : null),
       requestHeaders: req.headers,
     }
-    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(req.url)}`
+    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(`${req.url}|${userAgent}`)}`
     let artifact: string | undefined | Artifact
     let isCache = false
 
@@ -106,7 +106,8 @@ export class AppController {
         artifact,
         {
           ...urlParams,
-          ...(userAgent ? { userAgent } : null),
+          ...(userAgent ? { requestUserAgent: userAgent, userAgent } : null),
+          requestHeaders: req.headers,
         },
         isCache
       )
@@ -125,8 +126,8 @@ export class AppController {
     const providers: string[] = query.providers
       ? query.providers.split(',').map((item) => item.trim())
       : []
-    const userAgent = req.headers['user-agent']
-    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(req.url)}`
+    const userAgent = req.headers['user-agent'] || ''
+    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(`${req.url}|${userAgent}`)}`
 
     if (!providers.length) {
       throw new HttpException(
@@ -243,7 +244,8 @@ export class AppController {
         artifact,
         {
           ...urlParams,
-          ...(userAgent ? { userAgent } : null),
+          ...(userAgent ? { requestUserAgent: userAgent, userAgent } : null),
+          requestHeaders: req.headers,
         },
         isCache
       )
@@ -308,12 +310,13 @@ export class AppController {
     req: Request,
     res: Response,
     artifact: string | Artifact,
-    customParams?: Record<string, string>,
+    customParams?: Record<string, any>,
     isCachedPayload?: boolean
   ): Promise<void> {
     const config = this.surgioService.config
     const gatewayConfig = config?.gateway
-    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(req.url)}`
+    const userAgent = req.headers['user-agent'] || ''
+    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(`${req.url}|${userAgent}`)}`
 
     if (typeof artifact === 'string') {
       if (gatewayConfig?.useCacheOnError && !isCachedPayload) {
@@ -343,7 +346,7 @@ export class AppController {
       }
 
       const body = artifact.render(undefined, {
-        ...(customParams ? this.processUrlParams(customParams) : undefined),
+        ...(customParams ? this.prepareCustomParams(customParams) : undefined),
       })
 
       if (gatewayConfig?.useCacheOnError && !isCachedPayload) {
@@ -358,7 +361,7 @@ export class AppController {
     }
   }
 
-  private processUrlParams(
+  private prepareCustomParams(
     customParams: Record<string, string>
   ): Record<string, string> {
     const result: Record<string, string> = Object.create(null)
