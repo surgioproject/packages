@@ -34,11 +34,11 @@ module.exports = {
     },
   ],
   hooks: {
-    afterFetchNodeList: async (nodeList, customParams) => {
+    afterNodeListResponse: async (nodeList, customParams) => {
       return [
         {
           ...nodeList[0],
-          nodeName: customParams.requestUserAgent,
+          nodeName: customParams.requestHeaders?.['user-agent'],
         }
       ]
     }
