@@ -28,6 +28,8 @@
   "exclude": [
     "node_modules",
     "dist",
-    "coverage"
+    "coverage",
+    "eslint.config.mjs",
+    "*.mjs"
   ]
 }

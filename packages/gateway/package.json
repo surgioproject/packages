@@ -19,7 +19,7 @@
     "start:prod": "node dist/main",
     "dev": "nest start --watch",
     "debug": "nest start --debug --watch",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint .",
     "test": "run-s test:ci",
     "test:unit": "jest",
     "test:e2e": "jest --config __tests__/jest-e2e.json",
