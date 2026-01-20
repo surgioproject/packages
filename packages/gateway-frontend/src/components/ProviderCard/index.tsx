@@ -35,7 +35,7 @@ function ProviderCard({ provider }: ProviderCardProps) {
         enqueueSnackbar('该 Provider 不支持查询', { variant: 'error' })
       }
     })()
-      .catch((err) => {
+      .catch(() => {
         enqueueSnackbar('网络问题', { variant: 'error' })
       })
       .finally(() => {

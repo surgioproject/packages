@@ -54,7 +54,7 @@ const scope = nock('http://example.com')
 
     counter1++;
 
-    if (counter1 > 2) {
+    if (counter1 > 1) {
       return [500];
     } else {
       return [200, res];

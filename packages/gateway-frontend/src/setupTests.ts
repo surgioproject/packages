@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-namespace,@typescript-eslint/ban-ts-comment */
-
 // jest-dom adds custom jest matchers for asserting on DOM nodes.
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)

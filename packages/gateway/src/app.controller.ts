@@ -24,7 +24,6 @@ import { APIAuthGuard } from './auth/api-auth.guard'
 import { Roles } from './auth/roles.decorator'
 import { Role } from './constants/role'
 import { SurgioService } from './surgio/surgio.service'
-import { PossibleProviderType } from 'surgio/provider'
 
 dayjs.extend(duration)
 
@@ -48,12 +47,13 @@ export class AppController {
     const filter = query.filter
     const urlParams = _.omit(query, ['dl', 'format', 'filter', 'access_token'])
     const artifactName: string = params.name
-    const userAgent = req.headers['user-agent']
+    const userAgent = req.headers['user-agent'] || ''
     const getNodeListParams = {
       ...urlParams,
       ...(userAgent ? { requestUserAgent: userAgent } : null),
+      requestHeaders: req.headers,
     }
-    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(req.url)}`
+    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(`${req.url}|${userAgent}`)}`
     let artifact: string | undefined | Artifact
     let isCache = false
 
@@ -106,7 +106,8 @@ export class AppController {
         artifact,
         {
           ...urlParams,
-          ...(userAgent ? { userAgent } : null),
+          ...(userAgent ? { requestUserAgent: userAgent, userAgent } : null),
+          requestHeaders: req.headers,
         },
         isCache
       )
@@ -125,8 +126,8 @@ export class AppController {
     const providers: string[] = query.providers
       ? query.providers.split(',').map((item) => item.trim())
       : []
-    const userAgent = req.headers['user-agent']
-    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(req.url)}`
+    const userAgent = req.headers['user-agent'] || ''
+    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(`${req.url}|${userAgent}`)}`
 
     if (!providers.length) {
       throw new HttpException(
@@ -167,6 +168,7 @@ export class AppController {
     const getNodeListParams = {
       ...urlParams,
       ...(userAgent ? { requestUserAgent: userAgent } : null),
+      requestHeaders: req.headers,
     }
     let artifact: Artifact | string
     let isCache = false
@@ -242,7 +244,8 @@ export class AppController {
         artifact,
         {
           ...urlParams,
-          ...(userAgent ? { userAgent } : null),
+          ...(userAgent ? { requestUserAgent: userAgent, userAgent } : null),
+          requestHeaders: req.headers,
         },
         isCache
       )
@@ -307,12 +310,13 @@ export class AppController {
     req: Request,
     res: Response,
     artifact: string | Artifact,
-    customParams?: Record<string, string>,
+    customParams?: Record<string, any>,
     isCachedPayload?: boolean
   ): Promise<void> {
     const config = this.surgioService.config
     const gatewayConfig = config?.gateway
-    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(req.url)}`
+    const userAgent = req.headers['user-agent'] || ''
+    const cacheKey = `${CACHE_KEYS.RenderedArtifact}:${toMD5(`${req.url}|${userAgent}`)}`
 
     if (typeof artifact === 'string') {
       if (gatewayConfig?.useCacheOnError && !isCachedPayload) {
@@ -330,54 +334,19 @@ export class AppController {
       res.send(artifact)
     } else {
       if (!isCachedPayload) {
-        const providers = artifact.providerMap.values()
-        let provider: PossibleProviderType | undefined = undefined
+        const subscriptionUserInfo = artifact.subscriptionUserInfo;
 
-        if (artifact.artifact.subscriptionUserInfoProvider) {
-          for (const p of providers) {
-            if (
-              p.supportGetSubscriptionUserInfo &&
-              p.name === artifact.artifact.subscriptionUserInfoProvider
-            ) {
-              provider = p
-              break
-            }
-          }
-          if (!provider) {
-            this.logger.error(`subscriptionUserInfoProvider ${provider} 不存在`)
-          }
-        } else if (artifact.providerMap.size === 1) {
-          provider = providers.next().value
-        }
+        if (subscriptionUserInfo) {
+          const values = ['upload', 'download', 'total', 'expire'].map(
+            (key) => `${key}=${subscriptionUserInfo[key] || 0}`
+          )
 
-        if (provider) {
-          const requestUserAgent = this.surgioService.config.gateway
-            ?.passRequestUserAgent
-            ? customParams?.requestUserAgent
-            : undefined
-
-          if (provider.supportGetSubscriptionUserInfo) {
-            try {
-              const subscriptionUserInfo =
-                await provider.getSubscriptionUserInfo({ requestUserAgent })
-
-              if (subscriptionUserInfo) {
-                const values = ['upload', 'download', 'total', 'expire'].map(
-                  (key) => `${key}=${subscriptionUserInfo[key] || 0}`
-                )
-
-                res.header('subscription-userinfo', values.join('; '))
-              }
-            } catch (err) {
-              this.logger.error('处理订阅信息失败')
-              this.logger.error(err.stack || err)
-            }
-          }
+          res.header('subscription-userinfo', values.join('; '))
         }
       }
 
       const body = artifact.render(undefined, {
-        ...(customParams ? this.processUrlParams(customParams) : undefined),
+        ...(customParams ? this.prepareCustomParams(customParams) : undefined),
       })
 
       if (gatewayConfig?.useCacheOnError && !isCachedPayload) {
@@ -392,7 +361,7 @@ export class AppController {
     }
   }
 
-  private processUrlParams(
+  private prepareCustomParams(
     customParams: Record<string, string>
   ): Record<string, string> {
     const result: Record<string, string> = Object.create(null)

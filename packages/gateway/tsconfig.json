@@ -10,7 +10,7 @@
     "experimentalDecorators": true,
     "inlineSourceMap": true,
     "isolatedModules": true,
-    "outDir": "./dist",
+    "outDir": "dist/",
     "baseUrl": "./",
     "incremental": true,
     "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
@@ -28,6 +28,8 @@
   "exclude": [
     "node_modules",
     "dist",
-    "coverage"
+    "coverage",
+    "eslint.config.mjs",
+    "*.mjs"
   ]
 }

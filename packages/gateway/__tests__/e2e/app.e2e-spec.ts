@@ -219,7 +219,7 @@ describe('AppController (e2e)', () => {
         `/export-providers?access_token=${token}&providers=hooks&format=surge-policy`
       )
       .set('User-Agent', 'test-agent')
-    console.log(res.text)
+
     expect(res.status).toBe(200)
     expect(res.text).toMatchSnapshot()
   })

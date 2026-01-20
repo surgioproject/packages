@@ -8,12 +8,11 @@ import { SurgioService } from './surgio.service'
 
 describe('SurgioService', () => {
   let surgioService: SurgioService
-  let mockedHttpClient
 
   beforeEach(async () => {
     jest.clearAllMocks()
 
-    mockedHttpClient = jest.spyOn(httpClient, 'get')
+    jest.spyOn(httpClient, 'get')
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [],

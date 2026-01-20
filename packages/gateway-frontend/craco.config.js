@@ -9,8 +9,7 @@ process.env.REACT_APP_VERSION = pkg.version;
  */
 const config = {
   eslint: {
-    enable: true,
-    mode: 'file',
+    enable: false,
   },
   plugins: [],
   style: {

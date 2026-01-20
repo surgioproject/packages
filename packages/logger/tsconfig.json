@@ -7,7 +7,8 @@
     "experimentalDecorators": true,
     "target": "es2017",
     "sourceMap": true,
-    "outDir": "./dist",
+    "outDir": "dist/",
+    "rootDir": "src/",
     "baseUrl": "./",
     "incremental": true,
     "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
@@ -16,7 +17,12 @@
     "allowJs": true,
     "skipLibCheck": true
   },
-  "exclude": ["node_modules", "dist", "coverage",
-    "src/__tests__/__fixtures__"
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "src/__tests__/__fixtures__",
+    "eslint.config.mjs",
+    "*.mjs"
   ]
 }
