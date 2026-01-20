@@ -13,7 +13,7 @@
   },
   "homepage": "https://surgio.js.org",
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf dist *.tsbuildinfo",
     "build": "nest build -p tsconfig.build.json",
     "start": "nest start",
     "start:prod": "node dist/main",
