@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/surgioproject/packages/compare/@surgio/gateway-frontend@2.1.2...@surgio/gateway-frontend@2.2.0) (2026-01-20)
+
+### chore
+
+- **eslint:** migrate to flat config format ([ad558a4](https://github.com/surgioproject/packages/commit/ad558a48a38fbf3f956070595b9fd6c61bcf6308))
+
+### Features
+
+- **frontend:** update components for request headers ([bac1255](https://github.com/surgioproject/packages/commit/bac12559f22cc0340caed6cc2f0bb2a1314295f2))
+
+### BREAKING CHANGES
+
+- **eslint:** ESLint configuration format has changed from legacy to flat config.
+
 ## [2.1.2](https://github.com/surgioproject/packages/compare/@surgio/gateway-frontend@2.1.1...@surgio/gateway-frontend@2.1.2) (2026-01-01)
 
 **Note:** Version bump only for package @surgio/gateway-frontend

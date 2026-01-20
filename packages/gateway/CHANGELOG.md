@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.3.0](https://github.com/surgioproject/packages/compare/@surgio/gateway@2.2.3...@surgio/gateway@2.3.0) (2026-01-20)
+
+### Bug Fixes
+
+- correct type definition for processUrlParams result ([62b7874](https://github.com/surgioproject/packages/commit/62b7874656d9a9656be669f05f98d746a50ffc5b))
+
+### chore
+
+- **eslint:** migrate to flat config format ([ad558a4](https://github.com/surgioproject/packages/commit/ad558a48a38fbf3f956070595b9fd6c61bcf6308))
+
+### Features
+
+- **gateway:** add request headers passing functionality ([dcfba21](https://github.com/surgioproject/packages/commit/dcfba213bcadd70764f88a74fcc5fb38815fc550))
+- **gateway:** pass request headers and user-agent to providers ([8ba7af3](https://github.com/surgioproject/packages/commit/8ba7af33d6b32dd7b7b8d82f772e8333268670a6))
+- **gateway:** pass request headers to providers ([ddd6ec8](https://github.com/surgioproject/packages/commit/ddd6ec8c382ea3235b5ea0afbfec1c2317bea7b2))
+
+### BREAKING CHANGES
+
+- **eslint:** ESLint configuration format has changed from legacy to flat config.
+
 ## [2.2.3](https://github.com/surgioproject/packages/compare/@surgio/gateway@2.2.2...@surgio/gateway@2.2.3) (2026-01-01)
 
 **Note:** Version bump only for package @surgio/gateway

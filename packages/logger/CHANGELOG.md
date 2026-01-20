@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/surgioproject/packages/compare/@surgio/logger@1.3.0...@surgio/logger@1.4.0) (2026-01-20)
+
+### chore
+
+- **eslint:** migrate to flat config format ([ad558a4](https://github.com/surgioproject/packages/commit/ad558a48a38fbf3f956070595b9fd6c61bcf6308))
+
+### BREAKING CHANGES
+
+- **eslint:** ESLint configuration format has changed from legacy to flat config.
+
 # [1.3.0](https://github.com/surgioproject/packages/compare/@surgio/logger@1.2.1...@surgio/logger@1.3.0) (2023-06-01)
 
 ### Features
