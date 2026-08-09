@@ -1,10 +1,41 @@
 import React from 'react'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { SnackbarProvider } from 'notistack'
 
 import ProviderCopyButtons from './'
 
 describe('<ProviderCopyButtons />', () => {
+  beforeAll(() => {
+    Object.defineProperty(global, 'ResizeObserver', {
+      configurable: true,
+      value: class {
+        disconnect() {}
+        observe() {}
+        unobserve() {}
+      },
+    })
+
+    Object.defineProperties(HTMLElement.prototype, {
+      hasPointerCapture: {
+        configurable: true,
+        value: jest.fn(() => false),
+      },
+      releasePointerCapture: {
+        configurable: true,
+        value: jest.fn(),
+      },
+      scrollIntoView: {
+        configurable: true,
+        value: jest.fn(),
+      },
+      setPointerCapture: {
+        configurable: true,
+        value: jest.fn(),
+      },
+    })
+  })
+
   test('renders component', () => {
     const { getByTestId } = render(
       <SnackbarProvider>
@@ -17,5 +48,23 @@ describe('<ProviderCopyButtons />', () => {
     expect($copyButton).toBeInTheDocument()
     expect($copyButton.textContent).toBe('复制')
     expect($changeTypeButton).toBeInTheDocument()
+  })
+
+  test('copies a Loon provider URL', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <SnackbarProvider>
+        <ProviderCopyButtons providerNameList={['first', 'second']} />
+      </SnackbarProvider>
+    )
+
+    await user.click(screen.getByTestId('format-select'))
+    await user.click(await screen.findByText('Loon Proxy'))
+
+    expect(screen.getByTestId('copy-button')).toHaveAttribute(
+      'data-clipboard-text',
+      `${window.location.origin}/export-providers?providers=first%2Csecond&format=loon`
+    )
   })
 })

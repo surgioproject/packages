@@ -47,9 +47,21 @@ describe('SurgioService', () => {
     expect(
       await surgioService.transformArtifact('test.conf', 'clash-provider')
     ).toMatchSnapshot()
+    expect(
+      await surgioService.transformArtifact('test.conf', 'loon')
+    ).toMatchSnapshot()
     await expect(
       surgioService.transformArtifact('test.conf', 'unknown')
     ).rejects.toThrowError(HttpException)
+  })
+
+  test('loon format should use the Loon node template', () => {
+    expect(
+      surgioService.getTemplateByFormat(
+        'loon',
+        'customFilters.globalFilter'
+      )
+    ).toBe('{{ getLoonNodes(nodeList) }}')
   })
 
   test('transformArtifact filter should work', async () => {

@@ -161,6 +161,9 @@ export class SurgioService {
           filter ? `, ${filter}` : ''
         }) }}`
 
+      case 'loon':
+        return '{{ getLoonNodes(nodeList) }}'
+
       case 'clash-provider':
         return [
           '---',
