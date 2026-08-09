@@ -58,6 +58,10 @@ function ProviderCopyButtons({ providerNameList }: ProviderCopyButtonsProps) {
           ),
         },
         {
+          name: 'Loon Proxy',
+          url: getExportProviderUrl(providers, 'loon', true, downloadToken),
+        },
+        {
           name: 'SS 订阅',
           url: getExportProviderUrl(providers, 'ss', true, downloadToken),
         },
