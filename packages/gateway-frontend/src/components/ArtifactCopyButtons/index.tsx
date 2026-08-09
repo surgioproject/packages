@@ -66,6 +66,15 @@ function ArtifactCopyButtons({
           ),
         },
         {
+          name: 'Loon Proxy',
+          url: getDownloadUrl(
+            `${artifact.name}?format=loon`,
+            true,
+            downloadToken,
+            artifactParams
+          ),
+        },
+        {
           name: 'SS 订阅',
           url: getDownloadUrl(
             `${artifact.name}?format=ss`,
