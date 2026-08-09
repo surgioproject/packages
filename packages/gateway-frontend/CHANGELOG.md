@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.3.0](https://github.com/surgioproject/packages/compare/@surgio/gateway-frontend@2.2.0...@surgio/gateway-frontend@2.3.0) (2026-08-09)
+
+### Features
+
+- add Loon provider template ([29dc313](https://github.com/surgioproject/packages/commit/29dc313868df632f7b28c086c90cd9878775ae15))
+
 # [2.2.0](https://github.com/surgioproject/packages/compare/@surgio/gateway-frontend@2.1.2...@surgio/gateway-frontend@2.2.0) (2026-01-20)
 
 ### chore
