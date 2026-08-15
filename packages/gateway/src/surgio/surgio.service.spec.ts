@@ -10,9 +10,9 @@ describe('SurgioService', () => {
   let surgioService: SurgioService
 
   beforeEach(async () => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
 
-    jest.spyOn(httpClient, 'get')
+    vi.spyOn(httpClient, 'get')
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [],
@@ -57,10 +57,7 @@ describe('SurgioService', () => {
 
   test('loon format should use the Loon node template', () => {
     expect(
-      surgioService.getTemplateByFormat(
-        'loon',
-        'customFilters.globalFilter'
-      )
+      surgioService.getTemplateByFormat('loon', 'customFilters.globalFilter')
     ).toBe('{{ getLoonNodes(nodeList) }}')
   })
 

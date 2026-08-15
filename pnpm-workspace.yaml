@@ -2,6 +2,7 @@ packages:
   - packages/*
 
 autoInstallPeers: false
+enableGlobalVirtualStore: false
 
 allowBuilds:
   '@nestjs/core': true

@@ -13,9 +13,9 @@
     "prebuild": "rimraf build",
     "build": "CI=false craco build",
     "test": "run-s test:ci",
-    "test:watch": "craco test --watchAll",
-    "test:cov": "craco test --coverage --watchAll=false",
-    "test:ci": "craco test --watchAll=false",
+    "test:watch": "vitest",
+    "test:cov": "vitest run --coverage",
+    "test:ci": "vitest run",
     "lint": "eslint .",
     "shadcn": "shadcn-ui"
   },
@@ -34,7 +34,7 @@
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@testing-library/dom": "^9.3.0",
-    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/loadable__component": "^5.13.4",
@@ -43,13 +43,11 @@
     "@types/react": "^18.2.7",
     "@types/react-dom": "^18.2.4",
     "@types/react-test-renderer": "^18.0.0",
-    "@types/testing-library__jest-dom": "^5.14.5",
     "autoprefixer": "^10.4.14",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "csstype": "^3.1.2",
     "http-proxy-middleware": "^2.0.6",
-    "jest-mock-axios": "^4.7.2",
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.221.0",
     "mobx": "^6.9.0",
@@ -79,7 +77,8 @@
   ],
   "files": [
     "build",
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "publishConfig": {
     "access": "public"

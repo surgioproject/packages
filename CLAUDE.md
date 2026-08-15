@@ -20,13 +20,25 @@ This is a monorepo for the Surgio project containing multiple packages managed b
 pnpm install
 
 # Build all packages (uses Turbo)
-pnpm build
+pnpm run build
 
 # Run tests across all packages
 pnpm test
 
+# Run TypeScript 6 and native TypeScript 7 checks
+pnpm run test:types
+
+# Run unit tests with Istanbul coverage
+pnpm run coverage
+
+# Validate packed package contents and CommonJS entrypoints
+pnpm run test:package-output
+
+# Run gateway e2e tests
+pnpm run test:e2e
+
 # Lint all packages
-pnpm lint
+pnpm run lint
 
 # Release management
 pnpm release        # Create new version and publish
@@ -41,7 +53,7 @@ Navigate to specific packages for targeted development:
 
 ```bash
 # Build
-pnpm build
+pnpm run build
 
 # Development mode with watch
 pnpm dev
@@ -59,7 +71,7 @@ pnpm test
 pnpm test:unit
 
 # Run e2e tests only
-pnpm test:e2e
+pnpm run test:e2e
 
 # Watch mode for tests
 pnpm test:watch
@@ -68,7 +80,7 @@ pnpm test:watch
 pnpm test:cov
 
 # Lint
-pnpm lint
+pnpm run lint
 ```
 
 #### Gateway Frontend (packages/gateway-frontend)
@@ -78,7 +90,7 @@ pnpm lint
 pnpm dev
 
 # Build for production
-pnpm build
+pnpm run build
 
 # Run tests
 pnpm test
@@ -90,14 +102,14 @@ pnpm test:watch
 pnpm test:cov
 
 # Lint
-pnpm lint
+pnpm run lint
 ```
 
 #### Logger (packages/logger)
 
 ```bash
 # Build
-pnpm build
+pnpm run build
 
 # Test
 pnpm test
@@ -109,7 +121,7 @@ pnpm test:watch
 pnpm test:cov
 
 # Lint
-pnpm lint
+pnpm run lint
 ```
 
 ## Architecture
@@ -118,6 +130,8 @@ pnpm lint
 
 - **Build System**: Turbo handles build orchestration with dependency-aware caching
 - **Package Manager**: pnpm with workspaces (version: 11.21.0)
+- **TypeScript**: TypeScript 6 is the configured compiler; native TypeScript 7 validates compatibility
+- **Test Runner**: Vitest 4 with Istanbul coverage and jsdom for frontend tests
 - **Versioning**: Lerna with independent versioning and conventional commits
 - **Git Hooks**: Husky + lint-staged for pre-commit checks
 - **Commit Convention**: Angular-style conventional commits (enforced by commitlint)
@@ -127,6 +141,7 @@ pnpm lint
 The gateway is a NestJS application that integrates with the main Surgio library:
 
 **Core Bootstrap Flow**:
+
 1. `main.ts` → `bootstrap()` in `bootstrap.ts`
 2. Creates NestJS application with custom Express adapter
 3. Initializes `SurgioModule` (global) with project directory from `SURGIO_PROJECT_DIR` env var
@@ -134,29 +149,34 @@ The gateway is a NestJS application that integrates with the main Surgio library
 5. Serves static frontend from `@surgio/gateway-frontend/build`
 
 **Module Organization**:
+
 - `AppModule`: Root module, configures static file serving, global config, and middleware
 - `SurgioModule`: Global module that provides `SurgioService` and `SurgioHelper` to entire app
 - `ApiModule`: API endpoints for configuration management
 - `AuthModule`: Authentication using Passport (cookie & bearer token strategies)
 
 **Key Middleware**:
+
 - `CookieParserMiddleware`: Parses cookies with secret from Surgio config hash
 - `PrepareMiddleware`: Runs before controller actions (excluded from render routes)
 
 **Deployment Options**:
+
 - HTTP Server: `createHttpServer()` - Standard Node.js HTTP server
 - Standalone: `startServer()` - Starts on configured port
 - Serverless: `createLambdaHandler()` - AWS Lambda handler with lazy initialization
 
 **Testing Strategy**:
+
 - Unit tests: `*.spec.ts` files in `src/`
 - E2E tests: `*.e2e-spec.ts` files in `__tests__/e2e/`
 - Test fixtures in `__tests__/__fixtures__/`
-- Separate Jest configs for unit vs e2e
+- Separate Vitest configs for unit vs e2e
 
 ### Gateway Frontend Architecture
 
 Built with React 18, using:
+
 - **State Management**: MobX with mobx-react-lite
 - **Routing**: React Router v6
 - **Data Fetching**: SWR (stale-while-revalidate)
@@ -170,6 +190,7 @@ The frontend is bundled into `build/` and served as static files by the gateway 
 ### Logger Package
 
 Simple Winston-based logger factory:
+
 - Provides `createLogger()` function
 - Log level controlled by `SURGIO_LOG_LEVEL` env var (default: 'info')
 - Formats: timestamp, label (service name), level, message
@@ -181,6 +202,7 @@ Simple Winston-based logger factory:
 ### Surgio Integration
 
 The gateway depends on the main `surgio` package (peer dependency). The `SurgioModule.register()` function:
+
 1. Accepts `cwd` option (project directory)
 2. Calls `loadConfig()` from `surgio/config` to load user's Surgio configuration
 3. Creates `SurgioHelper` instance with loaded config
@@ -201,15 +223,15 @@ The gateway package uses `workspace:*` protocol to depend on `@surgio/gateway-fr
 ```bash
 # Unit test for specific file
 cd packages/gateway
-pnpm test -- surgio.service.spec.ts
+pnpm run test:unit -- surgio.service.spec.ts
 
 # E2E test for specific file
 cd packages/gateway
-pnpm test:e2e -- api.e2e-spec.ts
+pnpm run test:e2e -- api.e2e-spec.ts
 
 # Frontend test for specific file
 cd packages/gateway-frontend
-pnpm test -- App.test.tsx
+pnpm run test:ci -- src/libs/utils.test.ts
 ```
 
 ### Test Setup Files
@@ -217,6 +239,17 @@ pnpm test -- App.test.tsx
 - Gateway unit tests: `__tests__/setup-tests.ts`
 - Gateway e2e tests: `__tests__/setup-e2e-tests.ts`
 - Frontend tests: `src/setupTests.ts`
+
+### CI Validation
+
+CI builds all packages, runs TypeScript 6 and native TypeScript 7 checks,
+lints the workspace, validates package output, collects unit-test coverage,
+and runs gateway e2e tests. Coverage is generated with Vitest and Istanbul.
+
+The TypeScript consumer fixture validates the public declarations for gateway,
+gateway frontend, and logger with both compilers. The package-output test runs
+`pnpm pack --dry-run --json` for every published package and checks declared
+entrypoints, declaration files, excluded test output, and CommonJS loading.
 
 ## Release Process
 

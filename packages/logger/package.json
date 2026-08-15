@@ -13,10 +13,10 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "prebuild": "rimraf dist *.tsbuildinfo",
-    "build": "tsc -p tsconfig.json",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
+    "build": "tsc6 -p tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:cov": "vitest run --coverage",
     "test:ci": "run-s test",
     "lint": "eslint ."
   },
@@ -31,23 +31,6 @@
   },
   "engines": {
     "node": ">=22.22.2"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".spec.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
   },
   "gitHead": "7af70e94964c379d9cf7dc6057ac2c0f161a0790"
 }

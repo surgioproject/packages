@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`AppController (e2e) /export-providers (GET) 1`] = `
+exports[`AppController (e2e) > /export-providers (GET) 1`] = `
 "ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid, vmess-aead=true
@@ -11,11 +11,11 @@ snell = snell, server, 44046, psk=yourpsk, obfs=http
 ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com"
 `;
 
-exports[`AppController (e2e) /export-providers (GET) global filter 1`] = `"🇺🇸 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"`;
+exports[`AppController (e2e) > /export-providers (GET) global filter 1`] = `"🇺🇸 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"`;
 
-exports[`AppController (e2e) /export-providers (GET) internal filter 1`] = `""`;
+exports[`AppController (e2e) > /export-providers (GET) internal filter 1`] = `""`;
 
-exports[`AppController (e2e) /export-providers (GET) multiple providers 1`] = `
+exports[`AppController (e2e) > /export-providers (GET) multiple providers 1`] = `
 "ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid, vmess-aead=true
@@ -29,9 +29,9 @@ Snell = snell, us.example.com, 443, psk=password, obfs=tls
 HTTPS = https, us.example.com, 443, username, password"
 `;
 
-exports[`AppController (e2e) /export-providers (GET) multiple providers 404 1`] = `"{"status":"error","statusCode":404,"error":"provider notfound 不存在"}"`;
+exports[`AppController (e2e) > /export-providers (GET) multiple providers 404 1`] = `"{"status":"error","statusCode":404,"error":"provider notfound 不存在"}"`;
 
-exports[`AppController (e2e) /export-providers (GET) private filter 1`] = `
+exports[`AppController (e2e) > /export-providers (GET) private filter 1`] = `
 "ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid, vmess-aead=true
@@ -39,7 +39,7 @@ ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password,
 🇺🇸 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"
 `;
 
-exports[`AppController (e2e) /export-providers (GET) using template 1`] = `
+exports[`AppController (e2e) > /export-providers (GET) using template 1`] = `
 "https://example.com/export-providers?access_token=abcd&providers=clash,custom&template=export
 
 ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
@@ -56,9 +56,9 @@ HTTPS = https, us.example.com, 443, username, password
 "
 `;
 
-exports[`AppController (e2e) /export-providers (GET) with user-agent 1`] = `"test-agent = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"`;
+exports[`AppController (e2e) > /export-providers (GET) with user-agent 1`] = `"test-agent = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"`;
 
-exports[`AppController (e2e) /export-providers (GET) with viewerToken 1`] = `
+exports[`AppController (e2e) > /export-providers (GET) with viewerToken 1`] = `
 "ss1 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true
 ss2 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=www.bing.com
 vmess = vmess, server, 443, username=uuid, vmess-aead=true
@@ -69,7 +69,7 @@ snell = snell, server, 44046, psk=yourpsk, obfs=http
 ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com"
 `;
 
-exports[`AppController (e2e) /get-artifact (GET) 1`] = `
+exports[`AppController (e2e) > /get-artifact (GET) 1`] = `
 "🇺🇸US 1 = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com
 🇺🇸US 2 = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password
 🇺🇸 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
@@ -88,21 +88,21 @@ ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password,
 "
 `;
 
-exports[`AppController (e2e) /get-artifact (GET) custom params 1`] = `
+exports[`AppController (e2e) > /get-artifact (GET) custom params 1`] = `
 "original
 ----
 original
 "
 `;
 
-exports[`AppController (e2e) /get-artifact (GET) custom params 2`] = `
+exports[`AppController (e2e) > /get-artifact (GET) custom params 2`] = `
 "new
 ----
 new
 "
 `;
 
-exports[`AppController (e2e) /get-artifact (GET) with viewerToken 1`] = `
+exports[`AppController (e2e) > /get-artifact (GET) with viewerToken 1`] = `
 "🇺🇸US 1 = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com
 🇺🇸US 2 = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password
 🇺🇸 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
@@ -121,7 +121,7 @@ ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password,
 "
 `;
 
-exports[`AppController (e2e) /render (GET) 1`] = `
+exports[`AppController (e2e) > /render (GET) 1`] = `
 "#!name=MitM All Hostnames
 #!desc=Perform MitM on all hostnames with port 443, except those to Apple and other common sites which can't be inspected. You still need configure CA certificate and enable the main switch of MitM.
 #https://example.com/render?access_token=abcd&template=render
@@ -131,7 +131,7 @@ hostname = -*.apple.com, -*.icloud.com, -*.mzstatic.com, -*.crashlytics.com, -*.
 "
 `;
 
-exports[`AppController (e2e) /render (GET) sub folder 1`] = `
+exports[`AppController (e2e) > /render (GET) sub folder 1`] = `
 "#!name=MitM All Hostnames
 #!desc=Perform MitM on all hostnames with port 443, except those to Apple and other common sites which can't be inspected. You still need configure CA certificate and enable the main switch of MitM.
 #https://example.com/render?access_token=abcd&template=sub-folder%2Frender
@@ -141,7 +141,7 @@ hostname = -*.apple.com, -*.icloud.com, -*.mzstatic.com, -*.crashlytics.com, -*.
 "
 `;
 
-exports[`AppController (e2e) /render (GET) with viewerToken 1`] = `
+exports[`AppController (e2e) > /render (GET) with viewerToken 1`] = `
 "#!name=MitM All Hostnames
 #!desc=Perform MitM on all hostnames with port 443, except those to Apple and other common sites which can't be inspected. You still need configure CA certificate and enable the main switch of MitM.
 #https://example.com/render?access_token=efgh&template=render

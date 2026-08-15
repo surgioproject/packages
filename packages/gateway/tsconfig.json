@@ -11,7 +11,6 @@
     "inlineSourceMap": true,
     "isolatedModules": true,
     "outDir": "dist/",
-    "baseUrl": "./",
     "incremental": true,
     "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
     "allowSyntheticDefaultImports": true, // https://zhuanlan.zhihu.com/p/29022311
@@ -20,16 +19,8 @@
     "strict": false,
     "strictNullChecks": true,
     "skipLibCheck": true,
-    "downlevelIteration": true,
-    "lib": [
-      "ES2022"
-    ]
+    "types": ["node", "vitest/globals"],
+    "lib": ["ES2022"]
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "coverage",
-    "eslint.config.mjs",
-    "*.mjs"
-  ]
+  "exclude": ["node_modules", "dist", "coverage", "eslint.config.mjs", "*.mjs"]
 }

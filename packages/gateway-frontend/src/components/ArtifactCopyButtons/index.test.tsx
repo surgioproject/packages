@@ -21,19 +21,19 @@ describe('<ArtifactCopyButtons />', () => {
     Object.defineProperties(HTMLElement.prototype, {
       hasPointerCapture: {
         configurable: true,
-        value: jest.fn(() => false),
+        value: vi.fn(() => false),
       },
       releasePointerCapture: {
         configurable: true,
-        value: jest.fn(),
+        value: vi.fn(),
       },
       scrollIntoView: {
         configurable: true,
-        value: jest.fn(),
+        value: vi.fn(),
       },
       setPointerCapture: {
         configurable: true,
-        value: jest.fn(),
+        value: vi.fn(),
       },
     })
   })

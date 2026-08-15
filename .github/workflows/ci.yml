@@ -30,8 +30,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Test, report coverage
+      - name: Build and test
         run: |
-          pnpm build
-          pnpm lint
-          pnpm test
+          pnpm run build
+          pnpm run test:types
+          pnpm run lint
+          pnpm run test:package-output
+          pnpm run coverage
+          pnpm run test:e2e
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v5
+        if: success() && matrix.os == 'ubuntu-latest' && matrix.node-version == 22
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/gateway/coverage/lcov.info,packages/gateway-frontend/coverage/lcov.info,packages/logger/coverage/lcov.info
+          disable_search: true
+          fail_ci_if_error: true

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SurgioService getArtifact should work 1`] = `
+exports[`SurgioService > getArtifact should work 1`] = `
 "🇺🇸US 1 = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com
 🇺🇸US 2 = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password
 🇺🇸 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
@@ -19,11 +19,11 @@ ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password,
 "
 `;
 
-exports[`SurgioService transformArtifact filter should work 1`] = `"🇺🇸 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"`;
+exports[`SurgioService > transformArtifact filter should work 1`] = `"🇺🇸 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true"`;
 
-exports[`SurgioService transformArtifact filter should work 2`] = `"shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com, udp-relay=true, fast-open=true, tag=🇺🇸 US"`;
+exports[`SurgioService > transformArtifact filter should work 2`] = `"shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com, udp-relay=true, fast-open=true, tag=🇺🇸 US"`;
 
-exports[`SurgioService transformArtifact filter should work 3`] = `
+exports[`SurgioService > transformArtifact filter should work 3`] = `
 "---
 proxies:
   - type: ss
@@ -41,7 +41,7 @@ proxies:
 "
 `;
 
-exports[`SurgioService transformArtifact format should work 1`] = `
+exports[`SurgioService > transformArtifact format should work 1`] = `
 "🇺🇸US 1 = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com
 🇺🇸US 2 = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password
 🇺🇸 US = ss, us.example.com, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=true, obfs=tls, obfs-host=gateway-carry.icloud.com, tfo=true
@@ -57,7 +57,7 @@ snell = snell, server, 44046, psk=yourpsk, obfs=http
 ss4 = ss, server, 443, encrypt-method=chacha20-ietf-poly1305, password=password, udp-relay=false, obfs=tls, obfs-host=example.com"
 `;
 
-exports[`SurgioService transformArtifact format should work 2`] = `
+exports[`SurgioService > transformArtifact format should work 2`] = `
 "shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=tls, obfs-host=gateway-carry.icloud.com, tag=🇺🇸US 1
 shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, tag=🇺🇸US 2
 shadowsocks=us.example.com:443, method=chacha20-ietf-poly1305, password=password, obfs=wss, obfs-host=gateway-carry.icloud.com, obfs-uri=/, tls-verification=true, tag=🇺🇸US 3
@@ -73,7 +73,7 @@ shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=t
 shadowsocks=server:443, method=chacha20-ietf-poly1305, password=password, obfs=wss, obfs-host=cloudflare.com, obfs-uri=/ws, tls-verification=true, tag=ss-wss"
 `;
 
-exports[`SurgioService transformArtifact format should work 3`] = `
+exports[`SurgioService > transformArtifact format should work 3`] = `
 "---
 proxies:
   - type: ss
@@ -233,7 +233,7 @@ proxies:
 "
 `;
 
-exports[`SurgioService transformArtifact format should work 4`] = `
+exports[`SurgioService > transformArtifact format should work 4`] = `
 "🇺🇸US 1 = Shadowsocks,us.example.com,443,chacha20-ietf-poly1305,"password",tls,gateway-carry.icloud.com
 🇺🇸US 2 = Shadowsocks,us.example.com,443,chacha20-ietf-poly1305,"password"
 🇺🇸 US = Shadowsocks,us.example.com,443,chacha20-ietf-poly1305,"password",tls,gateway-carry.icloud.com,fast-open=true,udp=true
