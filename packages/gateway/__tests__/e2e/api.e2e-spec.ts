@@ -91,6 +91,9 @@ describe('ApiController (e2e)', () => {
     expect(res.body.data.needAuth).toBeDefined()
     expect(res.body.data.backendVersion).toBeDefined()
     expect(res.body.data.coreVersion).toBeDefined()
+    expect(res.get('cache-control')).toBe(
+      'private, no-cache, no-store, must-revalidate'
+    )
   })
 
   test('/api/artifacts (GET)', async () => {

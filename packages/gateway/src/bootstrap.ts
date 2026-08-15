@@ -24,6 +24,7 @@ export async function bootstrap(): Promise<NestExpressApplication> {
 export function applyMiddlwares(
   app: NestExpressApplication
 ): NestExpressApplication {
+  app.set('query parser', 'extended')
   app.useGlobalFilters(new AppExceptionsFilter())
   app.use(express.json())
 

@@ -134,8 +134,10 @@ pnpm run lint
 - **Build System**: Turbo handles build orchestration with dependency-aware caching
 - **Package Manager**: pnpm with workspaces (version: 11.21.0)
 - **TypeScript**: TypeScript 6 is the configured compiler; native TypeScript 7 validates compatibility
+- **Backend Framework**: NestJS 11 with Express 5
 - **Frontend Build**: Vite 8 with the official React plugin
 - **Test Runner**: Vitest 4 with Istanbul coverage and jsdom for frontend tests
+- **Formatter**: Prettier 3 (also required by the NestJS schematics toolchain)
 - **Versioning**: Lerna with independent versioning and conventional commits
 - **Git Hooks**: Husky + lint-staged for pre-commit checks
 - **Commit Convention**: Angular-style conventional commits (enforced by commitlint)
@@ -163,6 +165,8 @@ The gateway is a NestJS application that integrates with the main Surgio library
 
 - `CookieParserMiddleware`: Parses cookies with secret from Surgio config hash
 - `PrepareMiddleware`: Runs before controller actions (excluded from render routes)
+- Express 5 middleware routes use named wildcards such as `{*splat}`
+- The Express query parser is set to `extended` to preserve nested and array query parameters
 
 **Deployment Options**:
 
@@ -176,6 +180,7 @@ The gateway is a NestJS application that integrates with the main Surgio library
 - E2E tests: `*.e2e-spec.ts` files in `__tests__/e2e/`
 - Test fixtures in `__tests__/__fixtures__/`
 - Separate Vitest configs for unit vs e2e
+- E2E coverage includes the standard HTTP server and AWS Lambda entrypoints
 
 ### Gateway Frontend Architecture
 

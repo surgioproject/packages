@@ -102,6 +102,15 @@ describe('AppController (e2e)', () => {
     }
   })
 
+  test('/get-artifact (GET) extended query params', async () => {
+    const res = await supertest(app.getHttpServer()).get(
+      `/get-artifact/custom-params.conf?access_token=${token}&foo[]=first&foo[]=second&child[bar]=nested`
+    )
+
+    expect(res.status).toBe(200)
+    expect(res.text).toBe('first,second\n----\nnested\n')
+  })
+
   test('/get-artifact (GET) error cache', async () => {
     await supertest(app.getHttpServer())
       .get(`/get-artifact/clash-error-after-first.conf?access_token=${token}`)

@@ -55,7 +55,7 @@ export class AppModule {
     const secret = this.surgioService.surgioHelper.configHash
 
     CookieParserMiddleware.configure(secret)
-    consumer.apply(CookieParserMiddleware).forRoutes('*')
+    consumer.apply(CookieParserMiddleware).forRoutes('{*splat}')
 
     consumer
       .apply(PrepareMiddleware)

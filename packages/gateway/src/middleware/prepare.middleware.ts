@@ -8,15 +8,14 @@ import { SurgioService } from '../surgio/surgio.service'
 export class PrepareMiddleware implements NestMiddleware {
   constructor(private readonly surgioService: SurgioService) {}
 
-  use(req: Response, res: Request, next: () => void): void {
+  use(req: Request, res: Response, next: () => void): void {
     ;(async () => {
       const surgioHelper = this.surgioService.surgioHelper
       const remoteSnippetsConfig = surgioHelper.config.remoteSnippets || []
 
       if (!surgioHelper.remoteSnippetList) {
-        surgioHelper.remoteSnippetList = await loadRemoteSnippetList(
-          remoteSnippetsConfig
-        )
+        surgioHelper.remoteSnippetList =
+          await loadRemoteSnippetList(remoteSnippetsConfig)
       }
     })().then(next)
   }

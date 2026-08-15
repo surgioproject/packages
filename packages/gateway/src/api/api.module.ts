@@ -19,6 +19,6 @@ export class ApiModule {
         )
         next()
       })
-      .forRoutes('api/*')
+      .forRoutes('api/{*splat}')
   }
 }
