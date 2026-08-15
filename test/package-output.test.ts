@@ -1,6 +1,8 @@
 import { execFileSync } from 'node:child_process'
+import { existsSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { resolve } from 'node:path'
+import { JSDOM } from 'jsdom'
 import { describe, expect, test } from 'vitest'
 
 const require = createRequire(import.meta.url)
@@ -74,6 +76,7 @@ describe('published package output', () => {
     expect(files).not.toContain('vitest.e2e.config.ts')
     expect(files).not.toContain('vitest.config.mts')
     expect(files).not.toContain('vitest.e2e.config.mts')
+    expect(files).not.toContain('vite.config.mts')
     expect(files).not.toContainEqual(expect.stringMatching(/(^|\/)src\//))
     expect(files).not.toContainEqual(
       expect.stringMatching(/(^|\/)(?:__tests__|coverage)\//)
@@ -100,5 +103,41 @@ describe('published package output', () => {
     expect(frontend).toBeTypeOf('function')
     expect(logger.createLogger).toBeTypeOf('function')
     expect(eslintConfig).toBeInstanceOf(Array)
+  })
+
+  test('frontend HTML references assets included in the package', () => {
+    const frontendDirectory = resolve(
+      repositoryRoot,
+      'packages/gateway-frontend'
+    )
+    const html = readFileSync(resolve(frontendDirectory, 'build/index.html'), {
+      encoding: 'utf8',
+    })
+    const document = new JSDOM(html).window.document
+    const assetUrls = [
+      ...Array.from(
+        document.querySelectorAll<HTMLScriptElement>('script[src]')
+      ),
+      ...Array.from(
+        document.querySelectorAll<HTMLLinkElement>(
+          'link[rel="stylesheet"][href]'
+        )
+      ),
+    ]
+      .map(
+        (element) => element.getAttribute('src') ?? element.getAttribute('href')
+      )
+      .filter((url): url is string => url?.startsWith('/') === true)
+    const files = pack('packages/gateway-frontend')
+
+    expect(assetUrls.length).toBeGreaterThan(0)
+    assetUrls.forEach((url) => {
+      const assetPath = url.replace(/^\//, '')
+
+      expect(existsSync(resolve(frontendDirectory, 'build', assetPath))).toBe(
+        true
+      )
+      expect(files).toContain(`build/${assetPath}`)
+    })
   })
 })

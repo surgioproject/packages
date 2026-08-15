@@ -9,9 +9,10 @@
   "repository": "https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend",
   "author": "Roy Li <me@royli.dev>",
   "scripts": {
-    "dev": "BROWSER=none craco start",
+    "dev": "vite",
     "prebuild": "rimraf build",
-    "build": "CI=false craco build",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "run-s test:ci",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
@@ -20,8 +21,6 @@
     "shadcn": "shadcn-ui"
   },
   "devDependencies": {
-    "@craco/craco": "^7.1.0",
-    "@craco/types": "^7.1.0",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@headlessui/react": "^1.7.14",
@@ -42,12 +41,11 @@
     "@types/qrcode.react": "^1.0.2",
     "@types/react": "^18.2.7",
     "@types/react-dom": "^18.2.4",
-    "@types/react-test-renderer": "^18.0.0",
+    "@vitejs/plugin-react": "^6.0.5",
     "autoprefixer": "^10.4.14",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "csstype": "^3.1.2",
-    "http-proxy-middleware": "^2.0.6",
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.221.0",
     "mobx": "^6.9.0",
@@ -62,19 +60,14 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.44.2",
     "react-router-dom": "^6.11.2",
-    "react-scripts": "5.0.1",
-    "react-test-renderer": "^18.2.0",
     "shadcn-ui": "^0.3.0",
     "swr": "^2.1.5",
     "tailwind-merge": "^1.12.0",
     "tailwindcss": "^3.3.2",
     "tailwindcss-animate": "^1.0.5",
-    "webpack": "5.83.1",
+    "vite": "^8.2.1",
     "zod": "^3.25.76"
   },
-  "browserslist": [
-    "defaults"
-  ],
   "files": [
     "build",
     "index.js",

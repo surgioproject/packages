@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is a monorepo for the Surgio project containing multiple packages managed by pnpm workspaces, Lerna, and Turbo. Surgio is a network configuration management tool. The repository contains:
 
 - **@surgio/gateway**: NestJS-based API Gateway backend that serves Surgio configuration
-- **@surgio/gateway-frontend**: React-based frontend UI for the gateway (built with CRA/Craco, Tailwind CSS, MobX, shadcn/ui)
+- **@surgio/gateway-frontend**: React-based frontend UI for the gateway (built with Vite, Tailwind CSS, MobX, shadcn/ui)
 - **@surgio/logger**: Winston-based logging utility shared across packages
 - **@surgio/eslint-config-surgio**: ESLint configuration for Surgio config stores
 
@@ -92,6 +92,9 @@ pnpm dev
 # Build for production
 pnpm run build
 
+# Preview the production build
+pnpm preview
+
 # Run tests
 pnpm test
 
@@ -131,6 +134,7 @@ pnpm run lint
 - **Build System**: Turbo handles build orchestration with dependency-aware caching
 - **Package Manager**: pnpm with workspaces (version: 11.21.0)
 - **TypeScript**: TypeScript 6 is the configured compiler; native TypeScript 7 validates compatibility
+- **Frontend Build**: Vite 8 with the official React plugin
 - **Test Runner**: Vitest 4 with Istanbul coverage and jsdom for frontend tests
 - **Versioning**: Lerna with independent versioning and conventional commits
 - **Git Hooks**: Husky + lint-staged for pre-commit checks
@@ -183,9 +187,9 @@ Built with React 18, using:
 - **Forms**: React Hook Form + Zod validation
 - **UI Components**: shadcn/ui (Radix UI primitives + Tailwind)
 - **Styling**: Tailwind CSS with custom config
-- **Build**: Create React App with Craco customization
+- **Build**: Vite with the official React plugin
 
-The frontend is bundled into `build/` and served as static files by the gateway backend.
+The frontend is bundled into `build/` and served as static files by the gateway backend. The Vite development server runs on port 3000 and proxies `/api`, `/get-artifact`, `/export-providers`, and `/render` to the gateway on port 4000.
 
 ### Logger Package
 
@@ -250,6 +254,8 @@ The TypeScript consumer fixture validates the public declarations for gateway,
 gateway frontend, and logger with both compilers. The package-output test runs
 `pnpm pack --dry-run --json` for every published package and checks declared
 entrypoints, declaration files, excluded test output, and CommonJS loading.
+It also parses the built frontend HTML and verifies that every local JavaScript
+and CSS asset is present in the published tarball.
 
 ## Release Process
 

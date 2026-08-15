@@ -5,7 +5,7 @@
 </p>
 
 ![Github Actions][github-actions-image]
-[![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest)
+[![vitest](https://img.shields.io/badge/tested_with-vitest-6E9F18.svg?logo=vitest)](https://vitest.dev/)
 
 [github-actions-image]: https://github.com/surgioproject/packages/workflows/Node%20CI/badge.svg
 
