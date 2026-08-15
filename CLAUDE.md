@@ -117,7 +117,7 @@ pnpm lint
 ### Monorepo Structure
 
 - **Build System**: Turbo handles build orchestration with dependency-aware caching
-- **Package Manager**: pnpm with workspaces (version: 10.27.0+)
+- **Package Manager**: pnpm with workspaces (version: 11.21.0)
 - **Versioning**: Lerna with independent versioning and conventional commits
 - **Git Hooks**: Husky + lint-staged for pre-commit checks
 - **Commit Convention**: Angular-style conventional commits (enforced by commitlint)
@@ -228,4 +228,4 @@ pnpm test -- App.test.tsx
 
 ## Node Version Requirement
 
-All packages require Node.js >= 18.0.0
+All packages require Node.js >= 22.22.2

@@ -100,7 +100,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.22.2"
   },
   "gitHead": "da96fe077b24097d0a721392bd32ec4a88ac2ee0"
 }

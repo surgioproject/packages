@@ -1,7 +1,12 @@
 packages:
   - packages/*
 
-onlyBuiltDependencies:
-  - '@nestjs/core'
-  - '@parcel/watcher'
-  - nx
+autoInstallPeers: false
+
+allowBuilds:
+  '@nestjs/core': true
+  '@parcel/watcher': true
+  core-js: false
+  core-js-pure: false
+  nx: true
+  yarn: false

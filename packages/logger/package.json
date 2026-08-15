@@ -29,6 +29,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "engines": {
+    "node": ">=22.22.2"
+  },
   "jest": {
     "moduleFileExtensions": [
       "js",
