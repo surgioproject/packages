@@ -12,7 +12,7 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ['**/*.ts'],
+    files: ['**/*.{ts,mts,cts,js,mjs,cjs}'],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {

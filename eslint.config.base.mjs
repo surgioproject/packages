@@ -17,6 +17,8 @@ export function createBaseConfig(tsconfigPath, tsconfigRootDir, options = {}) {
     'build/**',
     '**/*.js',
     '**/*.mjs',
+    '**/*.mts',
+    '**/*.cts',
     ...(options.ignores || []),
   ];
 

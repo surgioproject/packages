@@ -14,6 +14,7 @@ export default tseslint.config(
       'public/**',
       '**/*.js',
       '**/*.mjs',
+      '**/*.mts',
       'src/libs/shadcn.ts',
     ],
   },
