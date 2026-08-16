@@ -12,10 +12,7 @@
     "**/*.test.ts",
     "**/*.md"
   ],
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*"],
   "version": "independent",
-  "npmClient": "pnpm",
-  "useWorkspaces": true
+  "npmClient": "pnpm"
 }

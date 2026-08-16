@@ -4,10 +4,6 @@ packages:
 autoInstallPeers: false
 enableGlobalVirtualStore: false
 
-peerDependencyRules:
-  allowedVersions:
-    'nunjucks>chokidar': '4'
-
 allowBuilds:
   '@nestjs/core': true
   '@parcel/watcher': true

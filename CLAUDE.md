@@ -31,7 +31,7 @@ pnpm run test:types
 # Run unit tests with Istanbul coverage
 pnpm run coverage
 
-# Validate packed package contents and CommonJS entrypoints
+# Validate ESM package contents and modern Node require compatibility
 pnpm run test:package-output
 
 # Run gateway e2e tests
@@ -132,11 +132,13 @@ pnpm run lint
 ### Monorepo Structure
 
 - **Build System**: Turbo handles build orchestration with dependency-aware caching
-- **Package Manager**: pnpm with workspaces (version: 11.21.0)
+- **Package Manager**: pnpm with workspaces (version: 11.22.0)
 - **TypeScript**: TypeScript 6 is the configured compiler; native TypeScript 7 validates compatibility
 - **Backend Framework**: NestJS 11 with Express 5
 - **Frontend Build**: Vite 8 with the official React plugin
 - **Test Runner**: Vitest 4 with Istanbul coverage and jsdom for frontend tests
+- **Linting**: ESLint 10 with typescript-eslint and @eslint-react
+- **Module System**: Native ESM with `module-sync` compatibility for Node.js `require()`
 - **Formatter**: Prettier 3 (also required by the NestJS schematics toolchain)
 - **Versioning**: Lerna with independent versioning and conventional commits
 - **Git Hooks**: Husky + lint-staged for pre-commit checks
@@ -184,14 +186,14 @@ The gateway is a NestJS application that integrates with the main Surgio library
 
 ### Gateway Frontend Architecture
 
-Built with React 18, using:
+Built with React 19, using:
 
-- **State Management**: MobX with mobx-react-lite
-- **Routing**: React Router v6
+- **State Management**: MobX 7 with mobx-react-lite
+- **Routing**: React Router v7 declarative routes
 - **Data Fetching**: SWR (stale-while-revalidate)
 - **Forms**: React Hook Form + Zod validation
 - **UI Components**: shadcn/ui (Radix UI primitives + Tailwind)
-- **Styling**: Tailwind CSS with custom config
+- **Styling**: Tailwind CSS 4 with CSS-first theme configuration
 - **Build**: Vite with the official React plugin
 
 The frontend is bundled into `build/` and served as static files by the gateway backend. The Vite development server runs on port 3000 and proxies `/api`, `/get-artifact`, `/export-providers`, and `/render` to the gateway on port 4000.
@@ -216,6 +218,10 @@ The gateway depends on the main `surgio` package (peer dependency). The `SurgioM
 2. Calls `loadConfig()` from `surgio/config` to load user's Surgio configuration
 3. Creates `SurgioHelper` instance with loaded config
 4. Makes helper available globally via dependency injection
+
+The gateway is built as NodeNext ESM and requires Surgio v4. It imports Surgio's
+native ESM subpath exports directly. User `surgio.conf.js` and provider files
+remain CommonJS and are loaded with `createRequire()`.
 
 ### Frontend Version Tracking
 
@@ -255,12 +261,13 @@ CI builds all packages, runs TypeScript 6 and native TypeScript 7 checks,
 lints the workspace, validates package output, collects unit-test coverage,
 and runs gateway e2e tests. Coverage is generated with Vitest and Istanbul.
 
-The TypeScript consumer fixture validates the public declarations for gateway,
-gateway frontend, and logger with both compilers. The package-output test runs
-`pnpm pack --dry-run --json` for every published package and checks declared
-entrypoints, declaration files, excluded test output, and CommonJS loading.
-It also parses the built frontend HTML and verifies that every local JavaScript
-and CSS asset is present in the published tarball.
+The ESM and CommonJS TypeScript consumer fixtures validate the public
+declarations for gateway, gateway frontend, and logger with both compilers.
+The package-output test runs `pnpm pack --dry-run --json` for every published
+package and checks ESM entrypoints, `module-sync` require compatibility,
+declaration files, and excluded test output. It also parses the built frontend
+HTML and verifies that every local JavaScript and CSS asset is present in the
+published tarball.
 
 ## Release Process
 
@@ -272,4 +279,6 @@ and CSS asset is present in the published tarball.
 
 ## Node Version Requirement
 
-All packages require Node.js >= 22.22.2
+All packages require Node.js >= 22.22.2. Published packages contain one native
+ESM runtime build; synchronous CommonJS consumers use Node.js `module-sync`
+interop rather than a separate CommonJS artifact.
