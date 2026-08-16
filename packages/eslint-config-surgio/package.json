@@ -1,6 +1,7 @@
 {
   "name": "@surgio/eslint-config-surgio",
   "version": "2.1.0",
+  "type": "module",
   "description": "ESLint config for Surgio config stores",
   "keywords": [
     "surgio",
@@ -9,6 +10,13 @@
   "homepage": "https://surgio.js.org",
   "license": "MIT",
   "main": "index.js",
+  "exports": {
+    ".": {
+      "module-sync": "./index.js",
+      "default": "./index.js"
+    },
+    "./*": "./*"
+  },
   "repository": "https://github.com/surgioproject/packages/tree/master/packages/eslint-config-surgio",
   "author": "Roy Li <me@royli.dev>",
   "bugs": {
@@ -24,10 +32,10 @@
     "node": ">=22.22.2"
   },
   "peerDependencies": {
-    "eslint": ">=9.0.0"
+    "eslint": ">=10.0.0"
   },
   "dependencies": {
-    "@eslint/js": "^9.0.0",
-    "globals": "^16.0.0"
+    "@eslint/js": "^10.0.1",
+    "globals": "^17.11.0"
   }
 }

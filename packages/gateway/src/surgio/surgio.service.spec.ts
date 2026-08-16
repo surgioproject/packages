@@ -1,10 +1,10 @@
 import { HttpException } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { join } from 'path'
-import { httpClient } from 'surgio/utils'
+import { httpClient } from 'surgio/utils.js'
 
-import { SurgioModule } from './surgio.module'
-import { SurgioService } from './surgio.service'
+import { SurgioModule } from './surgio.module.js'
+import { SurgioService } from './surgio.service.js'
 
 describe('SurgioService', () => {
   let surgioService: SurgioService
@@ -18,7 +18,10 @@ describe('SurgioService', () => {
       providers: [],
       imports: [
         SurgioModule.register({
-          cwd: join(__dirname, '../../__tests__/__fixtures__/gateway'),
+          cwd: join(
+            import.meta.dirname,
+            '../../__tests__/__fixtures__/gateway'
+          ),
         }),
       ],
     }).compile()

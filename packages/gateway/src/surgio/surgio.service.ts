@@ -1,9 +1,12 @@
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common'
-import { Artifact } from 'surgio/generator'
-import { PossibleProviderType, GetNodeListParams } from 'surgio/provider'
-import { CommandConfig } from 'surgio/internal'
+import { Artifact } from 'surgio/generator.js'
+import type { CommandConfig } from 'surgio/internal.js'
+import type {
+  GetNodeListParams,
+  PossibleProviderType,
+} from 'surgio/provider.js'
 
-import { KEY, SurgioHelper } from './surgio-helper'
+import { KEY, SurgioHelper } from './surgio-helper.js'
 
 @Injectable()
 export class SurgioService {
@@ -74,20 +77,20 @@ export class SurgioService {
             : null),
         } as const)
       : template
-      ? ({
-          name: `${providerName}.conf`,
-          downloadUrl: options.downloadUrl,
-          provider: providerName,
-          template,
-          ...(options.combineProviders
-            ? {
-                combineProviders: options.combineProviders,
-              }
-            : null),
-        } as const)
-      : (() => {
-          throw new Error('未指定 format 和 template')
-        })()
+        ? ({
+            name: `${providerName}.conf`,
+            downloadUrl: options.downloadUrl,
+            provider: providerName,
+            template,
+            ...(options.combineProviders
+              ? {
+                  combineProviders: options.combineProviders,
+                }
+              : null),
+          } as const)
+        : (() => {
+            throw new Error('未指定 format 和 template')
+          })()
 
     const artifactInstance = new Artifact(
       this.surgioHelper.config,

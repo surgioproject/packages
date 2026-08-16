@@ -2,9 +2,9 @@ import { NestFactory } from '@nestjs/core'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import express from 'express'
 
-import { AppModule } from './app.module'
-import { AppExceptionsFilter } from './filter/app-exception.filter'
-import { createAdapter } from './app.adapter'
+import { AppModule } from './app.module.js'
+import { AppExceptionsFilter } from './filter/app-exception.filter.js'
+import { createAdapter } from './app.adapter.js'
 
 export async function bootstrap(): Promise<NestExpressApplication> {
   const app = await NestFactory.create<NestExpressApplication>(

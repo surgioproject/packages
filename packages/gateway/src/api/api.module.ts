@@ -1,9 +1,9 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common'
 import { NextFunction, Request, Response } from 'express'
 
-import { ApiController } from './api.controller'
-import { AuthAPIModule } from './auth/auth.module'
-import { ConfigAPIModule } from './config/config.module'
+import { ApiController } from './api.controller.js'
+import { AuthAPIModule } from './auth/auth.module.js'
+import { ConfigAPIModule } from './config/config.module.js'
 
 @Module({
   controllers: [ApiController],

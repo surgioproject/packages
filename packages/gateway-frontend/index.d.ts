@@ -3,4 +3,7 @@ type Package = {
   version: string
 }
 
-export default function getPackage(): Package
+declare function getPackage(): Package
+
+export default getPackage
+export { getPackage as 'module.exports' }

@@ -1,9 +1,9 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common'
 
-import { AuthModule } from '../../auth/auth.module'
-import { FixCookieMiddleware } from '../../middleware/fix-cookie.middleware'
+import { AuthModule } from '../../auth/auth.module.js'
+import { FixCookieMiddleware } from '../../middleware/fix-cookie.middleware.js'
 
-import { AuthController } from './auth.controller'
+import { AuthController } from './auth.controller.js'
 
 @Module({
   controllers: [AuthController],

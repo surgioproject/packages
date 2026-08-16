@@ -12,18 +12,18 @@ import {
 } from '@nestjs/common'
 import type { Request, Response } from 'express'
 import _ from 'lodash'
-import { Artifact } from 'surgio/generator'
-import { getUrl, toMD5, getRenderedArtifactCacheMaxage } from 'surgio/utils'
-import { unifiedCache } from 'surgio/internal'
-import { CACHE_KEYS } from 'surgio/constant'
+import { Artifact } from 'surgio/generator.js'
+import { CACHE_KEYS } from 'surgio/constant.js'
+import { unifiedCache } from 'surgio/internal.js'
+import { getRenderedArtifactCacheMaxage, getUrl, toMD5 } from 'surgio/utils.js'
 import { URL } from 'url'
 import dayjs from 'dayjs'
-import duration from 'dayjs/plugin/duration'
+import duration from 'dayjs/plugin/duration.js'
 
-import { APIAuthGuard } from './auth/api-auth.guard'
-import { Roles } from './auth/roles.decorator'
-import { Role } from './constants/role'
-import { SurgioService } from './surgio/surgio.service'
+import { APIAuthGuard } from './auth/api-auth.guard.js'
+import { Roles } from './auth/roles.decorator.js'
+import { Role } from './constants/role.js'
+import { SurgioService } from './surgio/surgio.service.js'
 
 dayjs.extend(duration)
 
@@ -334,7 +334,7 @@ export class AppController {
       res.send(artifact)
     } else {
       if (!isCachedPayload) {
-        const subscriptionUserInfo = artifact.subscriptionUserInfo;
+        const subscriptionUserInfo = artifact.subscriptionUserInfo
 
         if (subscriptionUserInfo) {
           const values = ['upload', 'download', 'total', 'expire'].map(

@@ -1,5 +1,6 @@
-'use strict';
+import packageJson from './package.json' with { type: 'json' }
 
-module.exports = () => {
-  return require('./package');
-};
+const getPackage = () => packageJson
+
+export default getPackage
+export { getPackage as 'module.exports' }

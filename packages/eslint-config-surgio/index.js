@@ -1,10 +1,8 @@
-'use strict';
-
-const js = require('@eslint/js');
-const globals = require('globals');
+import js from '@eslint/js'
+import globals from 'globals'
 
 /** @type {import('eslint').Linter.Config[]} */
-module.exports = [
+const config = [
   js.configs.recommended,
   {
     languageOptions: {
@@ -26,4 +24,7 @@ module.exports = [
       eqeqeq: ['error', 'allow-null'],
     },
   },
-];
+]
+
+export default config
+export { config as 'module.exports' }

@@ -1,25 +1,28 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { join } from 'path'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import getPackage from '@surgio/gateway-frontend'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-import { AppController } from './app.controller'
-import { ApiModule } from './api/api.module'
-import { CookieParserMiddleware } from './middleware/cookie-parser.middleware'
-import { PrepareMiddleware } from './middleware/prepare.middleware'
-import { SurgioModule } from './surgio/surgio.module'
-import { SurgioService } from './surgio/surgio.service'
-import { AuthModule } from './auth/auth.module'
-import configuration from './config/configuration'
+import { AppController } from './app.controller.js'
+import { ApiModule } from './api/api.module.js'
+import { CookieParserMiddleware } from './middleware/cookie-parser.middleware.js'
+import { PrepareMiddleware } from './middleware/prepare.middleware.js'
+import { SurgioModule } from './surgio/surgio.module.js'
+import { SurgioService } from './surgio/surgio.service.js'
+import { AuthModule } from './auth/auth.module.js'
+import configuration from './config/configuration.js'
 
-const FE_MODULE = require.resolve('@surgio/gateway-frontend')
+const frontendEntry = fileURLToPath(
+  import.meta.resolve('@surgio/gateway-frontend')
+)
 const frontendPackage = getPackage()
 
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(FE_MODULE, '../build'),
+      rootPath: join(dirname(frontendEntry), 'build'),
       serveStaticOptions: {
         cacheControl: true,
         etag: true,

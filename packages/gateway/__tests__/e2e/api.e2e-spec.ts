@@ -2,10 +2,10 @@ import { NestFactory } from '@nestjs/core'
 import supertest from 'supertest'
 import { NestExpressApplication } from '@nestjs/platform-express'
 
-import { AppModule } from '../../src/app.module'
-import { applyMiddlwares } from '../../src/bootstrap'
-import { SurgioService } from '../../src/surgio/surgio.service'
-import { extractCookies } from '../helper'
+import { AppModule } from '../../src/app.module.js'
+import { applyMiddlwares } from '../../src/bootstrap.js'
+import { SurgioService } from '../../src/surgio/surgio.service.js'
+import { extractCookies } from '../helper.js'
 
 describe('ApiController (e2e)', () => {
   let app: NestExpressApplication

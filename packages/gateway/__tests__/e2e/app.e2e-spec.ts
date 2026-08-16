@@ -3,9 +3,9 @@ import { NestExpressApplication } from '@nestjs/platform-express'
 import supertest from 'supertest'
 import Bluebird from 'bluebird'
 
-import { AppModule } from '../../src/app.module'
-import { applyMiddlwares } from '../../src/bootstrap'
-import { SurgioService } from '../../src/surgio/surgio.service'
+import { AppModule } from '../../src/app.module.js'
+import { applyMiddlwares } from '../../src/bootstrap.js'
+import { SurgioService } from '../../src/surgio/surgio.service.js'
 
 describe('AppController (e2e)', () => {
   let app: NestExpressApplication

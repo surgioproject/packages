@@ -1,4 +1,4 @@
-import { logger, createLogger, transports } from './'
+import { logger, createLogger, transports } from './index.js'
 
 it('should works', () => {
   const dummy1 = createLogger({

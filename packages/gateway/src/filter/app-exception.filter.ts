@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common'
 import { Request, Response } from 'express'
 import { ServerResponse } from 'http'
-import Youch from 'youch'
-import { isSurgioError } from 'surgio/internal'
+import { Youch } from 'youch'
+import { isSurgioError } from 'surgio/internal.js'
 
 @Catch()
 export class AppExceptionsFilter implements ExceptionFilter {
@@ -76,23 +76,30 @@ export class AppExceptionsFilter implements ExceptionFilter {
     const accept = request.accepts('json', 'html')
 
     if (accept === 'html') {
-      const youch = new Youch(exception, request)
+      const youch = new Youch()
+      const surgioMetadata = [
+        {
+          key: 'Community',
+          value: 'https://t.me/surgiotg',
+        },
+      ]
 
-      youch
-        .addLink(() => {
-          return `
-<div>
-  ${
-    isSurgioError(exception)
-      ? `<div class="frame-preview" style="width: 100%;"><pre class="language-text">${exception.format()}</pre></div>`
-      : ''
-  }
-  <br />
-  <p>加入交流群汇报问题：<a href="https://t.me/surgiotg" target="_blank" rel="noopener">https://t.me/surgiotg</a></p>
-</div>
-            `
+      if (isSurgioError(exception)) {
+        surgioMetadata.unshift({
+          key: 'Formatted error',
+          value: exception.format(),
         })
-        .toHTML()
+      }
+
+      youch.metadata.group('Surgio', { Support: surgioMetadata })
+      youch
+        .toHTML(exception, {
+          request: {
+            headers: request.headers,
+            method: request.method,
+            url: request.originalUrl,
+          },
+        })
         .then((html) => {
           response.type('text/html').send(html)
         })

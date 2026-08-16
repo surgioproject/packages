@@ -2,10 +2,10 @@ import { ExecutionContext, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { AuthGuard } from '@nestjs/passport'
 
-import { Role } from '../constants/role'
-import { SurgioService } from '../surgio/surgio.service'
-import { EnrichedRequest } from '../types/app'
-import { ROLES_KEY } from './roles.decorator'
+import { Role } from '../constants/role.js'
+import { SurgioService } from '../surgio/surgio.service.js'
+import { EnrichedRequest } from '../types/app.js'
+import { ROLES_KEY } from './roles.decorator.js'
 
 @Injectable()
 export class APIAuthGuard extends AuthGuard(['cookie', 'bearer']) {

@@ -1,4 +1,4 @@
-import configuration from './configuration'
+import configuration from './configuration.js'
 
 describe('configuration', () => {
   afterEach(() => {

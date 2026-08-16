@@ -1,6 +1,7 @@
 {
   "name": "@surgio/logger",
   "version": "1.4.2",
+  "type": "module",
   "description": "Logger helper for Surgio projects",
   "homepage": "https://surgio.js.org",
   "repository": "https://github.com/surgioproject/packages/tree/master/packages/logger",
@@ -11,6 +12,14 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "module-sync": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./*": "./*"
+  },
   "scripts": {
     "prebuild": "rimraf dist *.tsbuildinfo",
     "build": "tsc6 -p tsconfig.build.json",
@@ -24,7 +33,7 @@
     "dist"
   ],
   "dependencies": {
-    "winston": "^3.2.1"
+    "winston": "^3.19.0"
   },
   "publishConfig": {
     "access": "public"

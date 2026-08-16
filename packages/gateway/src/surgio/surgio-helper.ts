@@ -2,18 +2,20 @@ import os from 'os'
 import { basename, join } from 'path'
 import fs from 'fs-extra'
 import { Environment } from 'nunjucks'
-import semver from 'semver'
 import { Logger } from '@nestjs/common'
-import { getEngine } from 'surgio/generator'
-import { getProvider, PossibleProviderType } from 'surgio/provider'
-import type {
-  ArtifactConfig,
-  CommandConfig,
-  RemoteSnippet,
-} from 'surgio/internal'
-import { packageJson as corePackageJson, cleanCaches } from 'surgio/internal'
-import { TMP_FOLDER_NAME } from 'surgio/constant'
 import { createHash } from 'crypto'
+import { createRequire } from 'node:module'
+import { TMP_FOLDER_NAME } from 'surgio/constant.js'
+import { getEngine } from 'surgio/generator.js'
+import {
+  cleanCaches,
+  type ArtifactConfig,
+  type CommandConfig,
+  type RemoteSnippet,
+} from 'surgio/internal.js'
+import { getProvider, type PossibleProviderType } from 'surgio/provider.js'
+
+const requireModule = createRequire(import.meta.url)
 
 export const KEY = 'SURGIO_HELPER'
 
@@ -24,7 +26,10 @@ export class SurgioHelper {
   public readonly templateEngine: Environment
   public readonly configHash: string
 
-  constructor(public cwd: string, public readonly config: CommandConfig) {
+  constructor(
+    public cwd: string,
+    public readonly config: CommandConfig
+  ) {
     this.artifactList = config.artifacts
     this.templateEngine = getEngine(config.templateDir, {
       clashCore: config.clashConfig?.clashCore,
@@ -33,7 +38,6 @@ export class SurgioHelper {
   }
 
   public async init(): Promise<this> {
-    await this.checkCoreVersion()
     await this.readProviders()
 
     return this
@@ -55,7 +59,7 @@ export class SurgioHelper {
 
           const providerName = basename(path, '.js')
 
-          return getProvider(providerName, require(path))
+          return getProvider(providerName, requireModule(path))
         } catch (err) {
           Logger.error(`读取 Provider (${path}) 失败: ` + err.message)
           return undefined
@@ -74,36 +78,6 @@ export class SurgioHelper {
       if (result) {
         this.providerMap.set(result.name, result)
       }
-    }
-  }
-
-  private async checkCoreVersion(): Promise<void> {
-    const gatewayPkgFile = require('../../package.json')
-    const peerVersion = gatewayPkgFile.peerDependencies.surgio
-    const corePkgVersion = corePackageJson.version as string
-
-    // Pre-release doesn't need to check
-    if (corePkgVersion.includes('-')) {
-      return
-    }
-
-    if (!semver.satisfies(corePkgVersion, peerVersion)) {
-      Logger.warn('', undefined, false)
-      Logger.warn(
-        'Surgio 版本过低，请运行下面命令升级后重新运行！',
-        undefined,
-        false
-      )
-      Logger.warn(
-        `要求版本 ${peerVersion}，当前版本 ${corePackageJson.version}`,
-        undefined,
-        false
-      )
-      Logger.warn('', undefined, false)
-      Logger.warn('  命令：', undefined, false)
-      Logger.warn('  npm install surgio@latest', undefined, false)
-      Logger.warn('', undefined, false)
-      throw new Error('Surgio 版本过低')
     }
   }
 

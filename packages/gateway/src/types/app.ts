@@ -1,6 +1,6 @@
 import { Request } from 'express'
 
-import { Role } from '../constants/role'
+import { Role } from '../constants/role.js'
 
 export interface UserContext {
   readonly accessToken: string

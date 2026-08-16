@@ -10,12 +10,12 @@ import {
 } from '@nestjs/common'
 import type { Response } from 'express'
 import _ from 'lodash'
-import { formatSubscriptionUserInfo } from 'surgio/utils'
+import { formatSubscriptionUserInfo } from 'surgio/utils.js'
 
-import { APIAuthGuard } from '../auth/api-auth.guard'
-import { Roles } from '../auth/roles.decorator'
-import { Role } from '../constants/role'
-import { SurgioService } from '../surgio/surgio.service'
+import { APIAuthGuard } from '../auth/api-auth.guard.js'
+import { Roles } from '../auth/roles.decorator.js'
+import { Role } from '../constants/role.js'
+import { SurgioService } from '../surgio/surgio.service.js'
 
 @Controller('api')
 @UseGuards(APIAuthGuard)

@@ -3,10 +3,10 @@ import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-http-bearer'
 import _ from 'lodash'
 
-import { Role } from '../constants/role'
-import { SurgioService } from '../surgio/surgio.service'
-import { UserContext } from '../types/app'
-import { AuthService } from './auth.service'
+import { Role } from '../constants/role.js'
+import { SurgioService } from '../surgio/surgio.service.js'
+import { UserContext } from '../types/app.js'
+import { AuthService } from './auth.service.js'
 
 @Injectable()
 export class BearerStrategy extends PassportStrategy(Strategy) {

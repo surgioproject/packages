@@ -37,6 +37,7 @@ proxies:
     plugin-opts:
       mode: tls
       host: gateway-carry.icloud.com
+    tfo: true
 
 "
 `;
@@ -120,6 +121,7 @@ proxies:
     plugin-opts:
       mode: tls
       host: gateway-carry.icloud.com
+    tfo: true
   - type: snell
     name: Snell
     server: us.example.com
@@ -237,11 +239,11 @@ exports[`SurgioService > transformArtifact format should work 4`] = `
 "🇺🇸US 1 = Shadowsocks,us.example.com,443,chacha20-ietf-poly1305,"password",tls,gateway-carry.icloud.com
 🇺🇸US 2 = Shadowsocks,us.example.com,443,chacha20-ietf-poly1305,"password"
 🇺🇸 US = Shadowsocks,us.example.com,443,chacha20-ietf-poly1305,"password",tls,gateway-carry.icloud.com,fast-open=true,udp=true
-HTTPS = https,us.example.com,443,username,"password",tls-name=us.example.com,skip-cert-verify=false
+HTTPS = https,us.example.com,443,username,"password",sni=us.example.com,skip-cert-verify=false
 ss1 = Shadowsocks,server,443,chacha20-ietf-poly1305,"password",udp=true
 ss2 = Shadowsocks,server,443,chacha20-ietf-poly1305,"password",tls,www.bing.com
 vmess = vmess,server,443,chacha20-poly1305,"uuid",transport=tcp
-http 1 = https,server,443,username,"password",tls-name=server,skip-cert-verify=false
+http 1 = https,server,443,username,"password",sni=server,skip-cert-verify=false
 http 2 = http,server,443,username,"password"
 ss4 = Shadowsocks,server,443,chacha20-ietf-poly1305,"password",tls,example.com"
 `;

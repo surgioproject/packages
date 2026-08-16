@@ -1,8 +1,8 @@
 import { Module, DynamicModule, Global } from '@nestjs/common'
-import { loadConfig } from 'surgio/config'
+import { loadConfig } from 'surgio/config.js'
 
-import { KEY, SurgioHelper } from './surgio-helper'
-import { SurgioService } from './surgio.service'
+import { KEY, SurgioHelper } from './surgio-helper.js'
+import { SurgioService } from './surgio.service.js'
 
 @Global()
 @Module({})

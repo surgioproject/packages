@@ -1,6 +1,6 @@
 import type { AddressInfo } from 'node:net'
 
-import { createHttpServer, createLambdaHandler } from '../../src'
+import { createHttpServer, createLambdaHandler } from '../../src/index.js'
 
 interface LambdaResponse {
   statusCode: number

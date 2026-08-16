@@ -1,9 +1,9 @@
-import 'source-map-support/register'
+import 'source-map-support/register.js'
 import { ConfigService } from '@nestjs/config'
 import { createServer, IncomingMessage, OutgoingMessage, Server } from 'http'
 import serverless, { Handler } from 'serverless-http'
 
-import { bootstrap } from './bootstrap'
+import { bootstrap } from './bootstrap.js'
 
 export const createHttpServer = (): Server => {
   const prepare = bootstrap().then((nestApp) => {

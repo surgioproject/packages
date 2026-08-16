@@ -2,10 +2,10 @@ import { execFileSync } from 'node:child_process'
 import { existsSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { resolve } from 'node:path'
+import { pathToFileURL } from 'node:url'
 import { JSDOM } from 'jsdom'
 import { describe, expect, test } from 'vitest'
 
-const require = createRequire(import.meta.url)
 const repositoryRoot = resolve(import.meta.dirname, '..')
 
 type PackFile = {
@@ -17,8 +17,19 @@ type PackResult = {
 }
 
 type PackageManifest = {
+  name: string
+  type: string
   main: string
   types?: string
+  peerDependencies?: Record<string, string>
+  exports: {
+    '.': {
+      types?: string
+      'module-sync': string
+      default: string
+    }
+    './*': string
+  }
 }
 
 const packages = [
@@ -40,6 +51,12 @@ const packages = [
   },
 ] as const
 
+const readManifest = (directory: string): PackageManifest => {
+  const manifestPath = resolve(repositoryRoot, directory, 'package.json')
+
+  return JSON.parse(readFileSync(manifestPath, 'utf8')) as PackageManifest
+}
+
 const pack = (directory: string): string[] => {
   const output = execFileSync('pnpm', ['pack', '--dry-run', '--json'], {
     cwd: resolve(repositoryRoot, directory),
@@ -52,21 +69,31 @@ const pack = (directory: string): string[] => {
 }
 
 describe('published package output', () => {
+  test('gateway requires Surgio v4', () => {
+    const manifest = readManifest('packages/gateway')
+
+    expect(manifest.peerDependencies?.surgio).toBe('^4.0.0')
+  })
+
   test.each(packages)('$directory contains only publishable files', (item) => {
-    const packageDirectory = resolve(repositoryRoot, item.directory)
-    const manifest = require(resolve(
-      packageDirectory,
-      'package.json'
-    )) as PackageManifest
+    const manifest = readManifest(item.directory)
     const files = pack(item.directory)
     const main = manifest.main.replace(/^\.\//, '')
+    const mainExport = `./${main}`
 
+    expect(manifest.type).toBe('module')
+    expect(manifest.exports['.']['module-sync']).toBe(mainExport)
+    expect(manifest.exports['.'].default).toBe(mainExport)
+    expect(manifest.exports['./*']).toBe('./*')
     expect(files).toContain('package.json')
     expect(files).toContain(main)
     item.required.forEach((file) => expect(files).toContain(file))
 
     if (manifest.types) {
       expect(files).toContain(manifest.types.replace(/^\.\//, ''))
+      expect(manifest.exports['.'].types).toBe(
+        `./${manifest.types.replace(/^\.\//, '')}`
+      )
     }
 
     expect(files).not.toContain('.node-version')
@@ -84,23 +111,51 @@ describe('published package output', () => {
     expect(files).not.toContainEqual(
       expect.stringMatching(/\.(?:spec|test)\.[^.]+(?:\.map)?$/)
     )
+    expect(files).not.toContainEqual(expect.stringMatching(/\.cjs$/))
   })
 
-  test('CommonJS entrypoints load from their declared main files', () => {
-    const gateway = require(resolve(repositoryRoot, 'packages/gateway'))
-    const frontend = require(resolve(
-      repositoryRoot,
-      'packages/gateway-frontend'
-    ))
-    const logger = require(resolve(repositoryRoot, 'packages/logger'))
-    const eslintConfig = require(resolve(
-      repositoryRoot,
-      'packages/eslint-config-surgio'
-    ))
+  test('ESM entrypoints load from their declared main files', async () => {
+    const load = (directory: string) => {
+      const manifest = readManifest(directory)
+      const entrypoint = resolve(repositoryRoot, directory, manifest.main)
+
+      return import(pathToFileURL(entrypoint).href)
+    }
+
+    const [gateway, frontend, logger, eslintConfig] = await Promise.all([
+      load('packages/gateway'),
+      load('packages/gateway-frontend'),
+      load('packages/logger'),
+      load('packages/eslint-config-surgio'),
+    ])
+
+    expect(gateway.createHttpServer).toBeTypeOf('function')
+    expect(gateway.createLambdaHandler).toBeTypeOf('function')
+    expect(frontend.default).toBeTypeOf('function')
+    expect(logger.createLogger).toBeTypeOf('function')
+    expect(eslintConfig.default).toBeInstanceOf(Array)
+  })
+
+  test('module-sync entrypoints preserve CommonJS require shapes', () => {
+    const load = (directory: string) => {
+      const packageDirectory = resolve(repositoryRoot, directory)
+      const manifest = readManifest(directory)
+      const packageRequire = createRequire(
+        resolve(packageDirectory, 'package.json')
+      )
+
+      return packageRequire(manifest.name)
+    }
+
+    const gateway = load('packages/gateway')
+    const frontend = load('packages/gateway-frontend')
+    const logger = load('packages/logger')
+    const eslintConfig = load('packages/eslint-config-surgio')
 
     expect(gateway.createHttpServer).toBeTypeOf('function')
     expect(gateway.createLambdaHandler).toBeTypeOf('function')
     expect(frontend).toBeTypeOf('function')
+    expect(frontend().name).toBe('@surgio/gateway-frontend')
     expect(logger.createLogger).toBeTypeOf('function')
     expect(eslintConfig).toBeInstanceOf(Array)
   })

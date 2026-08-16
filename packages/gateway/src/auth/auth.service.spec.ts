@@ -2,9 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing'
 import path from 'path'
 import sinon from 'sinon'
 
-import { SurgioModule } from '../surgio/surgio.module'
-import { SurgioService } from '../surgio/surgio.service'
-import { AuthService } from './auth.service'
+import { SurgioModule } from '../surgio/surgio.module.js'
+import { SurgioService } from '../surgio/surgio.service.js'
+import { AuthService } from './auth.service.js'
 
 describe('AuthService', () => {
   let authService: AuthService
@@ -15,7 +15,10 @@ describe('AuthService', () => {
       providers: [AuthService],
       imports: [
         SurgioModule.register({
-          cwd: path.join(__dirname, '../../__tests__/__fixtures__/gateway'),
+          cwd: path.join(
+            import.meta.dirname,
+            '../../__tests__/__fixtures__/gateway'
+          ),
         }),
       ],
     }).compile()

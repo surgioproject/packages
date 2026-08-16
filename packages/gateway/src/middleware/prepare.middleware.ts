@@ -1,8 +1,8 @@
 import { Injectable, NestMiddleware } from '@nestjs/common'
 import { Request, Response } from 'express'
-import { loadRemoteSnippetList } from 'surgio/utils'
+import { loadRemoteSnippetList } from 'surgio/utils.js'
 
-import { SurgioService } from '../surgio/surgio.service'
+import { SurgioService } from '../surgio/surgio.service.js'
 
 @Injectable()
 export class PrepareMiddleware implements NestMiddleware {

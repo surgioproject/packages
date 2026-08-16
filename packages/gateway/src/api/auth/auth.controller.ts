@@ -12,10 +12,10 @@ import { ConfigService } from '@nestjs/config'
 import type { Response } from 'express'
 import _ from 'lodash'
 
-import { APIAuthGuard } from '../../auth/api-auth.guard'
-import { AuthService } from '../../auth/auth.service'
-import { SurgioService } from '../../surgio/surgio.service'
-import type { EnrichedRequest } from '../../types/app'
+import { APIAuthGuard } from '../../auth/api-auth.guard.js'
+import { AuthService } from '../../auth/auth.service.js'
+import { SurgioService } from '../../surgio/surgio.service.js'
+import type { EnrichedRequest } from '../../types/app.js'
 
 @Controller('api/auth')
 export class AuthController {

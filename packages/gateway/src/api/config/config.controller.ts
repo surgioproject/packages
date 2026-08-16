@@ -1,8 +1,9 @@
 import { Controller, Get } from '@nestjs/common'
-import { packageJson as corePkgFile } from 'surgio/internal'
 import _ from 'lodash'
+import { packageJson as corePackage } from 'surgio/internal.js'
+import gatewayPackage from '../../../package.json' with { type: 'json' }
 
-import { SurgioService } from '../../surgio/surgio.service'
+import { SurgioService } from '../../surgio/surgio.service.js'
 
 @Controller('api')
 export class ConfigController {
@@ -17,8 +18,8 @@ export class ConfigController {
           'urlBase',
           'publicUrl',
         ]),
-        backendVersion: require('../../../package.json').version,
-        coreVersion: corePkgFile.version as string,
+        backendVersion: gatewayPackage.version,
+        coreVersion: corePackage.version as string,
         needAuth:
           this.surgioService.surgioHelper.config?.gateway?.auth ?? false,
       },

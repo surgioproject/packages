@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import crypto from 'crypto'
 
-import { SurgioService } from '../surgio/surgio.service'
+import { SurgioService } from '../surgio/surgio.service.js'
 
 @Injectable()
 export class AuthService {
