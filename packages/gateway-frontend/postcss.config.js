@@ -1,9 +1,5 @@
-'use strict';
+import tailwindcss from '@tailwindcss/postcss'
 
-module.exports = {
-  plugins: [
-    require('postcss-import'),
-    require('tailwindcss'),
-    require('autoprefixer'),
-  ],
-};
+export default {
+  plugins: [tailwindcss],
+}

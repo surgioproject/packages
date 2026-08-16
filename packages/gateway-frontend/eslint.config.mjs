@@ -1,9 +1,9 @@
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import eslintConfigPrettier from 'eslint-config-prettier';
-import reactPlugin from 'eslint-plugin-react';
-import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import globals from 'globals';
+import eslint from '@eslint/js'
+import eslintReact from '@eslint-react/eslint-plugin'
+import tseslint from 'typescript-eslint'
+import eslintConfigPrettier from 'eslint-config-prettier'
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
+import globals from 'globals'
 
 export default tseslint.config(
   {
@@ -17,13 +17,9 @@ export default tseslint.config(
       'src/libs/shadcn.ts',
     ],
   },
-  {
-    settings: { react: { version: 'detect' } },
-  },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
-  reactPlugin.configs.flat.recommended,
-  reactPlugin.configs.flat['jsx-runtime'],
+  eslintReact.configs['recommended-typescript'],
   {
     files: ['**/*.ts', '**/*.tsx'],
     plugins: { 'react-hooks': reactHooksPlugin },
@@ -36,7 +32,6 @@ export default tseslint.config(
       globals: { ...globals.browser, ...globals.es2020 },
     },
     rules: {
-      'react/prop-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
@@ -49,5 +44,5 @@ export default tseslint.config(
       ...reactHooksPlugin.configs.recommended.rules,
     },
   },
-  eslintConfigPrettier,
-);
+  eslintConfigPrettier
+)

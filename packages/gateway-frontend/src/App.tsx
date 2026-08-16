@@ -1,13 +1,7 @@
 import AppDrawer from '@/components/AppDrawer'
 import AppHeader from '@/components/AppHeader'
 import { validateCookie, validateToken } from '@/libs/http'
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  Suspense,
-  useMemo,
-} from 'react'
+import React, { useCallback, useEffect, Suspense, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Routes, Route, useLocation, Outlet } from 'react-router-dom'
 
@@ -26,7 +20,6 @@ const EmbedArtifactPage = React.lazy(() => import('./pages/embeds/Artifact'))
 const App = () => {
   const stores = useStores()
   const location = useLocation()
-  const [isAppDrawerOpen, setIsAppDrawerOpen] = useState(false)
 
   const validateAuth = useCallback(() => {
     const search = new URLSearchParams(location.search)
@@ -75,43 +68,12 @@ const App = () => {
       })
   }, [stores.config, validateAuth])
 
-  useEffect(() => {
-    setIsAppDrawerOpen(false)
-  }, [location])
-
-  const NormalLayout = useMemo(() => {
-    return (
-      <>
-        <AppHeader onAppDrawerButtonClick={() => setIsAppDrawerOpen(true)} />
-
-        <AppDrawer
-          isOpen={isAppDrawerOpen}
-          onClose={() => setIsAppDrawerOpen(false)}
-        />
-
-        <main className="flex flex-1 flex-col w-full bg-gray-50 py-4 sm:py-6 lg:py-8 lg:pl-72">
-          <div className="flex flex-1 flex-col px-4 sm:px-6 lg:px-8">
-            <Outlet />
-          </div>
-        </main>
-      </>
-    )
-  }, [isAppDrawerOpen])
-
-  const LayoutWithoutNav = useMemo(() => {
-    return (
-      <main className="flex flex-col w-full min-h-full bg-gray-50 py-4 sm:py-6 lg:py-8 px-4 sm:px-6 lg:px-8">
-        <Outlet />
-      </main>
-    )
-  }, [])
-
   return (
     <div className="flex flex-1 items-stretch relative flex-col">
       {stores.config.isReady ? (
         <>
           <Routes>
-            <Route path="/" element={NormalLayout}>
+            <Route path="/" element={<NormalLayout key={location.key} />}>
               <Route
                 path="artifacts"
                 element={<RouteSuspense element={<ArtifactListPage />} />}
@@ -123,7 +85,7 @@ const App = () => {
               <Route index element={<RouteSuspense element={<HomePage />} />} />
             </Route>
 
-            <Route path="/" element={LayoutWithoutNav}>
+            <Route path="/" element={<LayoutWithoutNav />}>
               <Route
                 path="/auth"
                 element={<RouteSuspense element={<AuthPage />} />}
@@ -139,6 +101,35 @@ const App = () => {
         </>
       ) : null}
     </div>
+  )
+}
+
+function NormalLayout() {
+  const [isAppDrawerOpen, setIsAppDrawerOpen] = useState(false)
+
+  return (
+    <>
+      <AppHeader onAppDrawerButtonClick={() => setIsAppDrawerOpen(true)} />
+
+      <AppDrawer
+        isOpen={isAppDrawerOpen}
+        onClose={() => setIsAppDrawerOpen(false)}
+      />
+
+      <main className="flex flex-1 flex-col w-full bg-gray-50 py-4 sm:py-6 lg:py-8 lg:pl-72">
+        <div className="flex flex-1 flex-col px-4 sm:px-6 lg:px-8">
+          <Outlet />
+        </div>
+      </main>
+    </>
+  )
+}
+
+function LayoutWithoutNav() {
+  return (
+    <main className="flex flex-col w-full min-h-full bg-gray-50 py-4 sm:py-6 lg:py-8 px-4 sm:px-6 lg:px-8">
+      <Outlet />
+    </main>
   )
 }
 

@@ -5,27 +5,15 @@ import { Button } from '@/components/ui/button'
 import { getDownloadUrl } from '@/libs/utils'
 import { cn } from '@/libs/shadcn'
 import { useDownloadToken } from '@/stores'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import React, { useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { ArtifactConfig } from 'surgio/internal'
-import { spacing } from 'tailwindcss/defaultTheme'
 
 import ArtifactActionButtons from '../ArtifactActionButtons'
 import ArtifactCopyButtons from '../ArtifactCopyButtons'
 import QrCodeButton from '../QrCodeButton'
-
-const ButtonsWrapper = styled.div`
-  & > * {
-    display: block;
-    white-space: nowrap;
-    margin-right: ${spacing[2]};
-    margin-bottom: ${spacing[2]};
-  }
-  margin-bottom: -${spacing[2]};
-`
 
 interface ArtifactCardProps {
   artifact: ArtifactConfig
@@ -113,7 +101,7 @@ function ArtifactCard({
         <Separator className="my-4" />
 
         <div>
-          <ButtonsWrapper className="flex flex-wrap">
+          <div className="flex flex-wrap items-center gap-2">
             <a
               data-testid="download-button"
               target="_blank"
@@ -140,7 +128,7 @@ function ArtifactCard({
               artifact={artifact}
               artifactParams={artifactParams}
             />
-          </ButtonsWrapper>
+          </div>
 
           <div className="mt-6 space-y-4">
             <div className="space-y-2">

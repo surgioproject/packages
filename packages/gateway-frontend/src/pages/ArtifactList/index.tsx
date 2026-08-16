@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2 } from 'lucide-react'
-import React, { useEffect } from 'react'
+import React, { useMemo } from 'react'
 import useSWR from 'swr'
 import { ArtifactConfig } from 'surgio/internal'
 import { defaultFetcher } from '@/libs/utils'
@@ -8,7 +8,7 @@ import ArtifactCard from '@/components/ArtifactCard'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Separator } from '@/components/ui/separator'
 
-const Page = (): JSX.Element => {
+const Page = (): React.JSX.Element => {
   const { data: artifactList, error } = useSWR<ReadonlyArray<ArtifactConfig>>(
     '/api/artifacts',
     defaultFetcher
@@ -16,34 +16,13 @@ const Page = (): JSX.Element => {
   const [categorySelection, setCategorySelection] = React.useState<{
     [key: string]: boolean
   }>({})
-  const [categories, setCategories] = React.useState<string[]>([])
-
-  useEffect(() => {
-    if (artifactList) {
-      const result = artifactList
-        .reduce<string[]>((accu, curr): string[] => {
-          if (Array.isArray(curr?.categories)) {
-            accu.push(...curr.categories)
-          }
-          return accu
-        }, [])
-        .filter((item, index, arr) => {
-          const find = arr.findIndex((i) => i === item)
-          return index === find
-        })
-
-      result.forEach((cat) => {
-        setCategorySelection((prevVal) => {
-          return {
-            ...prevVal,
-            [cat]: false,
-          }
-        })
-      })
-
-      setCategories(result)
-    }
-  }, [artifactList])
+  const categories = useMemo(
+    () =>
+      Array.from(
+        new Set(artifactList?.flatMap((artifact) => artifact.categories ?? []))
+      ),
+    [artifactList]
+  )
 
   if (error) {
     return (
@@ -72,10 +51,8 @@ const Page = (): JSX.Element => {
   const getArtifactListElement = () => {
     if (!artifactList) return null
 
-    const result: JSX.Element[] = []
-    const hasSelection = Object.keys(categorySelection).some(
-      (key) => categorySelection[key]
-    )
+    const result: React.JSX.Element[] = []
+    const hasSelection = categories.some((key) => categorySelection[key])
 
     if (!hasSelection) {
       return artifactList.map((item) => {
@@ -130,7 +107,7 @@ const Page = (): JSX.Element => {
                     >
                       <Checkbox
                         id={`cb-${cat}`}
-                        checked={categorySelection[cat]}
+                        checked={categorySelection[cat] ?? false}
                         onCheckedChange={(val) =>
                           handleCategoryChange(cat)(val === true)
                         }

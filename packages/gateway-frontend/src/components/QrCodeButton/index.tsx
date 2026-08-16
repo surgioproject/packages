@@ -5,7 +5,7 @@ import {
   PopoverContent,
 } from '@/components/ui/popover'
 import React, { useCallback, useState } from 'react'
-import QrCode from 'qrcode.react'
+import { QRCodeSVG } from 'qrcode.react'
 import { QrCodeIcon } from 'lucide-react'
 
 export interface QrCodeButtonProps {
@@ -30,7 +30,7 @@ export default function QrCodeButton(props: QrCodeButtonProps) {
         <PopoverContent className="w-auto h-auto p-0" side="top">
           {qrValue && (
             <div className="flex justify-center" data-text={props.text}>
-              <QrCode includeMargin value={qrValue} />
+              <QRCodeSVG marginSize={4} value={qrValue} />
             </div>
           )}
         </PopoverContent>

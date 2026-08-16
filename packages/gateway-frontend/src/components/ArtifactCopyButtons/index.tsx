@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import CopyButton from '@/components/CopyButton'
 import {
   Select,
   SelectContent,
@@ -10,7 +10,6 @@ import {
 import { observer } from 'mobx-react-lite'
 import { useSnackbar } from 'notistack'
 import React, { useState, useMemo } from 'react'
-import Clipboard from 'react-clipboard.js'
 import { ArtifactConfig } from 'surgio/internal'
 import { CATEGORIES } from 'surgio/constant'
 import { getDownloadUrl } from '@/libs/utils'
@@ -146,16 +145,15 @@ function ArtifactCopyButtons({
         </SelectContent>
       </Select>
 
-      <Clipboard
-        component={Button}
+      <CopyButton
+        text={selectedUrl || ''}
         data-testid="copy-button"
-        data-clipboard-text={selectedUrl || ''}
         onSuccess={onCopySuccess}
         onError={onCopyError}
-        button-variant="secondary"
+        variant="secondary"
       >
         复制
-      </Clipboard>
+      </CopyButton>
     </div>
   )
 }

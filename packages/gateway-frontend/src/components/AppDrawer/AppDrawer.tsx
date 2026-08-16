@@ -7,7 +7,7 @@ import AppDrawerContent from './AppDrawerContent'
 const AppDrawer = (params: {
   isOpen: boolean
   onClose: () => void
-}): JSX.Element => {
+}): React.JSX.Element => {
   return (
     <>
       <Transition.Root show={params.isOpen} as={Fragment}>

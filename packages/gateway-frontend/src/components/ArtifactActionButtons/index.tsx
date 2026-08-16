@@ -23,154 +23,81 @@ function ArtifactActionButtons({
     downloadToken,
     artifactParams
   )
-
-  const SurgeButtons: React.FC = () => {
-    if (
-      artifact.name.toLowerCase().includes('surge') ||
-      artifact?.categories?.includes(CATEGORIES.SURGE)
-    ) {
-      return (
-        <div>
-          <a
-            href={`surge:///install-config?url=${encodeURIComponent(
-              previewUrl
-            )}`}
-          >
-            <Button variant="secondary">添加到 Surge</Button>
-          </a>
-        </div>
-      )
-    }
-
-    return <></>
-  }
-
-  const ClashButtons: React.FC = () => {
-    if (
-      artifact.name.toLowerCase().includes('clash') ||
-      artifact?.categories?.includes(CATEGORIES.CLASH)
-    ) {
-      return (
-        <div>
-          <a
-            href={`clash://install-config?url=${encodeURIComponent(
-              previewUrl
-            )}`}
-          >
-            <Button variant="secondary">添加到 ClashX/CFW</Button>
-          </a>
-        </div>
-      )
-    }
-
-    return <></>
-  }
-
-  const QuantumultXButtons: React.FC = () => {
-    if (artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_SERVER)) {
-      const json: JsonObject = {
-        server_remote: [previewUrl],
-      }
-      return (
-        <div>
-          <a
-            data-testid="quanx-server-remote"
-            href={`quantumult-x:///add-resource?remote-resource=${encodeURIComponent(
-              JSON.stringify(json)
-            )}`}
-          >
-            <Button variant="secondary">添加到 Quantumult X</Button>
-          </a>
-        </div>
-      )
-    }
-
-    if (artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_FILTER)) {
-      const json: JsonObject = {
-        filter_remote: [previewUrl],
-      }
-      return (
-        <div>
-          <a
-            data-testid="quanx-filter-remote"
-            href={`quantumult-x:///add-resource?remote-resource=${encodeURIComponent(
-              JSON.stringify(json)
-            )}`}
-          >
-            <Button variant="secondary">添加到 Quantumult X</Button>
-          </a>
-        </div>
-      )
-    }
-
-    if (artifact?.categories?.includes(CATEGORIES.QUANTUMULT_X_REWRITE)) {
-      const json: JsonObject = {
-        rewrite_remote: [previewUrl],
-      }
-      return (
-        <div>
-          <a
-            data-testid="quanx-rewrite-remote"
-            href={`quantumult-x:///add-resource?remote-resource=${encodeURIComponent(
-              JSON.stringify(json)
-            )}`}
-          >
-            <Button variant="secondary">添加到 Quantumult X</Button>
-          </a>
-        </div>
-      )
-    }
-
-    return <></>
-  }
-
-  const LoonButtons: React.FC = () => {
-    if (
-      artifact.name.toLowerCase().includes('loon') ||
-      artifact?.categories?.includes(CATEGORIES.LOON)
-    ) {
-      return (
-        <div>
-          <a href={`loon://import?sub=${encodeURIComponent(previewUrl)}`}>
-            <Button variant="secondary">添加到 Loon</Button>
-          </a>
-        </div>
-      )
-    }
-
-    return <></>
-  }
-
-  const SurfboardButtons: React.FC = () => {
-    if (
-      artifact.name.toLowerCase().includes('surfboard') ||
-      artifact?.categories?.includes('Surfboard')
-    ) {
-      return (
-        <div>
-          <a
-            href={`surfboard:///install-config?url=${encodeURIComponent(
-              previewUrl
-            )}`}
-          >
-            <Button variant="secondary">添加到 Surfboard</Button>
-          </a>
-        </div>
-      )
-    }
-
-    return <></>
-  }
+  const name = artifact.name.toLowerCase()
+  const categories = artifact.categories ?? []
+  const quantumultXResource = getQuantumultXResource(categories, previewUrl)
 
   return (
     <div data-testid="action-buttons">
-      <SurgeButtons />
-      <ClashButtons />
-      <QuantumultXButtons />
-      <LoonButtons />
-      <SurfboardButtons />
+      {(name.includes('surge') || categories.includes(CATEGORIES.SURGE)) && (
+        <ActionLink
+          href={`surge:///install-config?url=${encodeURIComponent(previewUrl)}`}
+          label="添加到 Surge"
+        />
+      )}
+      {(name.includes('clash') || categories.includes(CATEGORIES.CLASH)) && (
+        <ActionLink
+          href={`clash://install-config?url=${encodeURIComponent(previewUrl)}`}
+          label="添加到 ClashX/CFW"
+        />
+      )}
+      {quantumultXResource && (
+        <ActionLink
+          data-testid={`quanx-${quantumultXResource.type}`}
+          href={`quantumult-x:///add-resource?remote-resource=${encodeURIComponent(
+            JSON.stringify(quantumultXResource.value)
+          )}`}
+          label="添加到 Quantumult X"
+        />
+      )}
+      {(name.includes('loon') || categories.includes(CATEGORIES.LOON)) && (
+        <ActionLink
+          href={`loon://import?sub=${encodeURIComponent(previewUrl)}`}
+          label="添加到 Loon"
+        />
+      )}
+      {(name.includes('surfboard') || categories.includes('Surfboard')) && (
+        <ActionLink
+          href={`surfboard:///install-config?url=${encodeURIComponent(
+            previewUrl
+          )}`}
+          label="添加到 Surfboard"
+        />
+      )}
     </div>
   )
+}
+
+interface ActionLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  href: string
+  label: string
+}
+
+function ActionLink({ href, label, ...props }: ActionLinkProps) {
+  return (
+    <div>
+      <a href={href} {...props}>
+        <Button variant="secondary">{label}</Button>
+      </a>
+    </div>
+  )
+}
+
+function getQuantumultXResource(
+  categories: ReadonlyArray<string>,
+  previewUrl: string
+): { type: string; value: JsonObject } | undefined {
+  if (categories.includes(CATEGORIES.QUANTUMULT_X_SERVER)) {
+    return { type: 'server-remote', value: { server_remote: [previewUrl] } }
+  }
+
+  if (categories.includes(CATEGORIES.QUANTUMULT_X_FILTER)) {
+    return { type: 'filter-remote', value: { filter_remote: [previewUrl] } }
+  }
+
+  if (categories.includes(CATEGORIES.QUANTUMULT_X_REWRITE)) {
+    return { type: 'rewrite-remote', value: { rewrite_remote: [previewUrl] } }
+  }
 }
 
 export default observer(ArtifactActionButtons)

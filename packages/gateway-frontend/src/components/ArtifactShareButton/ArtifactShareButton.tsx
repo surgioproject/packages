@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useSnackbar } from 'notistack'
 import React from 'react'
 import { Button } from '@/components/ui/button'
-import Clipboard from 'react-clipboard.js'
+import CopyButton from '@/components/CopyButton'
 import { ArtifactConfig } from 'surgio/internal'
 import {
   Dialog,
@@ -19,6 +19,8 @@ const ArtifactShareButton = ({ artifact }: { artifact: ArtifactConfig }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const downloadToken = useDownloadToken()
+  const embedCode = getEmbedCode(artifact.name, downloadToken)
+  const embedUrl = getEmbedUrl(artifact.name, downloadToken)
 
   const onCopySuccess = () => {
     enqueueSnackbar('复制成功', { variant: 'success' })
@@ -47,20 +49,19 @@ const ArtifactShareButton = ({ artifact }: { artifact: ArtifactConfig }) => {
               <div className="font-semibold">Embed HTML 代码</div>
               <div className="relative bg-secondary text-secondary-foreground pl-4 pr-[60px] rounded">
                 <pre id="embed-html" className="overflow-x-scroll py-4 text-sm">
-                  {getEmbedCode(artifact.name, downloadToken)}
+                  {embedCode}
                 </pre>
                 <div className="absolute right-3 top-0 bottom-0 flex items-center">
-                  <Clipboard
-                    component={Button}
+                  <CopyButton
+                    text={embedCode}
                     data-testid="copy-button"
-                    data-clipboard-target="#embed-html"
                     onSuccess={onCopySuccess}
                     onError={onCopyError}
-                    button-variant="outline"
+                    variant="outline"
                     className="p-2"
                   >
                     <ClipboardCopyIcon size={16} className="fill-secondary" />
-                  </Clipboard>
+                  </CopyButton>
                 </div>
               </div>
             </li>
@@ -71,20 +72,19 @@ const ArtifactShareButton = ({ artifact }: { artifact: ArtifactConfig }) => {
                   id="embed-page-url"
                   className="overflow-x-scroll py-4 text-sm"
                 >
-                  {getEmbedUrl(artifact.name, downloadToken)}
+                  {embedUrl}
                 </pre>
                 <div className="absolute right-3 top-0 bottom-0 flex items-center">
-                  <Clipboard
-                    component={Button}
+                  <CopyButton
+                    text={embedUrl}
                     data-testid="copy-button"
-                    data-clipboard-target="#embed-page-url"
                     onSuccess={onCopySuccess}
                     onError={onCopyError}
-                    button-variant="outline"
+                    variant="outline"
                     className="p-2"
                   >
                     <ClipboardCopyIcon size={16} className="fill-secondary" />
-                  </Clipboard>
+                  </CopyButton>
                 </div>
               </div>
             </li>
