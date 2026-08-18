@@ -53,7 +53,7 @@
     "test:ci": "run-s test:unit test:e2e"
   },
   "dependencies": {
-    "@hono/node-server": "^1.19.9",
+    "@hono/node-server": "^2.1.1",
     "@surgio/gateway-frontend": "workspace:*",
     "@surgio/logger": "workspace:*",
     "hono": "^4.12.3"

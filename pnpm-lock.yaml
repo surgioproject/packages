@@ -93,8 +93,8 @@ importers:
   packages/gateway:
     dependencies:
       '@hono/node-server':
-        specifier: ^1.19.9
-        version: 1.19.17(hono@4.13.2)
+        specifier: ^2.1.1
+        version: 2.1.1(hono@4.13.2)
       '@surgio/gateway-frontend':
         specifier: workspace:*
         version: link:../gateway-frontend
@@ -886,12 +886,6 @@ packages:
     peerDependencies:
       react: ^18 || ^19 || ^19.0.0-rc
       react-dom: ^18 || ^19 || ^19.0.0-rc
-
-  '@hono/node-server@1.19.17':
-    resolution: {integrity: sha512-dSneS5qhiauZWGDCeK4o695Xd9nUNjviSZCMQrj10eetr8Uln1ucn6bbphOM6UynAMMtNIzZNSpL9vnASJwrPQ==}
-    engines: {node: '>=18.14.1'}
-    peerDependencies:
-      hono: ^4
 
   '@hono/node-server@2.1.1':
     resolution: {integrity: sha512-ELuehkj5VCBdgEw9zs+ivkKwyzzUCSQuE96YmiPvn1ECBoZCczbFXJLeEGMTYjphP6gydh4pHMqEYPVMYUVgQg==}
@@ -7785,10 +7779,6 @@ snapshots:
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
       use-sync-external-store: 1.6.0(react@19.2.8)
-
-  '@hono/node-server@1.19.17(hono@4.13.2)':
-    dependencies:
-      hono: 4.13.2
 
   '@hono/node-server@2.1.1(hono@4.13.2)':
     dependencies:
