@@ -38,6 +38,7 @@ const config = [
       '@typescript-eslint': tseslint.plugin,
     },
     rules: {
+      'no-undef': 'off',
       '@typescript-eslint/consistent-type-imports': 'error',
       'no-restricted-syntax': [
         'error',
