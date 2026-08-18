@@ -5,19 +5,23 @@ import getFrontendPackage from '@surgio/gateway-frontend'
 import {
   createLogger,
   logger,
-  transports,
+  setLogLevel,
   type CreateLoggerOptions,
+  type Logger,
+  type LogLevel,
 } from '@surgio/logger'
 
 const options: CreateLoggerOptions = {
   service: 'typescript-consumer',
 }
+const level: LogLevel = 'info'
+const typedLogger: Logger = createLogger(options)
 
 void createGatewayApp
 void createHttpServer
 void createLambdaHandler
 void startServer
 void getFrontendPackage
-void createLogger(options)
+setLogLevel(level)
+void typedLogger
 void logger
-void transports

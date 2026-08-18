@@ -8,7 +8,7 @@ This is a monorepo for the Surgio project containing multiple packages managed b
 
 - **@surgio/gateway**: NestJS-based API Gateway backend that serves Surgio configuration
 - **@surgio/gateway-frontend**: React-based frontend UI for the gateway (built with Vite, Tailwind CSS, MobX, shadcn/ui)
-- **@surgio/logger**: Winston-based logging utility shared across packages
+- **@surgio/logger**: Edge-compatible Consola Core logging utility shared across Surgio projects
 - **@surgio/eslint-config-surgio**: ESLint configuration for Surgio config stores
 
 ## Development Commands
@@ -200,13 +200,14 @@ The frontend is bundled into `build/` and served as static files by the gateway 
 
 ### Logger Package
 
-Simple Winston-based logger factory:
+Cross-runtime logger factory built on `consola/core`:
 
-- Provides `createLogger()` function
-- Log level controlled by `SURGIO_LOG_LEVEL` env var (default: 'info')
+- Provides `createLogger()`, the default `logger`, and `setLogLevel()`
+- Runs in Node.js and Web-standard Edge Workers without Node compatibility shims
+- Log level defaults from `SURGIO_LOG_LEVEL` when `process.env` exists, otherwise `info`
 - Formats: timestamp, label (service name), level, message
-- Colorized output in non-production
-- Used by gateway and main Surgio project
+- Colorizes levels only in interactive Node development terminals
+- The public API exposes Surgio's own `Logger` and `LogLevel` types, not implementation-specific transports
 
 ## Important Technical Details
 

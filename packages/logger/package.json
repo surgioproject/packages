@@ -33,7 +33,10 @@
     "dist"
   ],
   "dependencies": {
-    "winston": "^3.19.0"
+    "consola": "^3.4.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1"
   },
   "publishConfig": {
     "access": "public"

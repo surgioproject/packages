@@ -150,6 +150,8 @@ describe('published package output', () => {
     expect(gatewayLambda.createLambdaHandler).toBeTypeOf('function')
     expect(frontend.default).toBeTypeOf('function')
     expect(logger.createLogger).toBeTypeOf('function')
+    expect(logger.setLogLevel).toBeTypeOf('function')
+    expect(logger).not.toHaveProperty('transports')
     expect(eslintConfig.default).toBeInstanceOf(Array)
   })
 
@@ -180,6 +182,8 @@ describe('published package output', () => {
     expect(frontend).toBeTypeOf('function')
     expect(frontend().name).toBe('@surgio/gateway-frontend')
     expect(logger.createLogger).toBeTypeOf('function')
+    expect(logger.setLogLevel).toBeTypeOf('function')
+    expect(logger).not.toHaveProperty('transports')
     expect(eslintConfig).toBeInstanceOf(Array)
   })
 

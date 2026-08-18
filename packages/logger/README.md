@@ -17,6 +17,26 @@
 [download-image]: https://img.shields.io/npm/dm/@surgio/logger.svg?style=flat-square
 [download-url]: https://npmjs.org/package/@surgio/logger
 
+`@surgio/logger` provides the same timestamped console logger in Node.js and
+Web-standard Edge Worker runtimes. Its runtime is based on `consola/core` and
+does not require Node compatibility shims.
+
+```ts
+import { createLogger, setLogLevel } from '@surgio/logger'
+
+const logger = createLogger({ service: 'surgio:worker' })
+
+setLogLevel('debug')
+logger.info('loaded %s', 'configuration')
+```
+
+The initial level comes from `SURGIO_LOG_LEVEL` when `process.env` is
+available, and otherwise defaults to `info`. Supported levels are `silent`,
+`error`, `warn`, `info`, and `debug`.
+
+Version 2 removes the Winston-specific `transports` export. Use
+`setLogLevel()` to update every existing and future logger.
+
 ## 文档
 
 查看完整使用文档，前往 [surgio.js.org](https://surgio.js.org)。

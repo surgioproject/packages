@@ -8,6 +8,7 @@ const frontendPackage = getFrontendPackage()
 const logger = loggerPackage.createLogger({
   service: 'typescript-consumer-cjs',
 })
+loggerPackage.setLogLevel('info')
 
 void gateway.createGatewayApp
 void gatewayNode.createHttpServer
@@ -17,4 +18,3 @@ void frontendPackage.name
 void frontendPackage.version
 void logger
 void loggerPackage.logger
-void loggerPackage.transports
