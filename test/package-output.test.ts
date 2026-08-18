@@ -17,6 +17,7 @@ type PackResult = {
 }
 
 type PackageManifest = {
+  dependencies?: Record<string, string>
   name: string
   type: string
   main: string
@@ -69,6 +70,15 @@ const pack = (directory: string): string[] => {
 }
 
 describe('published package output', () => {
+  test('eslint config owns its TypeScript tooling', () => {
+    const manifest = readManifest('packages/eslint-config-surgio')
+
+    expect(manifest.dependencies).toMatchObject({
+      typescript: '~6.0.3',
+      'typescript-eslint': '^8.67.0',
+    })
+  })
+
   test('gateway requires Surgio v4', () => {
     const manifest = readManifest('packages/gateway')
 
