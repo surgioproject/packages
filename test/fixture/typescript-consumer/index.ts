@@ -1,9 +1,6 @@
-import {
-  bootstrapServer,
-  createHttpServer,
-  createLambdaHandler,
-  startServer,
-} from '@surgio/gateway'
+import { createGatewayApp } from '@surgio/gateway'
+import { createLambdaHandler } from '@surgio/gateway/lambda'
+import { createHttpServer, startServer } from '@surgio/gateway/node'
 import getFrontendPackage from '@surgio/gateway-frontend'
 import {
   createLogger,
@@ -16,7 +13,7 @@ const options: CreateLoggerOptions = {
   service: 'typescript-consumer',
 }
 
-void bootstrapServer
+void createGatewayApp
 void createHttpServer
 void createLambdaHandler
 void startServer

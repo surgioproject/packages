@@ -1,4 +1,6 @@
 import gateway = require('@surgio/gateway')
+import gatewayLambda = require('@surgio/gateway/lambda')
+import gatewayNode = require('@surgio/gateway/node')
 import getFrontendPackage = require('@surgio/gateway-frontend')
 import loggerPackage = require('@surgio/logger')
 
@@ -7,10 +9,10 @@ const logger = loggerPackage.createLogger({
   service: 'typescript-consumer-cjs',
 })
 
-void gateway.bootstrapServer
-void gateway.createHttpServer
-void gateway.createLambdaHandler
-void gateway.startServer
+void gateway.createGatewayApp
+void gatewayNode.createHttpServer
+void gatewayLambda.createLambdaHandler
+void gatewayNode.startServer
 void frontendPackage.name
 void frontendPackage.version
 void logger

@@ -84,7 +84,13 @@ describe('published package output', () => {
     expect(manifest.type).toBe('module')
     expect(manifest.exports['.']['module-sync']).toBe(mainExport)
     expect(manifest.exports['.'].default).toBe(mainExport)
-    expect(manifest.exports['./*']).toBe('./*')
+    if (manifest.name === '@surgio/gateway') {
+      expect(manifest.exports['./node'].default).toBe('./dist/node.js')
+      expect(manifest.exports['./lambda'].default).toBe('./dist/lambda.js')
+      expect(manifest.exports['./worker'].default).toBe('./dist/worker.js')
+    } else {
+      expect(manifest.exports['./*']).toBe('./*')
+    }
     expect(files).toContain('package.json')
     expect(files).toContain(main)
     item.required.forEach((file) => expect(files).toContain(file))
@@ -122,15 +128,26 @@ describe('published package output', () => {
       return import(pathToFileURL(entrypoint).href)
     }
 
-    const [gateway, frontend, logger, eslintConfig] = await Promise.all([
+    const [gateway, gatewayNode, gatewayLambda, frontend, logger, eslintConfig] = await Promise.all([
       load('packages/gateway'),
+      import(
+        pathToFileURL(
+          resolve(repositoryRoot, 'packages/gateway/dist/node.js')
+        ).href
+      ),
+      import(
+        pathToFileURL(
+          resolve(repositoryRoot, 'packages/gateway/dist/lambda.js')
+        ).href
+      ),
       load('packages/gateway-frontend'),
       load('packages/logger'),
       load('packages/eslint-config-surgio'),
     ])
 
-    expect(gateway.createHttpServer).toBeTypeOf('function')
-    expect(gateway.createLambdaHandler).toBeTypeOf('function')
+    expect(gateway.createGatewayApp).toBeTypeOf('function')
+    expect(gatewayNode.createHttpServer).toBeTypeOf('function')
+    expect(gatewayLambda.createLambdaHandler).toBeTypeOf('function')
     expect(frontend.default).toBeTypeOf('function')
     expect(logger.createLogger).toBeTypeOf('function')
     expect(eslintConfig.default).toBeInstanceOf(Array)
@@ -148,12 +165,18 @@ describe('published package output', () => {
     }
 
     const gateway = load('packages/gateway')
+    const gatewayRequire = createRequire(
+      resolve(repositoryRoot, 'packages/gateway/package.json')
+    )
+    const gatewayNode = gatewayRequire('@surgio/gateway/node')
+    const gatewayLambda = gatewayRequire('@surgio/gateway/lambda')
     const frontend = load('packages/gateway-frontend')
     const logger = load('packages/logger')
     const eslintConfig = load('packages/eslint-config-surgio')
 
-    expect(gateway.createHttpServer).toBeTypeOf('function')
-    expect(gateway.createLambdaHandler).toBeTypeOf('function')
+    expect(gateway.createGatewayApp).toBeTypeOf('function')
+    expect(gatewayNode.createHttpServer).toBeTypeOf('function')
+    expect(gatewayLambda.createLambdaHandler).toBeTypeOf('function')
     expect(frontend).toBeTypeOf('function')
     expect(frontend().name).toBe('@surgio/gateway-frontend')
     expect(logger.createLogger).toBeTypeOf('function')

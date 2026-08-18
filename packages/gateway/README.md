@@ -21,6 +21,40 @@
 
 查看完整使用文档，前往 [surgio.js.org](https://surgio.js.org)。
 
+## Hono Gateway
+
+Gateway 使用一个 Hono app 实现全部 HTTP 路由，并通过子路径选择部署平台：
+
+```js
+import { createGatewayApp } from '@surgio/gateway'
+import { startServer } from '@surgio/gateway/node'
+import { createLambdaHandler } from '@surgio/gateway/lambda'
+import { createWorkerGateway } from '@surgio/gateway/worker'
+```
+
+Node 项目只需要维护一个 `surgio.project.ts`，Node.js 22.22.2 及以上版本会直接运行其中可擦除的 TypeScript，`startServer()` 会从当前目录加载它。Cloudflare Worker 使用构建期 manifest：
+
+```js
+import { createWorkerGateway } from '@surgio/gateway/worker'
+import { createCloudflareKvStore } from 'surgio/cache/cloudflare'
+import { TtlCache } from 'surgio/cache/core'
+import manifest from './.surgio/worker-manifest.mjs'
+
+export default createWorkerGateway(manifest, {
+  bindings(env) {
+    return {
+      cache: new TtlCache({
+        store: createCloudflareKvStore(env.SURGIO_CACHE),
+      }),
+      assets: env.ASSETS,
+      resolveSecret: (name) => env[name],
+    }
+  },
+})
+```
+
+`@surgio/gateway/worker/build` 的 `buildGatewayWorker()` 会同时生成 Surgio manifest 和准备前端 assets。Worker 需配置 `nodejs_compat`、KV 与 Assets binding。
+
 ## 交流
 
 [<img width="207" src="https://raw.githubusercontent.com/geekdada/surgio/master/docs/.vuepress/public/join-telegram.png">](https://t.me/surgiotg)

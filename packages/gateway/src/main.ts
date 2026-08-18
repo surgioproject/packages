@@ -1,3 +1,3 @@
-import { startServer } from './index.js'
+import { startServer } from './node.js'
 
 startServer()

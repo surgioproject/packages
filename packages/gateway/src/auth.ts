@@ -1,0 +1,50 @@
+import { deleteCookie, getCookie, setCookie } from 'hono/cookie'
+
+import type { Context } from 'hono'
+import type { GatewayConfig, GatewayRole } from './types.js'
+
+const encoder = new TextEncoder()
+
+const toHex = (input: ArrayBuffer): string =>
+  [...new Uint8Array(input)].map((item) => item.toString(16).padStart(2, '0')).join('')
+
+export const signAccessToken = async (token: string): Promise<string> => {
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(token || 'surgio-gateway'),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign'],
+  )
+  return toHex(await crypto.subtle.sign('HMAC', key, encoder.encode(token)))
+}
+
+export const authenticate = async (
+  context: Context,
+  config: GatewayConfig,
+): Promise<{ readonly roles: ReadonlyArray<GatewayRole> } | undefined> => {
+  if (!config.auth) return { roles: ['admin', 'viewer'] }
+  const authorization = context.req.header('authorization')
+  const bearer = authorization?.match(/^Bearer\s+(.+)$/i)?.[1]
+  const token = bearer ?? context.req.query('access_token')
+  if (token && token === config.accessToken) return { roles: ['admin', 'viewer'] }
+  if (token && token === config.viewerToken) return { roles: ['viewer'] }
+  const cookie = getCookie(context, '_t')
+  if (cookie && cookie === (await signAccessToken(config.accessToken ?? ''))) {
+    return { roles: ['admin', 'viewer'] }
+  }
+  return undefined
+}
+
+export const setAuthCookie = async (context: Context, config: GatewayConfig): Promise<void> => {
+  setCookie(context, '_t', await signAccessToken(config.accessToken ?? ''), {
+    httpOnly: true,
+    path: '/',
+    maxAge: config.cookieMaxAge ?? 60 * 60 * 24 * 31,
+    sameSite: 'Lax',
+  })
+}
+
+export const clearAuthCookie = (context: Context): void => {
+  deleteCookie(context, '_t', { path: '/' })
+}
