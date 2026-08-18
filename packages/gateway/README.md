@@ -47,13 +47,12 @@ export default createWorkerGateway(manifest, {
         store: createCloudflareKvStore(env.SURGIO_CACHE),
       }),
       assets: env.ASSETS,
-      resolveSecret: (name) => env[name],
     }
   },
 })
 ```
 
-`@surgio/gateway/worker/build` 的 `buildGatewayWorker()` 会同时生成 Surgio manifest 和准备前端 assets。Worker 需配置 `nodejs_compat`、KV 与 Assets binding。
+`@surgio/gateway/worker/build` 的 `buildGatewayWorker()` 会同时生成 Surgio manifest 和准备前端 assets。Worker 需配置 `nodejs_compat`、KV 与 Assets binding。文本变量和 Secrets 通过 `process.env` 读取；KV、Assets 等结构化 binding 继续由 `bindings(env)` 注入。
 
 ## 交流
 

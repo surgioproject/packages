@@ -6,7 +6,6 @@ import type { GatewayAssets, GatewayCache, GatewayRuntime } from './types.js'
 
 export interface WorkerGatewayBindings {
   readonly cache: GatewayCache
-  readonly resolveSecret?: (name: string) => string | undefined
   readonly assets?: GatewayAssets
 }
 
@@ -30,7 +29,6 @@ export const createWorkerGateway = <Env extends object>(
     const bindings = options.bindings(env)
     const runtime = (options.createRuntime ?? createSurgioRuntime)(manifest, {
       cache: bindings.cache,
-      resolveSecret: bindings.resolveSecret,
     }) as GatewayRuntime
     const state = { runtime, bindings }
     states.set(env, state)
