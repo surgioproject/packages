@@ -1,8 +1,6 @@
 'use strict';
 
-const { defineSurgioConfig } = require('surgio');
-
-module.exports = defineSurgioConfig({
+module.exports = {
   artifacts: [
     {
       name: 'test.conf',
@@ -60,4 +58,4 @@ module.exports = defineSurgioConfig({
   customFilters: {
     globalFilter: (node) => node.nodeName === '🇺🇸 US',
   },
-});
+};
