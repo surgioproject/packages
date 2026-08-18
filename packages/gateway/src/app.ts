@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 
 import gatewayPackage from '../package.json' with { type: 'json' }
 import { authenticate, clearAuthCookie, setAuthCookie } from './auth.js'
+import { gatewayLogger } from './logger.js'
 import { omitQuery, parseStructuredQuery } from './query.js'
 
 import type { Context, MiddlewareHandler } from 'hono'
@@ -21,11 +22,6 @@ export interface GatewayAppOptions<Bindings extends object = object> {
   readonly assets?: GatewayAssets | ((context: Context<{ Bindings: Bindings }>) => GatewayAssets | undefined)
   readonly errorCacheTtl?: number
   readonly logger?: GatewayLogger
-}
-
-const consoleLogger: GatewayLogger = {
-  warn: (message, error) => console.warn(message, error ?? ''),
-  error: (message, error) => console.error(message, error ?? ''),
 }
 
 const textHeaders = {
@@ -71,7 +67,7 @@ export const createGatewayApp = <Bindings extends object = object>(
 ): Hono<{ Bindings: Bindings }> => {
   const app = new Hono<{ Bindings: Bindings }>()
   const errorCacheTtl = options.errorCacheTtl ?? 7 * 24 * 60 * 60_000
-  const logger = options.logger ?? consoleLogger
+  const logger = options.logger ?? gatewayLogger
   const runtimeFor = async (context: Context): Promise<GatewayRuntime> =>
     typeof options.runtime === 'function'
       ? options.runtime(context as Context<{ Bindings: Bindings }>)

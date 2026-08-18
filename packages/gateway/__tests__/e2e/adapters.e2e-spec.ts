@@ -3,7 +3,8 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { createLambdaHandler } from '../../src/lambda.js'
-import { createHttpServer } from '../../src/node.js'
+import { gatewayLogger } from '../../src/logger.js'
+import { startServer } from '../../src/node.js'
 
 import type { AddressInfo } from 'node:net'
 import type { GatewayRuntime } from '../../src/types.js'
@@ -43,13 +44,18 @@ const assetsDir = path.resolve(
 
 describe('platform adapters', () => {
   test('serves the Hono app through a real Node HTTP server', async () => {
-    const server = createHttpServer({ runtime, assetsDir })
-    server.listen(0, '127.0.0.1')
-    await once(server, 'listening')
+    const info = vi
+      .spyOn(gatewayLogger, 'info')
+      .mockImplementation(() => undefined)
+    const server = await startServer({ runtime, assetsDir, port: 0 })
     const { port } = server.address() as AddressInfo
     const response = await fetch(`http://127.0.0.1:${port}/get-artifact/demo.conf`)
     expect(response.status).toBe(200)
     expect(await response.text()).toBe('demo.conf')
+    expect(info).toHaveBeenCalledWith(
+      '> Your app is ready at %s',
+      'http://127.0.0.1:0',
+    )
     server.close()
     await once(server, 'close')
   })

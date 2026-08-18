@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { getRequestListener } from '@hono/node-server'
 
 import { createGatewayApp } from './app.js'
+import { gatewayLogger } from './logger.js'
 
 import type { Server } from 'node:http'
 import type { GatewayAppOptions } from './app.js'
@@ -119,6 +120,6 @@ export const startServer = async (options: NodeGatewayOptions = {}): Promise<Ser
     server.once('error', reject)
     server.listen(port, hostname, resolve)
   })
-  console.log(`> Your app is ready at http://${hostname}:${port}`)
+  gatewayLogger.info('> Your app is ready at %s', `http://${hostname}:${port}`)
   return server
 }

@@ -62,6 +62,23 @@ const createFixture = () => {
 const auth = { Authorization: 'Bearer admin-token' }
 
 describe('createGatewayApp', () => {
+  test('uses the shared Gateway logger by default', async () => {
+    const { runtime } = createFixture()
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+    const app = createGatewayApp({ runtime })
+
+    const response = await app.request(
+      '/get-artifact/demo.conf?access_token=viewer-token',
+    )
+
+    expect(response.status).toBe(200)
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringMatching(
+        / \[surgio:gateway\] warn: \[download-artifact\] demo\.conf "-"$/,
+      ),
+    )
+  })
+
   test('renders artifacts and preserves safe structured query values', async () => {
     const { app, cacheSet, runtime } = createFixture()
     const response = await app.request(
