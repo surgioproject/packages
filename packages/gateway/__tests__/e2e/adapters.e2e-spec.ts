@@ -31,6 +31,7 @@ const runtime: GatewayRuntime = {
     urlBase: 'https://example.com/',
     publicUrl: 'https://example.com/',
     coreVersion: '4.0.0',
+    accessToken: 'admin-token',
     auth: false,
   }),
   async resetCache() {},
@@ -52,6 +53,15 @@ describe('platform adapters', () => {
     const response = await fetch(`http://127.0.0.1:${port}/get-artifact/demo.conf`)
     expect(response.status).toBe(200)
     expect(await response.text()).toBe('demo.conf')
+
+    const authResponse = await fetch(`http://127.0.0.1:${port}/api/auth`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ accessToken: 'admin-token' }),
+    })
+    expect(authResponse.status).toBe(200)
+    expect(await authResponse.json()).toEqual({ status: 'ok' })
+
     expect(info).toHaveBeenCalledWith(
       '> Your app is ready at %s',
       'http://127.0.0.1:0',
