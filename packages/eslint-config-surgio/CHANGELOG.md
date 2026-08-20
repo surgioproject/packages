@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.0](https://github.com/surgioproject/packages/compare/@surgio/eslint-config-surgio@2.1.0...@surgio/eslint-config-surgio@3.0.0-beta.0) (2026-08-20)
+
+### Bug Fixes
+
+- **eslint-config-surgio:** disable no-undef for TypeScript files ([78c09aa](https://github.com/surgioproject/packages/commit/78c09aa004b2286086da0a64395c9b35ae58cfab))
+
+### Features
+
+- **eslint-config-surgio:** add TypeScript support ([a1cd905](https://github.com/surgioproject/packages/commit/a1cd90595ac0fce8a41535ca97ffc4ea559c793f))
+
+### BREAKING CHANGES
+
+- **eslint-config-surgio:** Require Node.js 22.22.2 or newer and ESLint 10 or newer. The package now uses native ESM with `module-sync` compatibility and adds TypeScript-aware rules for Node.js type stripping.
+
 # [2.1.0](https://github.com/surgioproject/packages/compare/@surgio/eslint-config-surgio@2.0.0...@surgio/eslint-config-surgio@2.1.0) (2026-01-20)
 
 **Note:** Version bump only for package @surgio/eslint-config-surgio
