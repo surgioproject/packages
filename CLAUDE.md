@@ -55,7 +55,8 @@ Navigate to specific packages for targeted development:
 # Build
 pnpm run build
 
-# Rebuild on change
+# Build once, then rebuild and restart the server on source changes.
+# Serves __tests__/__fixtures__/gateway on port 4000 unless SURGIO_PROJECT_DIR is set
 pnpm dev
 
 # Start the Node server from dist/
@@ -158,7 +159,7 @@ The gateway is a single Hono app. Platform-specific entrypoints wire it to a run
 - `lambda.ts` (`@surgio/gateway/lambda`): `createLambdaHandler()` wraps the Node app with `hono/aws-lambda`
 - `worker.ts` (`@surgio/gateway/worker`): `createWorkerGateway(manifest, { bindings })` for Cloudflare Workers. Runtime comes from `surgio/worker` and a build-time manifest; cache and assets come from Worker bindings
 - `worker-build.ts` (`@surgio/gateway/worker/build`): `buildGatewayWorker()` generates the Surgio manifest and copies frontend assets
-- `main.ts`: calls `startServer()`; used by `pnpm start:prod`
+- `main.ts`: calls `startServer()` with `SURGIO_PROJECT_DIR` as the project directory when set; used by `pnpm start:prod` and `pnpm dev`
 
 **Request handling**:
 
