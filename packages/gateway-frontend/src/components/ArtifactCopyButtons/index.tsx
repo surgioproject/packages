@@ -92,7 +92,7 @@ function ArtifactCopyButtons({
           ),
         },
         {
-          name: 'V2Ray 订阅',
+          name: 'V2RayN 订阅',
           url: getDownloadUrl(
             `${artifact.name}?format=v2ray`,
             true,
