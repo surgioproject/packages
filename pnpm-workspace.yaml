@@ -5,10 +5,11 @@ autoInstallPeers: false
 enableGlobalVirtualStore: false
 
 allowBuilds:
-  '@nestjs/core': true
-  '@parcel/watcher': true
   core-js: false
   core-js-pure: false
   esbuild: true
   nx: true
   yarn: false
+
+minimumReleaseAgeExclude:
+  - surgio@4.0.0-beta.1
