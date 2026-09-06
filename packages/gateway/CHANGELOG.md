@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/%40surgio%2Fgateway%402.4.1...%40surgio%2Fgateway%403.0.0-beta.0) (2026-09-06)
+
+### Code Refactoring
+
+- **gateway:** migrate from nestjs to hono ([74a091b](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/74a091b146696dca08969857e5531092fe7a963a))
+- **gateway:** read worker secrets via process.env ([379fd4d](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/379fd4db20674a11a8bbdd31ef9542ede45eaf15))
+
+### Features
+
+- **gateway:** support project dir override in dev server ([eadc8a9](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/eadc8a97b9641d8d8f48b8813f35ed125e9eeff3))
+- **gateway:** upgrade nestjs to v11 ([a3a0c11](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/a3a0c11041290731624723db96bca479c7e19ca0))
+- **gateway:** use shared @surgio/logger ([0a713d8](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/0a713d8a118e6c4569c4626b1ba7e14478eb2561))
+
+### BREAKING CHANGES
+
+- **gateway:** Main entrypoint no longer exports createHttpServer,
+  createLambdaHandler, startServer or bootstrapServer. Use the matching
+  subpath entrypoints instead.
+- **gateway:** WorkerGatewayBindings no longer accepts
+  resolveSecret. Secrets are read directly from process.env.
+
 ## [2.4.1](https://github.com/surgioproject/packages/compare/@surgio/gateway@2.4.0...@surgio/gateway@2.4.1) (2026-08-09)
 
 **Note:** Version bump only for package @surgio/gateway

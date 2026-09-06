@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.4.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/%40surgio%2Fgateway-frontend%402.3.1...%40surgio%2Fgateway-frontend%402.4.0) (2026-09-06)
+
+### Bug Fixes
+
+- update subscription name from 'V2Ray 订阅' to 'V2RayN 订阅' in ArtifactCopyButtons and ProviderCopyButtons components ([eddd832](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/eddd832a74466fa51a7356c5cbb832a6fb54c0d7))
+
+### Features
+
+- **gateway-frontend:** react 19 and tailwind 4 ([b266533](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/b266533baffb4fa7e92544917b1a2b9d62fb3b63))
+
 ## [2.3.1](https://github.com/surgioproject/packages/compare/@surgio/gateway-frontend@2.3.0...@surgio/gateway-frontend@2.3.1) (2026-08-09)
 
 **Note:** Version bump only for package @surgio/gateway-frontend
