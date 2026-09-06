@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a monorepo for the Surgio project containing multiple packages managed by pnpm workspaces, Lerna, and Turbo. Surgio is a network configuration management tool. The repository contains:
 
-- **@surgio/gateway**: NestJS-based API Gateway backend that serves Surgio configuration
+- **@surgio/gateway**: Hono-based API Gateway that serves Surgio configuration on Node.js, AWS Lambda, and Cloudflare Workers
 - **@surgio/gateway-frontend**: React-based frontend UI for the gateway (built with Vite, Tailwind CSS, MobX, shadcn/ui)
 - **@surgio/logger**: Edge-compatible Consola Core logging utility shared across Surgio projects
 - **@surgio/eslint-config-surgio**: ESLint configuration for Surgio config stores
@@ -55,10 +55,10 @@ Navigate to specific packages for targeted development:
 # Build
 pnpm run build
 
-# Development mode with watch
+# Rebuild on change
 pnpm dev
 
-# Start production server
+# Start the Node server from dist/
 pnpm start:prod
 
 # Debug mode
@@ -133,56 +133,47 @@ pnpm run lint
 
 - **Build System**: Turbo handles build orchestration with dependency-aware caching
 - **Package Manager**: pnpm with workspaces (version: 11.22.0)
-- **TypeScript**: TypeScript 6 is the configured compiler; native TypeScript 7 validates compatibility
-- **Backend Framework**: NestJS 11 with Express 5
+- **TypeScript**: TypeScript 6 (`tsc6`) is the configured compiler; native TypeScript 7 (`tsc`) validates compatibility. The root `tsconfig.json` is a solution file whose `references` list every project that `test:types` checks with `tsc -b --noEmit`
+- **Backend Framework**: Hono 4 on Web-standard `Request`/`Response`, with `@hono/node-server` for Node.js
 - **Frontend Build**: Vite 8 with the official React plugin
 - **Test Runner**: Vitest 4 with Istanbul coverage and jsdom for frontend tests
 - **Linting**: ESLint 10 with typescript-eslint and @eslint-react
 - **Module System**: Native ESM with `module-sync` compatibility for Node.js `require()`
-- **Formatter**: Prettier 3 (also required by the NestJS schematics toolchain)
+- **Formatter**: Prettier 3
 - **Versioning**: Lerna with independent versioning and conventional commits
 - **Git Hooks**: Husky + lint-staged for pre-commit checks
 - **Commit Convention**: Angular-style conventional commits (enforced by commitlint)
 
 ### Gateway Package Architecture
 
-The gateway is a NestJS application that integrates with the main Surgio library:
+The gateway is a single Hono app. Platform-specific entrypoints wire it to a runtime, a cache, and a static-asset source:
 
-**Core Bootstrap Flow**:
+**Source layout** (`src/`):
 
-1. `main.ts` → `bootstrap()` in `bootstrap.ts`
-2. Creates NestJS application with custom Express adapter
-3. Initializes `SurgioModule` (global) with project directory from `SURGIO_PROJECT_DIR` env var
-4. `SurgioHelper` loads Surgio config and initializes helper utilities
-5. Serves static frontend from `@surgio/gateway-frontend/build`
+- `app.ts`: `createGatewayApp()` builds the Hono app and owns every route. Exported from the package root
+- `types.ts`: `GatewayRuntime`, `GatewayCache`, `GatewayAssets`, `GatewayLogger`, and `GatewayConfig` interfaces that adapters implement
+- `auth.ts`: token and cookie authentication on top of `hono/cookie` and Web Crypto
+- `query.ts`: parses nested and array query parameters (`a[b]=1`, `a[]=1`) without prototype pollution
+- `node.ts` (`@surgio/gateway/node`): `createNodeGatewayApp()`, `createHttpServer()`, `startServer()`. Loads the project via `surgio/project` and `surgio/runtime/node`, uses `surgio/cache`, and serves the frontend from `@surgio/gateway-frontend/build` on the filesystem
+- `lambda.ts` (`@surgio/gateway/lambda`): `createLambdaHandler()` wraps the Node app with `hono/aws-lambda`
+- `worker.ts` (`@surgio/gateway/worker`): `createWorkerGateway(manifest, { bindings })` for Cloudflare Workers. Runtime comes from `surgio/worker` and a build-time manifest; cache and assets come from Worker bindings
+- `worker-build.ts` (`@surgio/gateway/worker/build`): `buildGatewayWorker()` generates the Surgio manifest and copies frontend assets
+- `main.ts`: calls `startServer()`; used by `pnpm start:prod`
 
-**Module Organization**:
+**Request handling**:
 
-- `AppModule`: Root module, configures static file serving, global config, and middleware
-- `SurgioModule`: Global module that provides `SurgioService` and `SurgioHelper` to entire app
-- `ApiModule`: API endpoints for configuration management
-- `AuthModule`: Authentication using Passport (cookie & bearer token strategies)
-
-**Key Middleware**:
-
-- `CookieParserMiddleware`: Parses cookies with secret from Surgio config hash
-- `PrepareMiddleware`: Runs before controller actions (excluded from render routes)
-- Express 5 middleware routes use named wildcards such as `{*splat}`
-- The Express query parser is set to `extended` to preserve nested and array query parameters
-
-**Deployment Options**:
-
-- HTTP Server: `createHttpServer()` - Standard Node.js HTTP server
-- Standalone: `startServer()` - Starts on configured port
-- Serverless: `createLambdaHandler()` - AWS Lambda handler with lazy initialization
+- `runtime`, `cache`, and `assets` in `GatewayAppOptions` can be values or per-request functions of the Hono context, so Worker bindings resolve lazily per environment
+- Authentication is a `requireRole('admin' | 'viewer')` middleware. Admin and viewer tokens come from the Surgio gateway config; a signed `_t` cookie grants admin
+- Render routes (`/get-artifact/:name`, `/export-providers`, `/render`) can serve cached bodies on error when `useCacheOnError` is set; TTL is `SURGIO_RENDERED_ARTIFACT_CACHE_MAXAGE` or seven days
+- `/api/*` responses carry a no-store cache-control header
+- Unknown routes fall through to the assets source, which returns `index.html` for SPA paths
 
 **Testing Strategy**:
 
-- Unit tests: `*.spec.ts` files in `src/`
-- E2E tests: `*.e2e-spec.ts` files in `__tests__/e2e/`
+- Unit tests: `*.spec.ts` files in `src/`. `app.spec.ts` drives `createGatewayApp()` with a stub runtime; `app.edge.spec.ts` bundles the app with esbuild to prove it has no Node dependencies
+- E2E tests: `*.e2e-spec.ts` files in `__tests__/e2e/`, covering the Node HTTP server and the AWS Lambda adapter
 - Test fixtures in `__tests__/__fixtures__/`
 - Separate Vitest configs for unit vs e2e
-- E2E coverage includes the standard HTTP server and AWS Lambda entrypoints
 
 ### Gateway Frontend Architecture
 
@@ -213,24 +204,17 @@ Cross-runtime logger factory built on `consola/core`:
 
 ### Surgio Integration
 
-The gateway depends on the main `surgio` package (peer dependency). The `SurgioModule.register()` function:
+The gateway depends on the main `surgio` package (peer dependency, v4). It imports Surgio's native ESM subpath exports directly and only from platform entrypoints, so `app.ts` stays runtime-agnostic:
 
-1. Accepts `cwd` option (project directory)
-2. Calls `loadConfig()` from `surgio/config` to load user's Surgio configuration
-3. Creates `SurgioHelper` instance with loaded config
-4. Makes helper available globally via dependency injection
+- `surgio/project` and `surgio/runtime/node`: load `surgio.project.ts` from `cwd` and create the Node runtime
+- `surgio/cache`: default Node cache
+- `surgio/worker` and `surgio/worker/build`: Worker runtime from a manifest, and manifest generation
 
-The gateway is built as NodeNext ESM and requires Surgio v4. It imports Surgio's
-native ESM subpath exports directly. User `surgio.conf.js` and provider files
-remain CommonJS and are loaded with `createRequire()`.
-
-### Frontend Version Tracking
-
-The gateway sets `x-frontend-version` header on static assets (JS/CSS/JSON) to track frontend version in production.
+The Surgio subpaths are imported through variables so bundlers for other targets do not resolve them.
 
 ### Workspace Dependencies
 
-The gateway package uses `workspace:*` protocol to depend on `@surgio/gateway-frontend`, ensuring it always uses the local workspace version.
+The gateway package uses `workspace:*` protocol to depend on `@surgio/gateway-frontend` and `@surgio/logger`, ensuring it always uses the local workspace version.
 
 ## Testing
 
@@ -239,11 +223,11 @@ The gateway package uses `workspace:*` protocol to depend on `@surgio/gateway-fr
 ```bash
 # Unit test for specific file
 cd packages/gateway
-pnpm run test:unit -- surgio.service.spec.ts
+pnpm run test:unit -- app.spec.ts
 
 # E2E test for specific file
 cd packages/gateway
-pnpm run test:e2e -- api.e2e-spec.ts
+pnpm run test:e2e -- adapters.e2e-spec.ts
 
 # Frontend test for specific file
 cd packages/gateway-frontend
@@ -253,7 +237,7 @@ pnpm run test:ci -- src/libs/utils.test.ts
 ### Test Setup Files
 
 - Gateway unit tests: `__tests__/setup-tests.ts`
-- Gateway e2e tests: `__tests__/setup-e2e-tests.ts`
+- Gateway e2e tests: `__tests__/setup-e2e-tests.ts` (points `SURGIO_PROJECT_DIR` at the gateway fixture)
 - Frontend tests: `src/setupTests.ts`
 
 ### CI Validation
@@ -264,6 +248,8 @@ and runs gateway e2e tests. Coverage is generated with Vitest and Istanbul.
 
 The ESM and CommonJS TypeScript consumer fixtures validate the public
 declarations for gateway, gateway frontend, and logger with both compilers.
+They resolve `@surgio/*` to built `dist/` declarations, so `pnpm run build`
+must run before `pnpm run test:types`.
 The package-output test runs `pnpm pack --dry-run --json` for every published
 package and checks ESM entrypoints, `module-sync` require compatibility,
 declaration files, and excluded test output. It also parses the built frontend
