@@ -37,7 +37,8 @@ const contentTypes: Readonly<Record<string, string>> = {
 }
 
 const defaultAssetsDir = (): string => {
-  const packageFile = import.meta.resolve('@surgio/gateway-frontend/package.json')
+  const packageFile = import.meta
+    .resolve('@surgio/gateway-frontend/package.json')
   return path.join(path.dirname(fileURLToPath(packageFile)), 'build')
 }
 
@@ -47,14 +48,23 @@ const createFilesystemAssets = (directory: string): GatewayAssets => ({
     const relative = pathname === '/' ? 'index.html' : pathname.slice(1)
     const candidate = path.resolve(directory, relative)
     const root = path.resolve(directory)
-    const filename = candidate.startsWith(`${root}${path.sep}`) ? candidate : path.join(root, 'index.html')
+    const filename = candidate.startsWith(`${root}${path.sep}`)
+      ? candidate
+      : path.join(root, 'index.html')
     try {
       const content = await fs.readFile(filename)
-      return new Response(content, { headers: { 'content-type': contentTypes[path.extname(filename)] ?? 'application/octet-stream' } })
+      return new Response(content, {
+        headers: {
+          'content-type':
+            contentTypes[path.extname(filename)] ?? 'application/octet-stream',
+        },
+      })
     } catch {
       try {
         const content = await fs.readFile(path.join(root, 'index.html'))
-        return new Response(content, { headers: { 'content-type': contentTypes['.html'] } })
+        return new Response(content, {
+          headers: { 'content-type': contentTypes['.html'] },
+        })
       } catch {
         return new Response('NOT FOUND', { status: 404 })
       }
@@ -62,23 +72,27 @@ const createFilesystemAssets = (directory: string): GatewayAssets => ({
   },
 })
 
-const createRuntime = async (options: NodeGatewayOptions): Promise<GatewayRuntime> => {
+const createRuntime = async (
+  options: NodeGatewayOptions
+): Promise<GatewayRuntime> => {
   if (options.runtime) return options.runtime
   const projectEntry = 'surgio/project'
   const runtimeEntry = 'surgio/runtime/node'
-  const [{ loadSurgioProject }, { createNodeSurgioRuntime }] = await Promise.all([
-    import(projectEntry),
-    import(runtimeEntry),
-  ])
-  const project = options.project ?? (await loadSurgioProject(options.cwd ?? process.cwd()))
-  return createNodeSurgioRuntime(project, options.runtimeOptions) as GatewayRuntime
+  const [{ loadSurgioProject }, { createNodeSurgioRuntime }] =
+    await Promise.all([import(projectEntry), import(runtimeEntry)])
+  const project =
+    options.project ?? (await loadSurgioProject(options.cwd ?? process.cwd()))
+  return createNodeSurgioRuntime(
+    project,
+    options.runtimeOptions
+  ) as GatewayRuntime
 }
 
 const createDefaultCache = (): GatewayCache => {
   let cachePromise: Promise<GatewayCache> | undefined
   const getCache = () =>
     (cachePromise ??= import('surgio/cache').then(
-      ({ cache }) => cache as GatewayCache,
+      ({ cache }) => cache as GatewayCache
     ))
   return {
     async get(key) {
@@ -100,8 +114,8 @@ export const createNodeGatewayApp = (options: NodeGatewayOptions = {}) => {
     assets: createFilesystemAssets(options.assetsDir ?? defaultAssetsDir()),
     errorCacheTtl:
       options.errorCacheTtl ??
-      (process.env.SURGIO_RENDERED_ARTIFACT_CACHE_MAXAGE
-        ? Number(process.env.SURGIO_RENDERED_ARTIFACT_CACHE_MAXAGE)
+      (process.env.SURGIO_GATEWAY_ERROR_CACHE_MAXAGE
+        ? Number(process.env.SURGIO_GATEWAY_ERROR_CACHE_MAXAGE)
         : undefined),
     logger: options.logger,
   })
@@ -112,7 +126,9 @@ export const createHttpServer = (options: NodeGatewayOptions = {}): Server => {
   return createServer(getRequestListener(app.fetch))
 }
 
-export const startServer = async (options: NodeGatewayOptions = {}): Promise<Server> => {
+export const startServer = async (
+  options: NodeGatewayOptions = {}
+): Promise<Server> => {
   const hostname = options.hostname ?? '127.0.0.1'
   const port = options.port ?? (Number(process.env.PORT) || 4000)
   const server = createHttpServer(options)

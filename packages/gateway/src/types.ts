@@ -9,6 +9,8 @@ export interface GatewayConfig {
   readonly auth?: boolean
   readonly cookieMaxAge?: number
   readonly useCacheOnError?: boolean
+  readonly passRequestUserAgent?: boolean
+  readonly passRequestHeaders?: ReadonlyArray<string>
 }
 
 export interface GatewayArtifact {
@@ -31,13 +33,23 @@ export interface GatewayRenderResult {
 }
 
 export interface GatewayRuntime {
-  renderArtifact(name: string, options?: Record<string, unknown>): Promise<GatewayRenderResult>
-  renderProviders(options: Record<string, unknown>): Promise<GatewayRenderResult>
-  renderTemplate(name: string, context?: Readonly<Record<string, unknown>>): Promise<string>
+  renderArtifact(
+    name: string,
+    options?: Record<string, unknown>
+  ): Promise<GatewayRenderResult>
+  renderProviders(
+    options: Record<string, unknown>
+  ): Promise<GatewayRenderResult>
+  renderTemplate(
+    name: string,
+    context?: Readonly<Record<string, unknown>>
+  ): Promise<string>
   listArtifacts(): ReadonlyArray<GatewayArtifact>
   listProviders(): ReadonlyArray<string>
   getProviderInfo(name: string): Promise<GatewayProviderInfo | undefined>
-  getProviderSubscription(name: string): Promise<Readonly<Record<string, number>> | undefined>
+  getProviderSubscription(
+    name: string
+  ): Promise<Readonly<Record<string, number>> | undefined>
   getGatewayConfig(): GatewayConfig | undefined
   resetCache(): Promise<void>
   close(): Promise<void>

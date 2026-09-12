@@ -2,9 +2,9 @@ import { describe, expect, test, vi } from 'vitest'
 
 import { createGatewayApp } from './app.js'
 
-import type { GatewayCache, GatewayRuntime } from './types.js'
+import type { GatewayCache, GatewayConfig, GatewayRuntime } from './types.js'
 
-const config = {
+const config: GatewayConfig = {
   urlBase: 'https://example.com/',
   publicUrl: 'https://example.com/',
   coreVersion: '4.0.0',
@@ -14,17 +14,14 @@ const config = {
   useCacheOnError: true,
 }
 
-const createFixture = () => {
+const createFixture = (overrides: Partial<GatewayConfig> = {}) => {
+  const gatewayConfig = { ...config, ...overrides }
   const values = new Map<string, unknown>()
   const cacheSet = vi.fn(async (key: string, value: unknown) => {
     values.set(key, value)
   })
-  const cache: GatewayCache = {
-    async get(key) {
-      return values.get(key) as never
-    },
-    set: cacheSet,
-  }
+  const cacheGet = vi.fn(async (key: string) => values.get(key) as never)
+  const cache: GatewayCache = { get: cacheGet, set: cacheSet }
   const runtime: GatewayRuntime = {
     renderArtifact: vi.fn(async (name, options) => ({
       body: `${name}:${JSON.stringify(options?.customParams)}`,
@@ -43,10 +40,10 @@ const createFixture = () => {
     getProviderInfo: vi.fn(async (name) =>
       name === 'demo'
         ? { name, type: 'custom', supportGetSubscriptionUserInfo: true }
-        : undefined,
+        : undefined
     ),
     getProviderSubscription: vi.fn(async () => ({ upload: 1, total: 10 })),
-    getGatewayConfig: () => config,
+    getGatewayConfig: () => gatewayConfig,
     resetCache: vi.fn(async () => undefined),
     close: vi.fn(async () => undefined),
   }
@@ -56,7 +53,7 @@ const createFixture = () => {
     assets: { fetch: async () => new Response('spa') },
     logger: { warn: vi.fn(), error: vi.fn() },
   })
-  return { app, cacheSet, runtime, values }
+  return { app, cacheGet, cacheSet, runtime, values }
 }
 
 const auth = { Authorization: 'Bearer admin-token' }
@@ -68,28 +65,28 @@ describe('createGatewayApp', () => {
     const app = createGatewayApp({ runtime })
 
     const response = await app.request(
-      '/get-artifact/demo.conf?access_token=viewer-token',
+      '/get-artifact/demo.conf?access_token=viewer-token'
     )
 
     expect(response.status).toBe(200)
     expect(warn).toHaveBeenCalledWith(
       expect.stringMatching(
-        / \[surgio:gateway\] warn: \[download-artifact\] demo\.conf "-"$/,
-      ),
+        / \[surgio:gateway\] warn: \[download-artifact\] demo\.conf "-"$/
+      )
     )
   })
 
   test('renders artifacts and preserves safe structured query values', async () => {
     const { app, cacheSet, runtime } = createFixture()
     const response = await app.request(
-      '/get-artifact/demo.conf?access_token=viewer-token&foo[]=first&foo[]=second&child[bar]=nested&constructor.prototype.polluted=yes',
+      '/get-artifact/demo.conf?access_token=viewer-token&foo[]=first&foo[]=second&child[bar]=nested&constructor.prototype.polluted=yes'
     )
     expect(response.status).toBe(200)
     expect(response.headers.get('subscription-userinfo')).toBe(
-      'upload=1; download=2; total=3; expire=4',
+      'upload=1; download=2; total=3; expire=4'
     )
     expect(await response.text()).toContain(
-      '"foo":["first","second"],"child":{"bar":"nested"}',
+      '"foo":["first","second"],"child":{"bar":"nested"}'
     )
     expect(({} as { polluted?: string }).polluted).toBeUndefined()
     expect(runtime.renderArtifact).toHaveBeenCalledOnce()
@@ -98,55 +95,138 @@ describe('createGatewayApp', () => {
       expect.objectContaining({
         downloadUrl:
           'https://example.com/get-artifact/demo.conf?access_token=viewer-token&foo[]=first&foo[]=second&child[bar]=nested&constructor.prototype.polluted=yes',
-      }),
+      })
     )
     expect(cacheSet).toHaveBeenCalledWith(
+      expect.stringMatching(/^artifact-fallback:/),
       expect.any(String),
-      expect.any(String),
-      7 * 24 * 60 * 60_000,
+      24 * 60 * 60_000
     )
+  })
+
+  test('只把声明过的请求头交给 Provider', async () => {
+    const { app, runtime } = createFixture()
+    await app.request('/get-artifact/demo.conf?access_token=viewer-token', {
+      headers: {
+        'user-agent': 'Surge iOS/2920',
+        'cf-ray': '8f0c2b1a4e9d0001-SJC',
+        cookie: 'surgio=session',
+        'x-surge-unlocked-features': 'vif',
+      },
+    })
+
+    const [, options] = vi.mocked(runtime.renderArtifact).mock.calls[0]
+    expect(options?.getNodeListParams).toEqual({
+      requestHeaders: { 'x-surge-unlocked-features': 'vif' },
+    })
+  })
+
+  test('按配置放行 User-Agent 与额外请求头', async () => {
+    const { app, runtime } = createFixture({
+      passRequestUserAgent: true,
+      passRequestHeaders: ['Accept-Language'],
+    })
+    await app.request('/get-artifact/demo.conf?access_token=viewer-token', {
+      headers: {
+        'user-agent': 'Surge iOS/2920',
+        'accept-language': 'zh-CN',
+        'cf-ray': '8f0c2b1a4e9d0001-SJC',
+      },
+    })
+
+    const [, options] = vi.mocked(runtime.renderArtifact).mock.calls[0]
+    expect(options?.getNodeListParams).toMatchObject({
+      requestUserAgent: 'Surge iOS/2920',
+      requestHeaders: {
+        'accept-language': 'zh-CN',
+        'user-agent': 'Surge iOS/2920',
+      },
+    })
+  })
+
+  test('关闭 useCacheOnError 后不再读写兜底缓存', async () => {
+    const { app, cacheGet, cacheSet, runtime } = createFixture({
+      useCacheOnError: false,
+    })
+
+    const ok = await app.request(
+      '/get-artifact/demo.conf?access_token=viewer-token'
+    )
+    expect(ok.status).toBe(200)
+    expect(cacheSet).not.toHaveBeenCalled()
+
+    vi.mocked(runtime.renderArtifact).mockRejectedValueOnce(
+      new Error('offline')
+    )
+    const failed = await app.request(
+      '/get-artifact/demo.conf?access_token=viewer-token'
+    )
+
+    expect(failed.status).toBe(500)
+    expect(cacheGet).not.toHaveBeenCalled()
+  })
+
+  test('请求头与 query 顺序不影响兜底缓存 key', async () => {
+    const { app, cacheSet } = createFixture()
+    await app.request(
+      '/get-artifact/demo.conf?access_token=viewer-token&a=1&b=2'
+    )
+    await app.request(
+      '/get-artifact/demo.conf?b=2&access_token=viewer-token&a=1'
+    )
+
+    expect(cacheSet.mock.calls[0][0]).toBe(cacheSet.mock.calls[1][0])
   })
 
   test('supports download and provider export aliases', async () => {
     const { app, runtime } = createFixture()
     const artifact = await app.request(
-      '/get-artifact/demo.conf?access_token=viewer-token&dl=1&format=surge-policy',
+      '/get-artifact/demo.conf?access_token=viewer-token&dl=1&format=surge-policy'
     )
     expect(artifact.headers.get('content-disposition')).toBe(
-      'attachment; filename="demo.conf"',
+      'attachment; filename="demo.conf"'
     )
     expect(runtime.renderArtifact).toHaveBeenCalledWith(
       'demo.conf',
-      expect.objectContaining({ format: 'surge' }),
+      expect.objectContaining({ format: 'surge' })
     )
 
     const providers = await app.request(
-      '/export-providers?access_token=viewer-token&providers=demo&format=qx-server',
+      '/export-providers?access_token=viewer-token&providers=demo&format=qx-server'
     )
     expect(await providers.text()).toBe('providers:demo')
     expect(runtime.renderProviders).toHaveBeenCalledWith(
-      expect.objectContaining({ format: 'quantumultx' }),
+      expect.objectContaining({ format: 'quantumultx' })
     )
   })
 
   test('validates provider export input and missing resources', async () => {
     const { app } = createFixture()
-    expect((await app.request('/export-providers?access_token=viewer-token')).status).toBe(400)
+    expect(
+      (await app.request('/export-providers?access_token=viewer-token')).status
+    ).toBe(400)
     expect(
       (
         await app.request(
-          '/export-providers?access_token=viewer-token&providers=missing&format=surge-policy',
+          '/export-providers?access_token=viewer-token&providers=missing&format=surge-policy'
         )
-      ).status,
+      ).status
     ).toBe(404)
-    expect((await app.request('/get-artifact/missing?access_token=viewer-token')).status).toBe(404)
+    expect(
+      (await app.request('/get-artifact/missing?access_token=viewer-token'))
+        .status
+    ).toBe(404)
   })
 
   test('renders templates and serves assets as SPA fallback', async () => {
     const { app } = createFixture()
-    const rendered = await app.request('/render?access_token=viewer-token&template=folder%2Fdemo')
+    const rendered = await app.request(
+      '/render?access_token=viewer-token&template=folder%2Fdemo'
+    )
     expect(await rendered.text()).toBe('template:folder/demo')
-    expect((await app.request('/render?access_token=viewer-token')).status).toBe(400)
+    expect(
+      (await app.request('/render?access_token=viewer-token')).status
+    ).toBe(400)
     expect(await (await app.request('/')).text()).toBe('spa')
   })
 
@@ -160,24 +240,68 @@ describe('createGatewayApp', () => {
     expect(login.status).toBe(200)
     const cookie = login.headers.get('set-cookie') as string
     expect(cookie).toContain('_t=')
-    expect((await app.request('/api/auth/validate-cookie', { method: 'POST', headers: { cookie } })).status).toBe(200)
-    expect((await app.request('/api/auth/validate-token', { method: 'POST', headers: auth })).status).toBe(200)
-    expect((await app.request('/api/artifacts?access_token=viewer-token')).status).toBe(403)
-    expect((await app.request('/api/artifacts', { headers: auth })).status).toBe(200)
-    expect((await app.request('/api/auth', { method: 'POST', body: '{}' })).status).toBe(401)
-    expect((await app.request('/api/auth/logout', { method: 'POST' })).headers.get('set-cookie')).toContain('_t=')
+    expect(
+      (
+        await app.request('/api/auth/validate-cookie', {
+          method: 'POST',
+          headers: { cookie },
+        })
+      ).status
+    ).toBe(200)
+    expect(
+      (
+        await app.request('/api/auth/validate-token', {
+          method: 'POST',
+          headers: auth,
+        })
+      ).status
+    ).toBe(200)
+    expect(
+      (await app.request('/api/artifacts?access_token=viewer-token')).status
+    ).toBe(403)
+    expect(
+      (await app.request('/api/artifacts', { headers: auth })).status
+    ).toBe(200)
+    expect(
+      (await app.request('/api/auth', { method: 'POST', body: '{}' })).status
+    ).toBe(401)
+    expect(
+      (await app.request('/api/auth/logout', { method: 'POST' })).headers.get(
+        'set-cookie'
+      )
+    ).toContain('_t=')
     expect((await app.request('/api/auth/logout')).status).toBe(302)
   })
 
   test('exposes all management API contracts', async () => {
     const { app, runtime } = createFixture()
     expect((await app.request('/api/config')).status).toBe(200)
-    expect((await app.request('/api/artifacts/demo.conf?access_token=viewer-token')).status).toBe(200)
-    expect((await app.request('/api/artifacts/missing?access_token=viewer-token')).status).toBe(404)
-    expect((await app.request('/api/providers', { headers: auth })).status).toBe(200)
-    expect((await app.request('/api/providers/demo/subscription', { headers: auth })).status).toBe(200)
-    expect((await app.request('/api/providers/missing/subscription', { headers: auth })).status).toBe(404)
-    expect((await app.request('/api/clean-cache', { method: 'POST', headers: auth })).status).toBe(200)
+    expect(
+      (await app.request('/api/artifacts/demo.conf?access_token=viewer-token'))
+        .status
+    ).toBe(200)
+    expect(
+      (await app.request('/api/artifacts/missing?access_token=viewer-token'))
+        .status
+    ).toBe(404)
+    expect(
+      (await app.request('/api/providers', { headers: auth })).status
+    ).toBe(200)
+    expect(
+      (await app.request('/api/providers/demo/subscription', { headers: auth }))
+        .status
+    ).toBe(200)
+    expect(
+      (
+        await app.request('/api/providers/missing/subscription', {
+          headers: auth,
+        })
+      ).status
+    ).toBe(404)
+    expect(
+      (await app.request('/api/clean-cache', { method: 'POST', headers: auth }))
+        .status
+    ).toBe(200)
     expect(runtime.resetCache).toHaveBeenCalledOnce()
   })
 
@@ -185,7 +309,9 @@ describe('createGatewayApp', () => {
     const { app, runtime } = createFixture()
     const url = '/get-artifact/demo.conf?access_token=viewer-token'
     expect((await app.request(url)).status).toBe(200)
-    vi.mocked(runtime.renderArtifact).mockRejectedValueOnce(new Error('offline'))
+    vi.mocked(runtime.renderArtifact).mockRejectedValueOnce(
+      new Error('offline')
+    )
     const cached = await app.request(url)
     expect(cached.status).toBe(200)
     expect(cached.headers.get('x-use-cache')).toBe('true')

@@ -5,7 +5,11 @@ const keyParts = (key: string): string[] => {
   return parts.filter((part, index) => part || index === parts.length - 1)
 }
 
-const assign = (target: Record<string, unknown>, key: string, value: string): void => {
+const assign = (
+  target: Record<string, unknown>,
+  key: string,
+  value: string
+): void => {
   const parts = keyParts(key)
   if (!parts.length || parts.some((part) => blockedKeys.has(part))) return
 
@@ -15,7 +19,11 @@ const assign = (target: Record<string, unknown>, key: string, value: string): vo
     let container = target
     for (const part of parts.slice(0, -2)) {
       const existing = container[part]
-      if (!existing || typeof existing !== 'object' || Array.isArray(existing)) {
+      if (
+        !existing ||
+        typeof existing !== 'object' ||
+        Array.isArray(existing)
+      ) {
         container[part] = Object.create(null) as Record<string, unknown>
       }
       container = container[part] as Record<string, unknown>
@@ -39,7 +47,12 @@ const assign = (target: Record<string, unknown>, key: string, value: string): vo
   const last = parts.at(-1)
   if (!last) return
   const existing = current[last]
-  current[last] = existing === undefined ? value : Array.isArray(existing) ? [...existing, value] : [existing, value]
+  current[last] =
+    existing === undefined
+      ? value
+      : Array.isArray(existing)
+        ? [...existing, value]
+        : [existing, value]
 }
 
 export const parseStructuredQuery = (url: URL): Record<string, unknown> => {
@@ -50,7 +63,7 @@ export const parseStructuredQuery = (url: URL): Record<string, unknown> => {
 
 export const omitQuery = (
   input: Readonly<Record<string, unknown>>,
-  omitted: ReadonlyArray<string>,
+  omitted: ReadonlyArray<string>
 ): Record<string, unknown> => {
   const result = Object.create(null) as Record<string, unknown>
   for (const [key, value] of Object.entries(input)) {
@@ -58,3 +71,31 @@ export const omitQuery = (
   }
   return result
 }
+
+export const pickHeaders = (
+  headers: Headers,
+  allowed: ReadonlySet<string>
+): Record<string, string> => {
+  const result = Object.create(null) as Record<string, string>
+  for (const [key, value] of headers) {
+    const name = key.toLowerCase()
+    if (allowed.has(name)) result[name] = value
+  }
+  return result
+}
+
+const sortValue = (value: unknown): unknown => {
+  if (Array.isArray(value)) return value.map(sortValue)
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>)
+        .sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0))
+        .map(([key, item]) => [key, sortValue(item)])
+    )
+  }
+  return value
+}
+
+/** 让缓存 key 不受对象与 query 参数书写顺序影响。 */
+export const stableStringify = (value: unknown): string =>
+  JSON.stringify(sortValue(value))

@@ -3,7 +3,12 @@ import { Hono } from 'hono'
 import gatewayPackage from '../package.json' with { type: 'json' }
 import { authenticate, clearAuthCookie, setAuthCookie } from './auth.js'
 import { gatewayLogger } from './logger.js'
-import { omitQuery, parseStructuredQuery } from './query.js'
+import {
+  omitQuery,
+  parseStructuredQuery,
+  pickHeaders,
+  stableStringify,
+} from './query.js'
 
 import type { Context, MiddlewareHandler } from 'hono'
 import type {
@@ -17,9 +22,17 @@ import type {
 } from './types.js'
 
 export interface GatewayAppOptions<Bindings extends object = object> {
-  readonly runtime: GatewayRuntime | ((context: Context<{ Bindings: Bindings }>) => GatewayRuntime | Promise<GatewayRuntime>)
-  readonly cache?: GatewayCache | ((context: Context<{ Bindings: Bindings }>) => GatewayCache | undefined)
-  readonly assets?: GatewayAssets | ((context: Context<{ Bindings: Bindings }>) => GatewayAssets | undefined)
+  readonly runtime:
+    | GatewayRuntime
+    | ((
+        context: Context<{ Bindings: Bindings }>
+      ) => GatewayRuntime | Promise<GatewayRuntime>)
+  readonly cache?:
+    | GatewayCache
+    | ((context: Context<{ Bindings: Bindings }>) => GatewayCache | undefined)
+  readonly assets?:
+    | GatewayAssets
+    | ((context: Context<{ Bindings: Bindings }>) => GatewayAssets | undefined)
   readonly errorCacheTtl?: number
   readonly logger?: GatewayLogger
 }
@@ -33,12 +46,20 @@ const errorJson = (context: Context, status: number, error: string): Response =>
   context.json({ status: 'error', statusCode: status, error }, status as 400)
 
 const digestKey = async (value: string): Promise<string> => {
-  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))
-  return [...new Uint8Array(digest)].map((item) => item.toString(16).padStart(2, '0')).join('').slice(0, 32)
+  const digest = await crypto.subtle.digest(
+    'SHA-256',
+    new TextEncoder().encode(value)
+  )
+  return [...new Uint8Array(digest)]
+    .map((item) => item.toString(16).padStart(2, '0'))
+    .join('')
+    .slice(0, 32)
 }
 
 const subscriptionHeader = (info: Readonly<Record<string, number>>): string =>
-  ['upload', 'download', 'total', 'expire'].map((key) => `${key}=${info[key] || 0}`).join('; ')
+  ['upload', 'download', 'total', 'expire']
+    .map((key) => `${key}=${info[key] || 0}`)
+    .join('; ')
 
 const addToken = (base: string, path: string, token?: string): string => {
   const url = new URL(path, base)
@@ -50,6 +71,23 @@ const publicRequestUrl = (requestUrl: string, publicUrl: string): string => {
   const request = new URL(requestUrl)
   return new URL(`${request.pathname}${request.search}`, publicUrl).toString()
 }
+
+/** 与 surgio 的 PASS_GATEWAY_REQUEST_HEADERS_WHITELIST 保持一致。 */
+const alwaysPassedRequestHeaders = ['x-surge-unlocked-features']
+
+/**
+ * 只把项目声明过的请求头交给 Provider。未声明的头不会影响抓取结果，却会让渲染缓存的
+ * key 逐请求变化（cf-ray、x-forwarded-for、auth cookie）。
+ */
+const allowedRequestHeaders = (config: GatewayConfig): Set<string> =>
+  new Set([
+    ...(config.passRequestHeaders ?? []).map((header) => header.toLowerCase()),
+    ...alwaysPassedRequestHeaders,
+    ...(config.passRequestUserAgent ? ['user-agent'] : []),
+  ])
+
+const fallbackCacheKey = async (parts: unknown): Promise<string> =>
+  `artifact-fallback:${await digestKey(stableStringify(parts))}`
 
 const providerFormat = (format: string): string => {
   const aliases: Record<string, string> = {
@@ -63,10 +101,10 @@ const providerFormat = (format: string): string => {
 }
 
 export const createGatewayApp = <Bindings extends object = object>(
-  options: GatewayAppOptions<Bindings>,
+  options: GatewayAppOptions<Bindings>
 ): Hono<{ Bindings: Bindings }> => {
   const app = new Hono<{ Bindings: Bindings }>()
-  const errorCacheTtl = options.errorCacheTtl ?? 7 * 24 * 60 * 60_000
+  const errorCacheTtl = options.errorCacheTtl ?? 24 * 60 * 60_000
   const logger = options.logger ?? gatewayLogger
   const runtimeFor = async (context: Context): Promise<GatewayRuntime> =>
     typeof options.runtime === 'function'
@@ -83,33 +121,45 @@ export const createGatewayApp = <Bindings extends object = object>(
 
   app.use('/api/*', async (context, next) => {
     await next()
-    context.header('cache-control', 'private, no-cache, no-store, must-revalidate')
+    context.header(
+      'cache-control',
+      'private, no-cache, no-store, must-revalidate'
+    )
   })
 
-  const requireRole = (role: GatewayRole): MiddlewareHandler<{ Bindings: Bindings }> =>
+  const requireRole =
+    (role: GatewayRole): MiddlewareHandler<{ Bindings: Bindings }> =>
     async (context, next) => {
       const config = (await runtimeFor(context)).getGatewayConfig()
       if (!config) return errorJson(context, 500, 'Gateway 未配置')
       const user = await authenticate(context, config)
       if (!user) return errorJson(context, 401, 'Unauthorized')
-      if (!user.roles.includes(role)) return errorJson(context, 403, 'Forbidden')
+      if (!user.roles.includes(role))
+        return errorJson(context, 403, 'Forbidden')
       await next()
     }
 
   const sendResult = async (
     context: Context,
     result: GatewayRenderResult | string,
-    cacheKey: string,
+    cacheKey: string | undefined,
     cached: boolean,
-    attachment?: string,
+    attachment?: string
   ): Promise<Response> => {
-    const config = (await runtimeFor(context)).getGatewayConfig()
     const body = typeof result === 'string' ? result : result.body
-    if (!cached && config?.useCacheOnError) await cacheFor(context)?.set(cacheKey, body, errorCacheTtl)
+    if (cacheKey && !cached)
+      await cacheFor(context)?.set(cacheKey, body, errorCacheTtl)
     if (cached) context.header('x-use-cache', 'true')
-    if (attachment) context.header('content-disposition', `attachment; filename="${attachment}"`)
+    if (attachment)
+      context.header(
+        'content-disposition',
+        `attachment; filename="${attachment}"`
+      )
     if (typeof result !== 'string' && result.subscriptionUserInfo && !cached) {
-      context.header('subscription-userinfo', subscriptionHeader(result.subscriptionUserInfo))
+      context.header(
+        'subscription-userinfo',
+        subscriptionHeader(result.subscriptionUserInfo)
+      )
     }
     return context.body(body, 200, textHeaders)
   }
@@ -117,14 +167,32 @@ export const createGatewayApp = <Bindings extends object = object>(
   app.get('/get-artifact/:name', requireRole('viewer'), async (context) => {
     const runtime = await runtimeFor(context)
     const name = context.req.param('name')
-    if (!runtime.listArtifacts().some((artifact) => artifact.name === name)) return errorJson(context, 404, 'NOT FOUND')
+    if (!runtime.listArtifacts().some((artifact) => artifact.name === name))
+      return errorJson(context, 404, 'NOT FOUND')
     const query = parseStructuredQuery(new URL(context.req.url))
     const format = typeof query.format === 'string' ? query.format : undefined
     const filter = typeof query.filter === 'string' ? query.filter : undefined
-    const customParams = omitQuery(query, ['dl', 'format', 'filter', 'access_token'])
+    const customParams = omitQuery(query, [
+      'dl',
+      'format',
+      'filter',
+      'access_token',
+    ])
     const userAgent = context.req.header('user-agent') ?? ''
-    const cacheKey = `rendered-artifact:${await digestKey(`${context.req.url}|${userAgent}`)}`
     const config = runtime.getGatewayConfig() as GatewayConfig
+    const requestHeaders = pickHeaders(
+      context.req.raw.headers,
+      allowedRequestHeaders(config)
+    )
+    const passUserAgent = Boolean(config.passRequestUserAgent && userAgent)
+    const cacheKey = config.useCacheOnError
+      ? await fallbackCacheKey([
+          name,
+          omitQuery(query, ['access_token']),
+          requestHeaders,
+          passUserAgent ? userAgent : '',
+        ])
+      : undefined
     try {
       const result = await runtime.renderArtifact(name, {
         customParams,
@@ -133,17 +201,31 @@ export const createGatewayApp = <Bindings extends object = object>(
         ...(format ? { format: providerFormat(format) } : undefined),
         getNodeListParams: {
           ...customParams,
-          ...(userAgent ? { requestUserAgent: userAgent } : undefined),
-          requestHeaders: Object.fromEntries(context.req.raw.headers),
+          ...(passUserAgent ? { requestUserAgent: userAgent } : undefined),
+          requestHeaders,
         },
       })
       logger.warn(`[download-artifact] ${name} "${userAgent || '-'}"`)
-      return sendResult(context, result, cacheKey, false, query.dl === '1' ? name : undefined)
+      return sendResult(
+        context,
+        result,
+        cacheKey,
+        false,
+        query.dl === '1' ? name : undefined
+      )
     } catch (error) {
-      const cached = await cacheFor(context)?.get<string>(cacheKey)
+      const cached = cacheKey
+        ? await cacheFor(context)?.get<string>(cacheKey)
+        : undefined
       if (cached !== undefined) {
         logger.warn('Artifact 生成错误，使用缓存', error)
-        return sendResult(context, cached, cacheKey, true, query.dl === '1' ? name : undefined)
+        return sendResult(
+          context,
+          cached,
+          cacheKey,
+          true,
+          query.dl === '1' ? name : undefined
+        )
       }
       throw error
     }
@@ -152,35 +234,80 @@ export const createGatewayApp = <Bindings extends object = object>(
   app.get('/export-providers', requireRole('viewer'), async (context) => {
     const runtime = await runtimeFor(context)
     const query = parseStructuredQuery(new URL(context.req.url))
-    const providers = typeof query.providers === 'string' ? query.providers.split(',').map((item) => item.trim()).filter(Boolean) : []
-    if (!providers.length) return errorJson(context, 400, '参数 provider 必须指定至少一个值')
+    const providers =
+      typeof query.providers === 'string'
+        ? query.providers
+            .split(',')
+            .map((item) => item.trim())
+            .filter(Boolean)
+        : []
+    if (!providers.length)
+      return errorJson(context, 400, '参数 provider 必须指定至少一个值')
     for (const provider of providers) {
-      if (!runtime.listProviders().includes(provider)) return errorJson(context, 404, `provider ${provider} 不存在`)
+      if (!runtime.listProviders().includes(provider))
+        return errorJson(context, 404, `provider ${provider} 不存在`)
     }
     const format = typeof query.format === 'string' ? query.format : undefined
-    const template = typeof query.template === 'string' ? query.template : undefined
-    if (!format && !template) return errorJson(context, 400, '参数 format 和 template 必须指定至少一个值')
+    const template =
+      typeof query.template === 'string' ? query.template : undefined
+    if (!format && !template)
+      return errorJson(
+        context,
+        400,
+        '参数 format 和 template 必须指定至少一个值'
+      )
     const userAgent = context.req.header('user-agent') ?? ''
-    const cacheKey = `rendered-artifact:${await digestKey(`${context.req.url}|${userAgent}`)}`
-    const customParams = omitQuery(query, ['dl', 'format', 'template', 'filter', 'access_token', 'providers'])
+    const config = runtime.getGatewayConfig() as GatewayConfig
+    const requestHeaders = pickHeaders(
+      context.req.raw.headers,
+      allowedRequestHeaders(config)
+    )
+    const passUserAgent = Boolean(config.passRequestUserAgent && userAgent)
+    const cacheKey = config.useCacheOnError
+      ? await fallbackCacheKey([
+          'export-providers',
+          omitQuery(query, ['access_token']),
+          requestHeaders,
+          passUserAgent ? userAgent : '',
+        ])
+      : undefined
+    const customParams = omitQuery(query, [
+      'dl',
+      'format',
+      'template',
+      'filter',
+      'access_token',
+      'providers',
+    ])
     try {
       const result = await runtime.renderProviders({
         providers,
         ...(format ? { format: providerFormat(format) } : undefined),
         ...(template ? { template } : undefined),
-        ...(typeof query.filter === 'string' ? { filter: query.filter } : undefined),
+        ...(typeof query.filter === 'string'
+          ? { filter: query.filter }
+          : undefined),
         customParams,
-        downloadUrl: publicRequestUrl(context.req.url, (runtime.getGatewayConfig() as GatewayConfig).publicUrl),
+        downloadUrl: publicRequestUrl(context.req.url, config.publicUrl),
         getNodeListParams: {
           ...customParams,
-          ...(userAgent ? { requestUserAgent: userAgent } : undefined),
-          requestHeaders: Object.fromEntries(context.req.raw.headers),
+          ...(passUserAgent ? { requestUserAgent: userAgent } : undefined),
+          requestHeaders,
         },
       })
-      return sendResult(context, result, cacheKey, false, query.dl === '1' ? result.artifact.name : undefined)
+      return sendResult(
+        context,
+        result,
+        cacheKey,
+        false,
+        query.dl === '1' ? result.artifact.name : undefined
+      )
     } catch (error) {
-      const cached = await cacheFor(context)?.get<string>(cacheKey)
-      if (cached !== undefined) return sendResult(context, cached, cacheKey, true)
+      const cached = cacheKey
+        ? await cacheFor(context)?.get<string>(cacheKey)
+        : undefined
+      if (cached !== undefined)
+        return sendResult(context, cached, cacheKey, true)
       throw error
     }
   })
@@ -188,19 +315,25 @@ export const createGatewayApp = <Bindings extends object = object>(
   app.get('/render', requireRole('viewer'), async (context) => {
     const runtime = await runtimeFor(context)
     const template = context.req.query('template')
-    if (!template) return errorJson(context, 400, '参数 template 必须指定一个值')
+    if (!template)
+      return errorJson(context, 400, '参数 template 必须指定一个值')
     const config = runtime.getGatewayConfig() as GatewayConfig
     try {
       const body = await runtime.renderTemplate(template, {
         downloadUrl: publicRequestUrl(context.req.url, config.publicUrl),
-        getUrl: (path: string) => addToken(config.publicUrl, path, config.accessToken),
+        getUrl: (path: string) =>
+          addToken(config.publicUrl, path, config.accessToken),
       })
       return context.body(body, 200, {
         'content-type': 'text/plain; charset=utf-8',
         'cache-control': 's-maxage=86400, stale-while-revalidate',
       })
     } catch (error) {
-      if (error instanceof Error && /template not found|模板.*不存在/i.test(error.message)) return errorJson(context, 404, 'NOT FOUND')
+      if (
+        error instanceof Error &&
+        /template not found|模板.*不存在/i.test(error.message)
+      )
+        return errorJson(context, 404, 'NOT FOUND')
       throw error
     }
   })
@@ -209,23 +342,44 @@ export const createGatewayApp = <Bindings extends object = object>(
     await (await runtimeFor(context)).resetCache()
     return context.json({ status: 'ok' })
   })
-  app.get('/api/artifacts', requireRole('admin'), async (context) => context.json({ status: 'ok', data: (await runtimeFor(context)).listArtifacts() }))
+  app.get('/api/artifacts', requireRole('admin'), async (context) =>
+    context.json({
+      status: 'ok',
+      data: (await runtimeFor(context)).listArtifacts(),
+    })
+  )
   app.get('/api/artifacts/:name', requireRole('viewer'), async (context) => {
-    const artifact = (await runtimeFor(context)).listArtifacts().find((item) => item.name === context.req.param('name'))
-    return artifact ? context.json({ status: 'ok', data: artifact }) : errorJson(context, 404, 'NOT FOUND')
+    const artifact = (await runtimeFor(context))
+      .listArtifacts()
+      .find((item) => item.name === context.req.param('name'))
+    return artifact
+      ? context.json({ status: 'ok', data: artifact })
+      : errorJson(context, 404, 'NOT FOUND')
   })
   app.get('/api/providers', requireRole('admin'), async (context) => {
     const runtime = await runtimeFor(context)
-    const data = (await Promise.all(runtime.listProviders().map((name) => runtime.getProviderInfo(name)))).filter(Boolean)
+    const data = (
+      await Promise.all(
+        runtime.listProviders().map((name) => runtime.getProviderInfo(name))
+      )
+    ).filter(Boolean)
     return context.json({ status: 'ok', data })
   })
-  app.get('/api/providers/:name/subscription', requireRole('admin'), async (context) => {
-    const runtime = await runtimeFor(context)
-    const provider = await runtime.getProviderInfo(context.req.param('name'))
-    if (!provider) return errorJson(context, 404, 'NOT FOUND')
-    if (!provider.supportGetSubscriptionUserInfo) return errorJson(context, 400, 'BAD REQUEST')
-    return context.json({ status: 'ok', data: (await runtime.getProviderSubscription(provider.name)) ?? null })
-  })
+  app.get(
+    '/api/providers/:name/subscription',
+    requireRole('admin'),
+    async (context) => {
+      const runtime = await runtimeFor(context)
+      const provider = await runtime.getProviderInfo(context.req.param('name'))
+      if (!provider) return errorJson(context, 404, 'NOT FOUND')
+      if (!provider.supportGetSubscriptionUserInfo)
+        return errorJson(context, 400, 'BAD REQUEST')
+      return context.json({
+        status: 'ok',
+        data: (await runtime.getProviderSubscription(provider.name)) ?? null,
+      })
+    }
+  )
 
   app.post('/api/auth', async (context) => {
     const config = (await runtimeFor(context)).getGatewayConfig()
@@ -233,7 +387,8 @@ export const createGatewayApp = <Bindings extends object = object>(
     const body = await context.req
       .json<{ accessToken?: string }>()
       .catch((): { accessToken?: string } => ({}))
-    if (body.accessToken !== config.accessToken) return errorJson(context, 401, 'Unauthorized')
+    if (body.accessToken !== config.accessToken)
+      return errorJson(context, 401, 'Unauthorized')
     await setAuthCookie(context, config)
     return context.json({ status: 'ok' })
   })
@@ -246,32 +401,51 @@ export const createGatewayApp = <Bindings extends object = object>(
     return context.redirect('/auth')
   })
   const validate = async (context: Context): Promise<Response> => {
-    const config = (await runtimeFor(context)).getGatewayConfig() as GatewayConfig
+    const config = (
+      await runtimeFor(context)
+    ).getGatewayConfig() as GatewayConfig
     const user = await authenticate(context, config)
     if (!user) return errorJson(context, 401, 'Unauthorized')
-    return context.json({ status: 'ok', data: { roles: user.roles, ...(config.viewerToken ? { viewerToken: config.viewerToken } : undefined) } })
+    return context.json({
+      status: 'ok',
+      data: {
+        roles: user.roles,
+        ...(config.viewerToken
+          ? { viewerToken: config.viewerToken }
+          : undefined),
+      },
+    })
   }
   app.post('/api/auth/validate-token', validate)
   app.post('/api/auth/validate-cookie', validate)
   app.get('/api/config', async (context) => {
     const config = (await runtimeFor(context)).getGatewayConfig()
     if (!config) return errorJson(context, 500, 'Gateway 未配置')
-    return context.json({ status: 'ok', data: {
-      urlBase: config.urlBase,
-      publicUrl: config.publicUrl,
-      backendVersion: gatewayPackage.version,
-      coreVersion: config.coreVersion,
-      needAuth: config.auth ?? false,
-    } })
+    return context.json({
+      status: 'ok',
+      data: {
+        urlBase: config.urlBase,
+        publicUrl: config.publicUrl,
+        backendVersion: gatewayPackage.version,
+        coreVersion: config.coreVersion,
+        needAuth: config.auth ?? false,
+      },
+    })
   })
 
   app.onError((error, context) => {
     logger.error('Gateway request failed', error)
-    return errorJson(context, 500, error instanceof Error ? error.message : 'Internal Server Error')
+    return errorJson(
+      context,
+      500,
+      error instanceof Error ? error.message : 'Internal Server Error'
+    )
   })
   app.notFound(async (context) => {
     const assets = assetsFor(context)
-    return assets ? assets.fetch(context.req.raw) : errorJson(context, 404, 'NOT FOUND')
+    return assets
+      ? assets.fetch(context.req.raw)
+      : errorJson(context, 404, 'NOT FOUND')
   })
   return app
 }
