@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.1](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/%40surgio%2Fgateway%403.0.0-beta.0...%40surgio%2Fgateway%403.0.0-beta.1) (2026-09-12)
+
+### Features
+
+- **gateway:** restrict headers and stabilize fallback cache key ([b7f7453](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/b7f7453c95a2f17b8d55ef0bd21f6dc8a31976bf))
+
 # [3.0.0-beta.0](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/%40surgio%2Fgateway%402.4.1...%40surgio%2Fgateway%403.0.0-beta.0) (2026-09-06)
 
 ### Code Refactoring
