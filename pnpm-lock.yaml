@@ -106,6 +106,12 @@ importers:
       '@surgio/logger':
         specifier: workspace:*
         version: link:../logger
+      date-fns:
+        specifier: ^4.4.0
+        version: 4.4.0
+      filesize:
+        specifier: ^11.0.23
+        version: 11.0.23
       hono:
         specifier: ^4.12.3
         version: 4.13.2

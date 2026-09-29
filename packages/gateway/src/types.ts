@@ -25,6 +25,13 @@ export interface GatewayProviderInfo {
   readonly supportGetSubscriptionUserInfo: boolean
 }
 
+export interface GatewaySubscriptionUserInfo {
+  readonly upload: number
+  readonly download: number
+  readonly total: number
+  readonly expire: number
+}
+
 export interface GatewayRenderResult {
   readonly body: string
   readonly artifact: GatewayArtifact
@@ -49,7 +56,7 @@ export interface GatewayRuntime {
   getProviderInfo(name: string): Promise<GatewayProviderInfo | undefined>
   getProviderSubscription(
     name: string
-  ): Promise<Readonly<Record<string, number>> | undefined>
+  ): Promise<GatewaySubscriptionUserInfo | undefined>
   getGatewayConfig(): GatewayConfig | undefined
   resetCache(): Promise<void>
   close(): Promise<void>

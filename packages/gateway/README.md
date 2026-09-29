@@ -54,6 +54,12 @@ export default createWorkerGateway(manifest, {
 
 `@surgio/gateway/worker/build` 的 `buildGatewayWorker()` 会同时生成 Surgio manifest 和准备前端 assets。Worker 需配置 `nodejs_compat`、KV 与 Assets binding。文本变量和 Secrets 通过 `process.env` 读取；KV、Assets 等结构化 binding 继续由 `bindings(env)` 注入。
 
+## 订阅信息 API
+
+`GET /api/providers` 返回 Provider 名称、类型、订阅 URL 和 `supportGetSubscriptionUserInfo`。管理 API 需要 admin 身份。
+
+`GET /api/providers/:name/subscription` 返回 `{ status: 'ok', data }`。`data` 中的 `upload`、`download`、`used`、`left` 和 `total` 是带单位的流量字符串，`expire` 是日期与相对时间字符串。没有有效期时，`expire` 为 `无数据`；上游未提供订阅信息时，`data` 为 `null`。
+
 ## 交流
 
 [<img width="207" src="https://raw.githubusercontent.com/geekdada/surgio/master/docs/.vuepress/public/join-telegram.png">](https://t.me/surgiotg)

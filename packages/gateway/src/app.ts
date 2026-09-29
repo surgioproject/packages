@@ -3,6 +3,7 @@ import { Hono } from 'hono'
 import gatewayPackage from '../package.json' with { type: 'json' }
 import { authenticate, clearAuthCookie, setAuthCookie } from './auth.js'
 import { gatewayLogger } from './logger.js'
+import { formatSubscriptionUserInfo } from './subscription.js'
 import {
   omitQuery,
   parseStructuredQuery,
@@ -374,9 +375,10 @@ export const createGatewayApp = <Bindings extends object = object>(
       if (!provider) return errorJson(context, 404, 'NOT FOUND')
       if (!provider.supportGetSubscriptionUserInfo)
         return errorJson(context, 400, 'BAD REQUEST')
+      const info = await runtime.getProviderSubscription(provider.name)
       return context.json({
         status: 'ok',
-        data: (await runtime.getProviderSubscription(provider.name)) ?? null,
+        data: info ? formatSubscriptionUserInfo(info) : null,
       })
     }
   )

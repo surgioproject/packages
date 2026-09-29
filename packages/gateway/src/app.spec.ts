@@ -42,7 +42,12 @@ const createFixture = (overrides: Partial<GatewayConfig> = {}) => {
         ? { name, type: 'custom', supportGetSubscriptionUserInfo: true }
         : undefined
     ),
-    getProviderSubscription: vi.fn(async () => ({ upload: 1, total: 10 })),
+    getProviderSubscription: vi.fn(async () => ({
+      upload: 1024,
+      download: 2048,
+      total: 10240,
+      expire: new Date(2030, 0, 1).getTime() / 1000,
+    })),
     getGatewayConfig: () => gatewayConfig,
     resetCache: vi.fn(async () => undefined),
     close: vi.fn(async () => undefined),
@@ -303,6 +308,62 @@ describe('createGatewayApp', () => {
         .status
     ).toBe(200)
     expect(runtime.resetCache).toHaveBeenCalledOnce()
+  })
+
+  test('formats subscription usage and expiry for the frontend', async () => {
+    const { app } = createFixture()
+    const response = await app.request('/api/providers/demo/subscription', {
+      headers: auth,
+    })
+
+    expect(response.status).toBe(200)
+    expect(await response.json()).toEqual({
+      status: 'ok',
+      data: {
+        upload: '1 KiB',
+        download: '2 KiB',
+        used: '3 KiB',
+        left: '7 KiB',
+        total: '10 KiB',
+        expire: expect.stringMatching(/^2030-01-01 \(.+\)$/),
+      },
+    })
+  })
+
+  test('formats zero usage and an unknown expiry', async () => {
+    const { app, runtime } = createFixture()
+    vi.mocked(runtime.getProviderSubscription).mockResolvedValueOnce({
+      upload: 0,
+      download: 0,
+      total: 1024,
+      expire: 0,
+    })
+    const response = await app.request('/api/providers/demo/subscription', {
+      headers: auth,
+    })
+
+    expect(await response.json()).toEqual({
+      status: 'ok',
+      data: {
+        upload: '0 B',
+        download: '0 B',
+        used: '0 B',
+        left: '1 KiB',
+        total: '1 KiB',
+        expire: '无数据',
+      },
+    })
+  })
+
+  test('returns null when a subscription has no usage metadata', async () => {
+    const { app, runtime } = createFixture()
+    vi.mocked(runtime.getProviderSubscription).mockResolvedValueOnce(undefined)
+    const response = await app.request('/api/providers/demo/subscription', {
+      headers: auth,
+    })
+
+    expect(response.status).toBe(200)
+    expect(await response.json()).toEqual({ status: 'ok', data: null })
   })
 
   test('uses cached payload when rendering fails', async () => {
