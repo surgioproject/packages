@@ -2,15 +2,15 @@ import { SubscriptionPanelItemProps } from '@/components/SubscriptionPanel/index
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { defaultFetcher } from '@/libs/utils'
+import type { SubscriptionUserInfo } from '@/libs/types'
 import React from 'react'
 import useSWR from 'swr'
 
 function SubscriptionPanelItem({ provider }: SubscriptionPanelItemProps) {
-  const { data, error } = useSWR<{
-    used: number
-    left: number
-    expire: number
-  }>(`/api/providers/${provider.name}/subscription`, defaultFetcher)
+  const { data, error } = useSWR<SubscriptionUserInfo | null>(
+    `/api/providers/${provider.name}/subscription`,
+    defaultFetcher
+  )
 
   if (error) {
     return (

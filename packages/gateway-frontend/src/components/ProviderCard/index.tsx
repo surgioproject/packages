@@ -6,7 +6,7 @@ import { useSnackbar } from 'notistack'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2 } from 'lucide-react'
 
-import { Provider } from '../../libs/types'
+import { Provider, type SubscriptionUserInfo } from '../../libs/types'
 import { defaultFetcher } from '../../libs/utils'
 import ProviderCopyButtons from '../ProviderCopyButtons'
 
@@ -22,7 +22,7 @@ function ProviderCard({ provider }: ProviderCardProps) {
     ;(async () => {
       setIsLoading(true)
 
-      const data = await defaultFetcher<any>(
+      const data = await defaultFetcher<SubscriptionUserInfo | null>(
         `/api/providers/${providerName}/subscription`
       )
 
