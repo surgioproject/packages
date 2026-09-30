@@ -33,7 +33,7 @@ const ArtifactShareButton = ({ artifact }: { artifact: ArtifactConfig }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>分享</Button>
+        <Button variant="ghost">分享</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

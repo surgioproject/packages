@@ -15,7 +15,7 @@ const ArtifactParamsPopover = ({ params }: { params: [string, string][] }) => {
       <PopoverTrigger asChild>
         <Button variant="outline" className="w-10 rounded-full p-0">
           <InfoIcon className="h-4 w-4" />
-          <span className="sr-only">Open popover</span>
+          <span className="sr-only">查看额外参数</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80" side="left" sideOffset={10}>

@@ -28,7 +28,7 @@ function ArtifactActionButtons({
   const quantumultXResource = getQuantumultXResource(categories, previewUrl)
 
   return (
-    <div data-testid="action-buttons">
+    <div data-testid="action-buttons" className="contents">
       {(name.includes('surge') || categories.includes(CATEGORIES.SURGE)) && (
         <ActionLink
           href={`surge:///install-config?url=${encodeURIComponent(previewUrl)}`}
@@ -75,11 +75,11 @@ interface ActionLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> 
 
 function ActionLink({ href, label, ...props }: ActionLinkProps) {
   return (
-    <div>
+    <Button asChild>
       <a href={href} {...props}>
-        <Button variant="secondary">{label}</Button>
+        {label}
       </a>
-    </div>
+    </Button>
   )
 }
 

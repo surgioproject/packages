@@ -6,9 +6,9 @@ import { getDownloadUrl } from '@/libs/utils'
 import { cn } from '@/libs/shadcn'
 import { useDownloadToken } from '@/stores'
 import { observer } from 'mobx-react-lite'
-import React, { useMemo } from 'react'
+import React, { useId, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
+import { Label } from '@/components/ui/label'
 import { ArtifactConfig } from 'surgio/internal'
 
 import ArtifactActionButtons from '../ArtifactActionButtons'
@@ -28,6 +28,7 @@ function ArtifactCard({
 }: ArtifactCardProps) {
   const providers = [artifact.provider].concat(artifact.combineProviders || [])
   const downloadToken = useDownloadToken()
+  const formatSelectId = useId()
   const downloadUrl = useMemo(
     () => getDownloadUrl(artifact.name, false, downloadToken, artifactParams),
     [artifact.name, artifactParams, downloadToken]
@@ -47,100 +48,93 @@ function ArtifactCard({
     return pairs
   }, [artifactParams])
 
-  const providersElement = providers.map((item) => {
-    return (
-      <Badge
-        data-testid="display-provider-item"
-        className="mr-3 mb-3"
-        key={item}
-      >
-        {item}
-      </Badge>
-    )
-  })
-
-  const categoriesElement = artifact.categories
-    ? artifact.categories.map((cat) => (
-        <Badge
-          data-testid="display-category-item"
-          className="mr-3 mb-3"
-          key={cat}
-        >
-          {cat}
-        </Badge>
-      ))
-    : null
-
   return (
-    <Card className={cn(isEmbed && `w-full`)}>
-      <CardHeader>
-        <CardTitle className="flex items-center">
-          <div className="text-xl flex-1 truncate">{artifact.name}</div>
+    <Card className={cn('flex flex-col', isEmbed && `w-full`)}>
+      <CardHeader className="gap-3 space-y-0">
+        <div className="flex items-center gap-3">
+          <CardTitle className="flex-1 truncate text-lg" title={artifact.name}>
+            {artifact.name}
+          </CardTitle>
           {extraParams.length > 0 && (
             <ArtifactParamsPopover params={extraParams} />
           )}
-        </CardTitle>
-      </CardHeader>
-
-      <CardContent>
-        <div data-testid="display-provider-list" className="space-y-2 -mb-3">
-          <div className="font-semibold">Providers</div>
-          <div className="flex flex-wrap">{providersElement}</div>
         </div>
 
         {artifact.categories && (
-          <>
-            <Separator className="my-4" />
-            <div className="space-y-2 -mb-3">
-              <div className="font-semibold">分类</div>
-              <div className="flex flex-wrap">{categoriesElement}</div>
-            </div>
-          </>
+          <div className="flex flex-wrap gap-1.5" aria-label="分类">
+            {artifact.categories.map((cat) => (
+              <Badge
+                data-testid="display-category-item"
+                variant="outline"
+                key={cat}
+              >
+                {cat}
+              </Badge>
+            ))}
+          </div>
         )}
+      </CardHeader>
 
-        <Separator className="my-4" />
+      <CardContent className="flex-1 space-y-6">
+        <div data-testid="display-provider-list" className="space-y-2">
+          <div className="text-xs font-medium text-muted-foreground">
+            Providers
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {providers.map((item) => (
+              <Badge
+                data-testid="display-provider-item"
+                variant="secondary"
+                key={item}
+              >
+                {item}
+              </Badge>
+            ))}
+          </div>
+        </div>
 
-        <div>
-          <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <ArtifactActionButtons
+            artifact={artifact}
+            artifactParams={artifactParams}
+          />
+
+          <Button variant="outline" asChild>
             <a
               data-testid="download-button"
               target="_blank"
               rel="nofollow noreferrer"
               href={downloadUrl}
             >
-              <Button className="block">下载</Button>
+              下载
             </a>
+          </Button>
 
+          <Button variant="outline" asChild>
             <a
               data-testid="preview-button"
               target="_blank"
               rel="nofollow noreferrer"
               href={previewUrl}
             >
-              <Button>预览</Button>
+              预览
             </a>
+          </Button>
 
-            <QrCodeButton text={previewUrl} />
+          <QrCodeButton text={previewUrl} />
 
-            {isEmbed ? null : <ArtifactShareButton artifact={artifact} />}
-
-            <ArtifactActionButtons
-              artifact={artifact}
-              artifactParams={artifactParams}
-            />
-          </div>
-
-          <div className="mt-6 space-y-4">
-            <div className="space-y-2">
-              <div className="font-semibold">复制订阅地址</div>
-              <ArtifactCopyButtons
-                artifact={artifact}
-                artifactParams={artifactParams}
-              />
-            </div>
-          </div>
+          {isEmbed ? null : <ArtifactShareButton artifact={artifact} />}
         </div>
       </CardContent>
+
+      <div className="space-y-2 border-t px-6 py-4">
+        <Label htmlFor={formatSelectId}>复制订阅地址</Label>
+        <ArtifactCopyButtons
+          artifact={artifact}
+          artifactParams={artifactParams}
+          selectId={formatSelectId}
+        />
+      </div>
     </Card>
   )
 }

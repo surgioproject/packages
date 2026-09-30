@@ -20,21 +20,24 @@ export default function QrCodeButton(props: QrCodeButtonProps) {
   }, [props.text])
 
   return (
-    <div>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button onClick={handleClick}>
-            <QrCodeIcon />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto h-auto p-0" side="top">
-          {qrValue && (
-            <div className="flex justify-center" data-text={props.text}>
-              <QRCodeSVG marginSize={4} value={qrValue} />
-            </div>
-          )}
-        </PopoverContent>
-      </Popover>
-    </div>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className="w-10 px-0"
+          aria-label="显示二维码"
+          onClick={handleClick}
+        >
+          <QrCodeIcon className="size-4" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto h-auto p-0" side="top">
+        {qrValue && (
+          <div className="flex justify-center" data-text={props.text}>
+            <QRCodeSVG marginSize={4} value={qrValue} />
+          </div>
+        )}
+      </PopoverContent>
+    </Popover>
   )
 }

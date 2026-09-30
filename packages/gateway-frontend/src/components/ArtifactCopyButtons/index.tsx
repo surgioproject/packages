@@ -18,11 +18,13 @@ import { useDownloadToken } from '@/stores'
 export interface ArtifactCopyButtonsProps {
   artifact: ArtifactConfig
   artifactParams?: URLSearchParams
+  selectId?: string
 }
 
 function ArtifactCopyButtons({
   artifact,
   artifactParams,
+  selectId,
 }: ArtifactCopyButtonsProps) {
   const downloadToken = useDownloadToken()
   const formatOptions = useMemo(
@@ -122,14 +124,15 @@ function ArtifactCopyButtons({
   }
 
   return (
-    <div className="flex space-x-4">
+    <div className="flex gap-2">
       <Select
         value={selectedFormat}
         disabled={isSnippet}
         onValueChange={(val) => setSelectedFormat(val)}
       >
         <SelectTrigger
-          className="w-[150px] sm:w-[180px]"
+          id={selectId}
+          className="min-w-0 flex-1 sm:w-64 sm:flex-none"
           data-testid="format-select"
         >
           <SelectValue />
