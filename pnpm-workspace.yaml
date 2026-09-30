@@ -12,4 +12,4 @@ allowBuilds:
   yarn: false
 
 minimumReleaseAgeExclude:
-  - surgio@4.0.0-beta.1
+  - surgio@4.0.0-beta.7
