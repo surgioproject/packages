@@ -44,11 +44,12 @@ test('shows Oixcloud subscription usage and expiry from the Gateway API', async 
     </SWRConfig>
   )
 
-  expect(await screen.findByText('已用流量：3 KiB')).toBeInTheDocument()
+  expect(await screen.findByText('7 KiB')).toBeInTheDocument()
   expect(screen.getByText('Oixcloud')).toBeInTheDocument()
-  expect(screen.getByText('剩余流量：7 KiB')).toBeInTheDocument()
-  expect(
-    screen.getByText('有效期至：2030-01-01 (about 3 years)')
-  ).toBeInTheDocument()
-  expect(screen.queryByText('🚧 暂无可用订阅 🚧')).not.toBeInTheDocument()
+  expect(screen.getByText('共 10 KiB')).toBeInTheDocument()
+  expect(screen.getByText('已用流量').nextSibling).toHaveTextContent('3 KiB')
+  expect(screen.getByText('有效期至').nextSibling).toHaveTextContent(
+    '2030-01-01 (about 3 years)'
+  )
+  expect(screen.queryByText('没有可查询流量的订阅')).not.toBeInTheDocument()
 })

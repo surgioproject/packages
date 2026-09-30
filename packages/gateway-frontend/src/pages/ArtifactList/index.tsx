@@ -1,18 +1,29 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Loader2 } from 'lucide-react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import React, { useMemo } from 'react'
 import useSWR from 'swr'
 import { ArtifactConfig } from 'surgio/internal'
 import { defaultFetcher } from '@/libs/utils'
 import ArtifactCard from '@/components/ArtifactCard'
+import LoadError from '@/components/LoadError'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Separator } from '@/components/ui/separator'
+import { Skeleton } from '@/components/ui/skeleton'
+
+const gridClassName =
+  'mt-6 lg:mt-8 grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8'
 
 const Page = (): React.JSX.Element => {
-  const { data: artifactList, error } = useSWR<ReadonlyArray<ArtifactConfig>>(
-    '/api/artifacts',
-    defaultFetcher
-  )
+  const {
+    data: artifactList,
+    error,
+    isValidating,
+    mutate,
+  } = useSWR<ReadonlyArray<ArtifactConfig>>('/api/artifacts', defaultFetcher)
   const [categorySelection, setCategorySelection] = React.useState<{
     [key: string]: boolean
   }>({})
@@ -24,23 +35,6 @@ const Page = (): React.JSX.Element => {
     [artifactList]
   )
 
-  if (error) {
-    return (
-      <div className="flex justify-center text-2xl font-semibold">
-        🚨 加载失败 🚨
-      </div>
-    )
-  }
-
-  if (!artifactList) {
-    return (
-      <div className="flex justify-center items-center text-lg">
-        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-        加载中...
-      </div>
-    )
-  }
-
   const handleCategoryChange = (name: string) => (checked: boolean) => {
     setCategorySelection({
       ...categorySelection,
@@ -48,94 +42,109 @@ const Page = (): React.JSX.Element => {
     })
   }
 
-  const getArtifactListElement = () => {
-    if (!artifactList) return null
-
-    const result: React.JSX.Element[] = []
-    const hasSelection = categories.some((key) => categorySelection[key])
-
-    if (!hasSelection) {
-      return artifactList.map((item) => {
-        return (
-          <div key={item.name}>
-            <ArtifactCard artifact={item} />
-          </div>
+  const selectedCategories = categories.filter((cat) => categorySelection[cat])
+  const visibleArtifacts =
+    selectedCategories.length > 0
+      ? artifactList?.filter((artifact) =>
+          artifact.categories?.some((cat) => selectedCategories.includes(cat))
         )
-      })
+      : artifactList
+
+  const renderList = () => {
+    if (error) {
+      return (
+        <LoadError
+          className="mt-6 lg:mt-8"
+          title="Artifact 列表加载失败"
+          isRetrying={isValidating}
+          onRetry={() => void mutate()}
+        />
+      )
     }
-
-    Object.keys(categorySelection).forEach((item) => {
-      if (categorySelection[item]) {
-        result.push(
-          ...artifactList
-            .filter((artifact) => {
-              return artifact?.categories?.includes(item)
-            })
-            .map((artifact) => {
-              return (
-                <div key={artifact.name}>
-                  <ArtifactCard artifact={artifact} />
-                </div>
-              )
-            })
-        )
-      }
-    })
-
-    return result
+    if (!visibleArtifacts) {
+      return <ArtifactListSkeleton />
+    }
+    if (visibleArtifacts.length === 0) {
+      return <ArtifactListEmpty />
+    }
+    return (
+      <div className={gridClassName}>
+        {visibleArtifacts.map((artifact) => (
+          <ArtifactCard key={artifact.name} artifact={artifact} />
+        ))}
+      </div>
+    )
   }
 
   return (
     <div>
       <Card>
-        {categories.length > 0 ? (
-          <>
-            <CardHeader>
-              <CardTitle className="text-2xl">Artifacts</CardTitle>
-            </CardHeader>
+        <CardHeader>
+          <CardTitle className="text-2xl">Artifacts</CardTitle>
+        </CardHeader>
 
-            <CardContent className="space-y-4">
-              <Separator />
-
-              <div className="space-y-2">
-                <div className="font-semibold">分类</div>
-                <div className="flex flex-wrap">
-                  {categories.map((cat) => (
-                    <div
-                      key={cat}
-                      className="flex items-center space-x-2 mr-4 my-1"
-                    >
-                      <Checkbox
-                        id={`cb-${cat}`}
-                        checked={categorySelection[cat] ?? false}
-                        onCheckedChange={(val) =>
-                          handleCategoryChange(cat)(val === true)
-                        }
-                        value={cat}
-                      />
-                      <label
-                        htmlFor={`cb-${cat}`}
-                        className="text-sm leading-none"
-                      >
-                        {cat}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </>
-        ) : (
-          <CardHeader>
-            <CardTitle className="text-2xl">Artifacts</CardTitle>
-          </CardHeader>
+        {categories.length > 0 && (
+          <CardContent>
+            <div
+              role="group"
+              aria-labelledby="artifact-category-filter"
+              className="flex flex-wrap items-center gap-x-5"
+            >
+              <span
+                id="artifact-category-filter"
+                className="text-sm text-muted-foreground"
+              >
+                按分类筛选
+              </span>
+              {categories.map((cat) => (
+                <label
+                  key={cat}
+                  htmlFor={`cb-${cat}`}
+                  className="flex min-h-10 cursor-pointer items-center gap-2 text-sm"
+                >
+                  <Checkbox
+                    id={`cb-${cat}`}
+                    checked={categorySelection[cat] ?? false}
+                    onCheckedChange={(val) =>
+                      handleCategoryChange(cat)(val === true)
+                    }
+                    value={cat}
+                  />
+                  {cat}
+                </label>
+              ))}
+            </div>
+          </CardContent>
         )}
       </Card>
 
-      <div className="mt-6 lg:mt-8 grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
-        {getArtifactListElement()}
-      </div>
+      {renderList()}
     </div>
+  )
+}
+
+// Heights match a rendered artifact card so the grid does not jump on load.
+function ArtifactListSkeleton() {
+  return (
+    <div className={gridClassName} aria-busy="true" aria-label="加载中">
+      {Array.from({ length: 4 }, (_, index) => (
+        <Skeleton key={index} className="h-[342px] rounded-lg" />
+      ))}
+    </div>
+  )
+}
+
+function ArtifactListEmpty() {
+  return (
+    <Card className="mt-6 lg:mt-8">
+      <CardHeader>
+        <CardTitle className="text-lg">还没有 Artifact</CardTitle>
+        <CardDescription>
+          在 Surgio 项目配置的 <code>artifacts</code>{' '}
+          中添加配置，然后刷新此页面。
+        </CardDescription>
+      </CardHeader>
+    </Card>
   )
 }
 

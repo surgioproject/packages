@@ -1,9 +1,16 @@
-import { Loader2 } from 'lucide-react'
 import React from 'react'
 import useSWR from 'swr'
 import uniqWith from 'lodash-es/uniqWith'
 import { Provider } from '@/libs/types'
 import { defaultFetcher } from '@/libs/utils'
+import LoadError from '@/components/LoadError'
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import SubscriptionPanelItem from './SubscriptionPanelItem'
 
@@ -12,26 +19,25 @@ export interface SubscriptionPanelItemProps {
 }
 
 function SubscriptionPanel() {
-  const { data: providerList, error } = useSWR<ReadonlyArray<Provider>>(
-    '/api/providers',
-    defaultFetcher
-  )
+  const {
+    data: providerList,
+    error,
+    isValidating,
+    mutate,
+  } = useSWR<ReadonlyArray<Provider>>('/api/providers', defaultFetcher)
 
   if (error) {
     return (
-      <div className="flex justify-center text-2xl font-semibold">
-        🚨 加载失败 🚨
-      </div>
+      <LoadError
+        title="订阅信息加载失败"
+        isRetrying={isValidating}
+        onRetry={() => void mutate()}
+      />
     )
   }
 
   if (!providerList) {
-    return (
-      <div className="flex justify-center items-center text-lg">
-        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-        加载中...
-      </div>
-    )
+    return <SubscriptionPanelSkeleton />
   }
 
   const supportedProviderList = uniqWith(
@@ -54,14 +60,19 @@ function SubscriptionPanel() {
 
   return (
     <>
-      <div className="font-semibold tracking-tight text-xl">订阅</div>
+      <PanelTitle />
 
       {supportedProviderList.length === 0 ? (
-        <div className="mt-3 lg:mt-4 py-5 rounded outline outline-slate-200 flex justify-center text-lg font-semibold bg-secondary">
-          🚧 暂无可用订阅 🚧
-        </div>
+        <Card className="mt-3 lg:mt-4">
+          <CardHeader>
+            <CardTitle className="text-lg">没有可查询流量的订阅</CardTitle>
+            <CardDescription>
+              支持查询订阅信息的 Provider 会显示在这里。
+            </CardDescription>
+          </CardHeader>
+        </Card>
       ) : (
-        <div className="mt-3 lg:mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
+        <div className={gridClassName}>
           {supportedProviderList.map((provider: Provider) => {
             return (
               <div key={provider.name}>
@@ -71,6 +82,27 @@ function SubscriptionPanel() {
           })}
         </div>
       )}
+    </>
+  )
+}
+
+const gridClassName =
+  'mt-3 lg:mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4'
+
+function PanelTitle() {
+  return <h2 className="font-semibold tracking-tight text-xl">订阅</h2>
+}
+
+// Heights match a rendered subscription card so the grid does not jump on load.
+function SubscriptionPanelSkeleton() {
+  return (
+    <>
+      <PanelTitle />
+      <div className={gridClassName} aria-busy="true" aria-label="加载中">
+        {Array.from({ length: 3 }, (_, index) => (
+          <Skeleton key={index} className="h-[231px] rounded-lg" />
+        ))}
+      </div>
     </>
   )
 }
