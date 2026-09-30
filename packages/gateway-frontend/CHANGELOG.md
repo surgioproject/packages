@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/%40surgio%2Fgateway-frontend%402.4.0...%40surgio%2Fgateway-frontend%402.5.0) (2026-09-30)
+
+### Features
+
+- **gateway-frontend:** type subscription info ([d99e5ff](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/d99e5fff6452a081c8bfeab66e2050647f11ad32))
+
 # [2.4.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/%40surgio%2Fgateway-frontend%402.3.1...%40surgio%2Fgateway-frontend%402.4.0) (2026-09-06)
 
 ### Bug Fixes
