@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.2](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/%40surgio%2Fgateway%403.0.0-beta.1...%40surgio%2Fgateway%403.0.0-beta.2) (2026-09-30)
+
+### Features
+
+- **gateway:** format subscription user info ([3afcf4f](https://github.com/surgioproject/packages/tree/master/packages/gateway/commit/3afcf4fc34761a65727d37dc3eee2571a37e658d))
+
 # [3.0.0-beta.1](https://github.com/surgioproject/packages/tree/master/packages/gateway/compare/%40surgio%2Fgateway%403.0.0-beta.0...%40surgio%2Fgateway%403.0.0-beta.1) (2026-09-12)
 
 ### Features
