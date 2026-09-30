@@ -69,7 +69,7 @@ function ProviderCard({ provider }: ProviderCardProps) {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  查询中...
+                  查询中…
                 </>
               ) : (
                 '查询流量'
