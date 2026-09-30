@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/%40surgio%2Fgateway-frontend%402.5.0...%40surgio%2Fgateway-frontend%402.6.0) (2026-09-30)
+
+### Features
+
+- **gateway-frontend:** add load error card with retry ([66e2957](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/66e2957b5a1c293ac00a55cfa28cba9baaaedd09))
+- **gateway-frontend:** redesign artifact and subscription cards ([144875f](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/commit/144875f49bf4febfb5226e4bbb496406c1932eab))
+
 # [2.5.0](https://github.com/surgioproject/packages/tree/master/packages/gateway-frontend/compare/%40surgio%2Fgateway-frontend%402.4.0...%40surgio%2Fgateway-frontend%402.5.0) (2026-09-30)
 
 ### Features
