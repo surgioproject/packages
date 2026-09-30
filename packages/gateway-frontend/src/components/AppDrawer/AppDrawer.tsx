@@ -4,6 +4,12 @@ import { XIcon } from 'lucide-react'
 
 import AppDrawerContent from './AppDrawerContent'
 
+// The panel, backdrop and close button move as one unit, so they share timing.
+// Closing runs faster than opening because the user has already moved on.
+const drawerEase = 'ease-[cubic-bezier(0.32,0.72,0,1)]'
+const enterTiming = `duration-300 ${drawerEase} motion-reduce:transition-none`
+const leaveTiming = `duration-200 ${drawerEase} motion-reduce:transition-none`
+
 const AppDrawer = (params: {
   isOpen: boolean
   onClose: () => void
@@ -18,10 +24,10 @@ const AppDrawer = (params: {
         >
           <Transition.Child
             as={Fragment}
-            enter="transition-opacity ease-linear duration-300"
+            enter={`transition-opacity ${enterTiming}`}
             enterFrom="opacity-0"
             enterTo="opacity-100"
-            leave="transition-opacity ease-linear duration-300"
+            leave={`transition-opacity ${leaveTiming}`}
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
@@ -31,20 +37,20 @@ const AppDrawer = (params: {
           <div className="fixed inset-0 flex">
             <Transition.Child
               as={Fragment}
-              enter="transition ease-in-out duration-300 transform"
+              enter={`transition-transform ${enterTiming}`}
               enterFrom="-translate-x-full"
               enterTo="translate-x-0"
-              leave="transition ease-in-out duration-300 transform"
+              leave={`transition-transform ${leaveTiming}`}
               leaveFrom="translate-x-0"
               leaveTo="-translate-x-full"
             >
               <Dialog.Panel className="relative mr-16 flex w-full max-w-xs flex-1">
                 <Transition.Child
                   as={Fragment}
-                  enter="ease-in-out duration-300"
+                  enter={`transition-opacity ${enterTiming}`}
                   enterFrom="opacity-0"
                   enterTo="opacity-100"
-                  leave="ease-in-out duration-300"
+                  leave={`transition-opacity ${leaveTiming}`}
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
