@@ -1,52 +1,14 @@
-<p align="center">
-    <a href="https://surgio.js.org/" target="_blank">
-        <img width="180" src="https://raw.githubusercontent.com/geekdada/surgio/master/docs/.vuepress/public/surgio-icon.png" alt="logo">
-    </a>
-</p>
+# 本仓库已迁移
 
-![Github Actions][github-actions-image]
-[![vitest](https://img.shields.io/badge/tested_with-vitest-6E9F18.svg?logo=vitest)](https://vitest.dev/)
+本仓库的所有包已合并到主库 [surgioproject/surgio](https://github.com/surgioproject/surgio)，位于其 `packages/` 目录下。提交历史和 tag 一并保留。
 
-[github-actions-image]: https://github.com/surgioproject/packages/workflows/Node%20CI/badge.svg
+| npm 包 | 新位置 |
+| --- | --- |
+| `@surgio/gateway` | `packages/gateway` |
+| `@surgio/gateway-frontend` | `packages/gateway-frontend` |
+| `@surgio/logger` | `packages/logger` |
+| `@surgio/eslint-config-surgio` | `packages/eslint-config-surgio` |
 
-## 文档
+本仓库不再更新。Issue 和 Pull Request 请提交到 [surgioproject/surgio](https://github.com/surgioproject/surgio)。
 
-查看完整使用文档，前往 [surgio.js.org](https://surgio.js.org)。
-
-## 交流
-
-[<img width="207" src="https://raw.githubusercontent.com/geekdada/surgio/master/docs/.vuepress/public/join-telegram.png">](https://t.me/surgiotg)
-
-## Contributors
-
-### Code Contributors
-
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/geekdada/surgio/graphs/contributors"><img src="https://opencollective.com/surgio/contributors.svg?width=890&button=false" /></a>
-
-### Financial Contributors
-
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/surgio/contribute)]
-
-#### Individuals
-
-<a href="https://opencollective.com/surgio"><img src="https://opencollective.com/surgio/individuals.svg?width=890"></a>
-
-#### Organizations
-
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/surgio/contribute)]
-
-<a href="https://opencollective.com/surgio/organization/0/website"><img src="https://opencollective.com/surgio/organization/0/avatar.svg"></a>
-<a href="https://opencollective.com/surgio/organization/1/website"><img src="https://opencollective.com/surgio/organization/1/avatar.svg"></a>
-<a href="https://opencollective.com/surgio/organization/2/website"><img src="https://opencollective.com/surgio/organization/2/avatar.svg"></a>
-<a href="https://opencollective.com/surgio/organization/3/website"><img src="https://opencollective.com/surgio/organization/3/avatar.svg"></a>
-<a href="https://opencollective.com/surgio/organization/4/website"><img src="https://opencollective.com/surgio/organization/4/avatar.svg"></a>
-<a href="https://opencollective.com/surgio/organization/5/website"><img src="https://opencollective.com/surgio/organization/5/avatar.svg"></a>
-<a href="https://opencollective.com/surgio/organization/6/website"><img src="https://opencollective.com/surgio/organization/6/avatar.svg"></a>
-<a href="https://opencollective.com/surgio/organization/7/website"><img src="https://opencollective.com/surgio/organization/7/avatar.svg"></a>
-<a href="https://opencollective.com/surgio/organization/8/website"><img src="https://opencollective.com/surgio/organization/8/avatar.svg"></a>
-<a href="https://opencollective.com/surgio/organization/9/website"><img src="https://opencollective.com/surgio/organization/9/avatar.svg"></a>
-
-## License
-
-[MIT](https://github.com/geekdada/surgio/blob/master/LICENSE)
+使用文档见 [surgio.js.org](https://surgio.js.org)。
